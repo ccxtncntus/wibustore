@@ -11,11 +11,11 @@ class ImagesController extends Controller
     {
         return '123';
     }
-    public function upload(Request $request, $id)
+    public function upload($uploadSuccess, $id)
     {
-        if ($request->has('img') && is_array($request->img) && count($request->img) > 0) {
+        if (count($uploadSuccess) > 0) {
             $allAdd = [];
-            foreach ($request->img as $item) {
+            foreach ($uploadSuccess as $item) {
                 $image = new Images;
                 $image->url = $item;
                 $image->product_id = $id;

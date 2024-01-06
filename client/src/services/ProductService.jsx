@@ -5,19 +5,6 @@ const List = async (page) => {
   return res;
 };
 
-// const update = async (name, category_id, description, quantity, price, img) => {
-//   const res = await request.POST(`/api/products`, {
-//     name: name,
-//     category_id: category_id,
-//     description: description,
-//     quantity: quantity,
-//     price: price,
-//     status: status,
-//     img: img,
-//   });
-//   return res;
-// };
-
 const update = async (formData) => {
   const res = await request.POST(`/api/products`, formData, {
     headers: {

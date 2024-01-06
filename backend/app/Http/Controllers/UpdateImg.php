@@ -9,18 +9,15 @@ class UpdateImg extends Controller
 {
     public function upload(Request $request)
     {
-        if ($request->has('img')) {
-            $images = $request->file('img');
-            return response()->json($request->img);
-            foreach ($images as $image) {
-                $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->storeAs('public/img', $imageName);
-                // Lưu tên file ảnh vào cơ sở dữ liệu hoặc thực hiện các thao tác khác
-            }
-            return response()->json('Upload nhiều ảnh thành công');
-        } else {
-            return response()->json('Không có ảnh được chọn');
+        $images = $request->file('images');
+        $uploadedImages = [];
+        foreach ($images as $image) {
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads'), $imageName);
+            $uploadedImages[] = $imageName;
         }
+        // return response()->json($uploadedImages);
+        return $uploadedImages;
     }
     public function show(string $id)
     {

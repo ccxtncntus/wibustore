@@ -31,63 +31,53 @@ class ProductsController extends Controller
     }
     public function upload(Request $request)
     {
-        // if ($request->hasFile('img')) {
-        $images = $request->file('images');
-        $uploadedImages = [];
-        foreach ($images as $image) {
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads'), $imageName);
-            $uploadedImages[] = $imageName;
+        $price = $request->price;
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'unique:products', 'max:255'],
+            "category_id" => ['required'],
+            "description" =>  ['required'],
+            "quantity" => ['numeric', 'min:1'],
+            "price" =>  ['numeric', 'min:1'],
+            "saleoff" => ['nullable', 'numeric', 'min:0', function ($attribute, $value, $fail) use ($price) {
+                if (!empty($value) && $value >= $price) {
+                    $fail('The saleoff must be less than the price.');
+                }
+            },],
+            "status" => ['required', 'max:100'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $products = new Products;
+            $products->name = $request->name;
+            $products->category_id = $request->category_id;
+            $products->description = $request->description;
+            $products->quantity = $request->quantity;
+            $products->price = $request->price;
+            $products->saleoff = $request->saleoff;
+            $products->status = $request->status;
+            $products->save();
+            $lastInsertId = $products->id;
+
+            // test tải img lên server
+            $upImgInserve = new UpdateImg();
+            $uploadSuccess = $upImgInserve->upload($request);
+            // tải img
+            $imagesController = new ImagesController();
+            $uploadResult = $imagesController->upload($uploadSuccess, $lastInsertId);
+
+            $data = [
+                "status" => 200,
+                "lastID" => $lastInsertId,
+                "dataImg" => $uploadResult->original,
+                "message" => "update thành công",
+            ];
+            return response()->json($data, 200);
         }
-        return response()->json(['success' => true, 'images' => $uploadedImages], 200);
-        // }
-        // return response()->json(['success' => false, 'message' => 'Không có file để upload.'], 400);
-        // $price = $request->price;
-        // $validator = Validator::make($request->all(), [
-        //     'name' => ['required', 'unique:products', 'max:255'],
-        //     "category_id" => ['required'],
-        //     "description" =>  ['required'],
-        //     "quantity" => ['numeric', 'min:1'],
-        //     "price" =>  ['numeric', 'min:1'],
-        //     "saleoff" => ['nullable', 'numeric', 'min:1', function ($attribute, $value, $fail) use ($price) {
-        //         if (!empty($value) && $value >= $price) {
-        //             $fail('The saleoff must be less than the price.');
-        //         }
-        //     },],
-        //     "status" => ['required', 'max:100'],
-        // ]);
-        // if ($validator->fails()) {
-        //     $data = [
-        //         "status" => 400,
-        //         "message" => $validator->errors()->first(),
-        //     ];
-        //     return response()->json($data, 400);
-        // } else {
-        //     $products = new Products;
-        //     $products->name = $request->name;
-        //     $products->category_id = $request->category_id;
-        //     $products->description = $request->description;
-        //     $products->quantity = $request->quantity;
-        //     $products->price = $request->price;
-        //     $products->saleoff = $request->saleoff;
-        //     $products->status = $request->status;
-        //     $products->save();
-        //     $lastInsertId = $products->id;
-        //     // tải img
-        //     $imagesController = new ImagesController();
-        //     $uploadResult = $imagesController->upload($request, $lastInsertId);
-        //     // test tải img lên server
-        //     // $test = new UpdateImg();
-        //     // $uploadtest = $test->upload($request);
-        //     $data = [
-        //         "status" => 200,
-        //         "lastID" => $lastInsertId,
-        //         "dataImg" => $uploadResult->original,
-        //         "upimg" => $uploadtest->original,
-        //         "message" => "update thành công",
-        //     ];
-        //     return response()->json($data, 200);
-        // }
     }
 
     public function show(string $id)
@@ -111,13 +101,6 @@ class ProductsController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function edit(Request $request, string $id)
     {
         $price = $request->price;
@@ -167,8 +150,15 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function sreach(string $id)
     {
-        //
+        // BookingDates::where('email', Input::get('email'))
+        //     ->orWhere('name', 'like', '%' . Input::get('name') . '%')->get();
+
+        // public function scopeWhereLike($query, $column, $value)
+        // {
+        //     return $query->where($column, 'like', '%' . $value . '%');
+        // }
+
     }
 }
