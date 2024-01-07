@@ -14,9 +14,12 @@ const ProductAdmin = () => {
     watch,
     reset,
     setFocus,
+    setValue,
   } = useForm();
+  const [imgBlob, setimgBlob] = useState([]);
+
   const onSubmit = async (data) => {
-    // console.log(data.category);
+    // console.log(data);
     try {
       const formData = new FormData();
       const arr = Object.values(data.imgs);
@@ -37,10 +40,10 @@ const ProductAdmin = () => {
       }
       reset();
       setFocus("name");
+      setimgBlob([]);
     } catch (error) {
       console.error("Error:", error);
     }
-    //   const addProductSuccess = await Promise.all([addProduct]);
   };
   const [listCategory, setlistCategory] = useState([]);
   useEffect(() => {
@@ -62,7 +65,6 @@ const ProductAdmin = () => {
     }
     return true;
   };
-  const [imgBlob, setimgBlob] = useState([]);
   useEffect(() => {
     const numberImg = watch("imgs").length;
     if (numberImg > 0) {
@@ -72,11 +74,12 @@ const ProductAdmin = () => {
     }
     return () => {};
   }, [watch("imgs")]);
-  const HandleDelBlob = (item) => {
-    console.log(watch("imgs"));
+  const HandleDelBlob = (item, index) => {
+    const arr = Object.values(watch("imgs"));
+    arr.splice(index, 1);
+    setValue("imgs", arr, { shouldValidate: true });
     URL.revokeObjectURL(item);
     const chay = imgBlob.filter((img) => img !== item);
-    console.log(chay);
     setimgBlob(chay);
   };
   return (
@@ -107,10 +110,11 @@ const ProductAdmin = () => {
           <Form.Group className="mb-3">
             <Form.Label>Category</Form.Label>
             <Form.Select
-              aria-label="Default select example"
-              {...register("category")}
+              {...register("category", {
+                required: "Category is required",
+              })}
             >
-              <option>--Chọn--</option>
+              <option value="">--- Chọn ---</option>
               {listCategory.length > 0 &&
                 listCategory.map((item, index) => (
                   <option value={item.id} key={index}>
@@ -118,6 +122,11 @@ const ProductAdmin = () => {
                   </option>
                 ))}
             </Form.Select>
+            {errors.category && (
+              <p className="text-danger" role="alert">
+                {errors.category?.message}
+              </p>
+            )}
           </Form.Group>
         </div>
         <Form.Group className="mb-3">
@@ -144,7 +153,7 @@ const ProductAdmin = () => {
                       alt=""
                     />
                     <i
-                      onClick={() => HandleDelBlob(item)}
+                      onClick={() => HandleDelBlob(item, index)}
                       style={{
                         position: "absolute",
                         top: -60,
@@ -163,7 +172,10 @@ const ProductAdmin = () => {
             id="file_product"
             type="file"
             {...register("imgs", {
-              required: "Img is required",
+              required:
+                watch("imgs") && Object.values(watch("imgs")).length > 0
+                  ? false
+                  : "img is required",
             })}
           />
           {errors.imgs && (

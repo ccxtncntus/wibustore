@@ -3,9 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 const HomeLazy = lazy(() => import("./pages/Home"));
 const AdminLazy = lazy(() => import("./pages/Admin"));
-const ProductAdminLazy = lazy(() => import("./controllers/admin/ProductAdmin"));
+const ProductAdminLazy = lazy(() => import("./components/admin/ProductAdmin"));
 const CategoriesAdminLazy = lazy(() =>
-  import("./controllers/admin/CategoriesAdmin")
+  import("./components/admin/CategoriesAdmin")
 );
 function App() {
   return (
