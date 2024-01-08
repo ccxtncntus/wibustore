@@ -5,6 +5,11 @@ const List = async (page) => {
   return res;
 };
 
+const onceProduct = async (value) => {
+  const res = await request.GET(`/api/products/once/${value}`);
+  return res;
+};
+
 const update = async (formData) => {
   const res = await request.POST(`/api/products`, formData, {
     headers: {
@@ -13,4 +18,22 @@ const update = async (formData) => {
   });
   return res;
 };
-export { List, update };
+
+const listProCategory = async (id, page) => {
+  const res = await request.GET(`/api/products/listPro/${id}`, {
+    pageNumber: page,
+  });
+  return res;
+};
+
+const delProduct = async (id) => {
+  const res = await request.DELETE(`/api/products/delete/${id}`);
+  return res;
+};
+
+const edit = async (formData, id) => {
+  const res = await request.POST(`/api/products/edit/${id}`, formData);
+  return res;
+};
+
+export { List, update, listProCategory, delProduct, edit, onceProduct };

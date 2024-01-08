@@ -9,15 +9,18 @@ class UpdateImg extends Controller
 {
     public function upload(Request $request)
     {
-        $images = $request->file('images');
-        $uploadedImages = [];
-        foreach ($images as $image) {
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('uploads'), $imageName);
-            $uploadedImages[] = $imageName;
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            $uploadedImages = [];
+            foreach ($images as $image) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('uploads'), $imageName);
+                $uploadedImages[] = $imageName;
+            }
+            return $uploadedImages;
+        } else {
+            return 400;
         }
-        // return response()->json($uploadedImages);
-        return $uploadedImages;
     }
     public function show(string $id)
     {

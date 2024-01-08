@@ -7,6 +7,8 @@ const ProductAdminLazy = lazy(() => import("./components/admin/ProductAdmin"));
 const CategoriesAdminLazy = lazy(() =>
   import("./components/admin/CategoriesAdmin")
 );
+const ListProductLazy = lazy(() => import("./components/admin/ListProducts"));
+
 function App() {
   return (
     <>
@@ -28,6 +30,14 @@ function App() {
           }
         >
           <Route
+            path="list-products"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ListProductLazy />
+              </Suspense>
+            }
+          />
+          <Route
             path="products"
             element={
               <Suspense fallback={<div>Loading...</div>}>
@@ -35,6 +45,7 @@ function App() {
               </Suspense>
             }
           />
+
           <Route
             path="categories"
             element={

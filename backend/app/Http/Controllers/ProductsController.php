@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Images;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\UpdateImg;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
@@ -29,6 +32,49 @@ class ProductsController extends Controller
             return response()->json($data, 200);
         }
     }
+
+    public function onceProduct($value)
+    {
+        $products = Products::select(
+            'products.id',
+            'products.name',
+            'products.status',
+            'products.description',
+            'products.quantity',
+            'products.price',
+            'products.saleoff',
+            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+        )
+            ->join('images', 'images.product_id', '=', 'products.id')
+            ->where('name', 'like', '%' . $value . '%')
+            ->groupBy(
+                'products.id',
+                'products.status',
+                'products.saleoff',
+                'products.price',
+                'products.quantity',
+                'products.description',
+                'products.name',
+            )
+            ->get();
+        $data = [
+            "status" => 200,
+            "data" => $products,
+        ];
+        return response()->json($products, 200);
+    }
+
+    public function listProductOfCategory(Request $request, $id)
+    {
+        $pageNumber = $request->pageNumber;
+        $products = Products::where('category_id', $id)->paginate(10, ['*'], 'page', $pageNumber);
+        $data = [
+            "status" => 200,
+            "data" => $products,
+        ];
+        return response()->json($data, 200);
+    }
+
     public function upload(Request $request)
     {
         $price = $request->price;
@@ -79,12 +125,9 @@ class ProductsController extends Controller
             return response()->json($data, 200);
         }
     }
-
     public function show(string $id)
     {
         $products = Products::find($id);
-        $imagesController = new ImagesController();
-        $uploadResult = $imagesController->delete($id);
         if ($products->count() === 0) {
             $upData = [
                 "status" => 400,
@@ -95,25 +138,24 @@ class ProductsController extends Controller
             $data = [
                 "status" => 200,
                 "data" => $products,
-                "img" => $uploadResult->original,
             ];
             return response()->json($data, 200);
         }
     }
 
-    public function edit(Request $request, string $id)
+    public function edit(Request $request, $id)
     {
+
         $price = $request->price;
         $validator = Validator::make($request->all(), [
             'name' => [
                 'required',
                 Rule::unique('products')->ignore($id), 'max:255'
             ],
-            "category_id" => ['required'],
             "description" =>  ['required'],
             "quantity" => ['numeric', 'min:1'],
             "price" =>  ['numeric', 'min:1'],
-            "saleoff" => ['nullable', 'numeric', 'min:1', function ($attribute, $value, $fail) use ($price) {
+            "saleoff" => ['nullable', 'numeric', 'min:0', function ($attribute, $value, $fail) use ($price) {
                 if (!empty($value) && $value >= $price) {
                     $fail('The saleoff must be less than the price.');
                 }
@@ -127,29 +169,57 @@ class ProductsController extends Controller
                 "message" => $validator->errors()->first(),
             ];
             return response()->json($data, 400);
-        }
-        // return response()->json($request, 200);
-        else {
-            $products = Products::find($id);
-            $products->name = $request->name;
-            $products->category_id = $request->category_id;
-            $products->description = $request->description;
-            $products->quantity = $request->quantity;
-            $products->price = $request->price;
-            $products->saleoff = $request->saleoff;
-            $products->status = $request->status;
-            $products->save();
+        } else {
+            $input = $request->except('category_id', 'images');
+            $products = Products::find($id)->update($input);
+
+            $upImgInserve = new UpdateImg();
+            $uploadSuccess = $upImgInserve->upload($request);
+            if ($uploadSuccess === 400) {
+                $uploadResult = 'Không có img';
+            } else {
+                $imagesController = new ImagesController();
+                $uploadResult = $imagesController->upload($uploadSuccess, $id);
+            }
             $data = [
                 "status" => 200,
-                "message" => "edit thành công",
+                "dataImg" => $uploadResult,
+                "message" => $products,
             ];
             return response()->json($data, 200);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function delete($id)
+    {
+
+
+        if (Products::where('id', $id)->exists()) {
+            $image = Images::select('url')->where('product_id', $id)->get();
+            if (count($image) > 0) {
+                foreach ($image as $i) {
+                    $imagePath = public_path('uploads') . '/' . $i->url;
+                    if (File::exists($imagePath)) {
+                        File::delete($imagePath);
+                    }
+                }
+            }
+            $products = Products::find($id);
+            $products->delete();
+            $data = [
+                "status" => 200,
+                "message" => "Del Success",
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                "status" => 200,
+                "message" => "there are not product",
+            ];
+            return response()->json($data, 200);
+        }
+    }
+
     public function sreach(string $id)
     {
         // BookingDates::where('email', Input::get('email'))

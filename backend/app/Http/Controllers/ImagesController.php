@@ -7,10 +7,29 @@ use App\Models\Images;
 
 class ImagesController extends Controller
 {
-    public function index()
+    public function index($product_id)
     {
-        return '123';
+        $images = Images::where('product_id', $product_id)->get();
+        return response()->json($images);
     }
+    public function deleteOnce($id)
+    {
+        $image = Images::find($id);
+        if ($image) {
+            $image->delete();
+            $data = [
+                "status" => 200,
+                "message" => "del success",
+            ];
+            return response()->json($data, 200);
+        }
+        $data = [
+            "status" => 400,
+            "message" => "no img",
+        ];
+        return response()->json($data, 200);
+    }
+
     public function upload($uploadSuccess, $id)
     {
         if (count($uploadSuccess) > 0) {

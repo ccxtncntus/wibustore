@@ -9,6 +9,9 @@ const Admin = () => {
             <NavLink to={"products"} className="list-group-item">
               Products
             </NavLink>
+            <NavLink to={"list-products"} className="list-group-item">
+              List products
+            </NavLink>
             <NavLink to={"categories"} className="list-group-item">
               Categories
             </NavLink>

@@ -19,7 +19,6 @@ const ProductAdmin = () => {
   const [imgBlob, setimgBlob] = useState([]);
 
   const onSubmit = async (data) => {
-    // console.log(data);
     try {
       const formData = new FormData();
       const arr = Object.values(data.imgs);
