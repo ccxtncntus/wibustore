@@ -33,15 +33,18 @@ const Home = () => {
     }
     setloading(false);
   };
-  useEffect(() => {
-    if (products.length > 0) {
-      console.log(products);
-    }
-  }, [products]);
+  // useEffect(() => {
+  //   if (products.length > 0) {
+  //     console.log(products);
+  //   }
+  // }, [products]);
   return (
     <>
-      <NavLink to="/crawl" className={"btn btn-primary"}>
+      <NavLink to="/crawl" className={"btn btn-primary m-2"}>
         Crawl
+      </NavLink>
+      <NavLink to="/admin" className={"btn btn-success"}>
+        Admin
       </NavLink>
       <div
         style={{

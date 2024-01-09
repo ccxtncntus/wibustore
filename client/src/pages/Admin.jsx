@@ -18,7 +18,9 @@ const Admin = () => {
             <li className="list-group-item">Tài khoản</li>
             <li className="list-group-item">Thống kê</li>
             <li className="list-group-item">Đơn hàng</li>
-            <li className="list-group-item">Thoát</li>
+            <NavLink to={"/"} className="list-group-item">
+              Thoát
+            </NavLink>
           </ul>
         </div>
         <div className="col-md-9">

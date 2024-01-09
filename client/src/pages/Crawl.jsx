@@ -17,28 +17,32 @@ const Crawl = () => {
     };
     fetchData();
   }, [p]);
-
   return (
     <>
       <div>
-        <NavLink to="/" className={"btn btn-success"}>
+        <NavLink to="/" className={"btn btn-success m-2"}>
           home
         </NavLink>
       </div>
-      page
+      <span className="m-2">Page</span>
       <input
+        style={{ width: 120 }}
         type="number"
-        className="m-2"
+        className="m-2 form-control "
         value={p}
         onChange={(e) => setp(e.target.value)}
       />
       <div className="crawl">
         {crawl.length > 0
           ? crawl.map((item, index) => (
-              <div className="crawl_child" key={index}>
+              <NavLink
+                to={"/crawl" + item.link}
+                className="crawl_child"
+                key={index}
+              >
                 <img src={item.img} alt="" />
                 <div>{item.name}</div>
-              </div>
+              </NavLink>
             ))
           : "Đang tải..."}
       </div>

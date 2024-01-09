@@ -194,8 +194,6 @@ class ProductsController extends Controller
 
     public function delete($id)
     {
-
-
         if (Products::where('id', $id)->exists()) {
             $image = Images::select('url')->where('product_id', $id)->get();
             if (count($image) > 0) {
@@ -237,8 +235,35 @@ class ProductsController extends Controller
             $img = $node->filter('img')->attr('src');
             $name = $node->filter('h3')->html();
             // $count = $node->filter('.product-sale-price')->text();
-            $result[] = ['img' => $img, 'name' => $name];
+            $link = $node->filter('a')->attr('href');
+            $result[] = ['img' => $img, 'name' => $name, "link" => $link];
         });
         return $result;
+    }
+
+
+    public function crawlDetail($path)
+    {
+        $client = new Client();
+        $response = $client->request('GET', "https://toyz.vn/products/$path");
+        $html = $response->getBody()->getContents();
+
+        $crawler = new Crawler($html);
+        $data = $crawler->filter('.psnip-slider-item');
+        // $result = $data->count();
+        $content = $crawler->filter('.product-thumbnail');
+        $name = $content->filter('a')->html();
+        $price = $content->filter('.price_span_child')->html();
+        $information = $content->filter('.text_exposed_show')->html();
+
+        $result = [];
+        $data->each(function (Crawler $node) use (&$result) {
+            $count = $node->filter('img')->attr('src');
+            $result[] = ['img' => $count];
+        });
+        $dataResult = [
+            'img' => $result, 'price' => $price, 'name' => $name, 'information' => $information
+        ];
+        return $dataResult;
     }
 }

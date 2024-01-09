@@ -14,6 +14,7 @@ const ListProducts = () => {
   const [listCate, setlistCate] = useState([]);
   const [listProductCate, setlistProductCate] = useState([]);
   const [delSuccess, setdelSuccess] = useState(false);
+  const [loading, setloading] = useState(false);
   useEffect(() => {
     const listC = async () => {
       try {
@@ -36,7 +37,7 @@ const ListProducts = () => {
     };
     listC();
     return () => {};
-  }, [watch("category"), delSuccess]);
+  }, [watch("category"), delSuccess, loading]);
   const confirm = async (item) => {
     const del = await ProductService.delProduct(item.id);
     console.log(del);
@@ -55,12 +56,16 @@ const ListProducts = () => {
   const handleShow = () => {
     setShow(false);
   };
+  const handleLoad = () => {
+    setloading((pre) => !pre);
+  };
 
   return (
     <>
       <EditProductAdmin
         show={show}
         onShow={handleShow}
+        onLoad={handleLoad}
         dataProduct={dataProduct}
       />
       <div className="row">
@@ -132,7 +137,7 @@ const ListProducts = () => {
         </div>
       ) : (
         <span>
-          <br /> Đang cập nhật ...
+          <br /> There are not products ...
         </span>
       )}
     </>

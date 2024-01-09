@@ -9,6 +9,7 @@ const CategoriesAdminLazy = lazy(() =>
 );
 const ListProductLazy = lazy(() => import("./components/admin/ListProducts"));
 const CrawlLazy = lazy(() => import("./pages/Crawl"));
+const CrawDetaillLazy = lazy(() => import("./pages/CrawlDetail"));
 
 function App() {
   return (
@@ -62,6 +63,14 @@ function App() {
           element={
             <Suspense fallback={<div>Loading...</div>}>
               <CrawlLazy />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/crawl/products/:name"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <CrawDetaillLazy />
             </Suspense>
           }
         />

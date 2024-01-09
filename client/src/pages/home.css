@@ -29,6 +29,17 @@
   gap: 10px;
   flex-wrap: wrap;
 }
+.crawl_child {
+  display: flex;
+  flex-direction: column;
+  color: black;
+  text-decoration: none;
+}
+
+.crawl_child:hover {
+  cursor: pointer;
+  color: red;
+}
 .crawl_child img {
   height: 400px;
 }

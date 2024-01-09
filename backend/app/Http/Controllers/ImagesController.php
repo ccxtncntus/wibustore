@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Images;
+use Illuminate\Support\Facades\File;
 
 class ImagesController extends Controller
 {
@@ -56,5 +57,21 @@ class ImagesController extends Controller
         } else {
             return response()->json('Không có img', 200);
         }
+    }
+    public function destroy($imgs)
+    {
+        $arrImgs = preg_split("/[,]/", $imgs);
+        foreach ($arrImgs as $img) {
+            Images::where("url", $img)->delete();
+            $imagePath = public_path('uploads') . '/' . $img;
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
+            }
+        }
+        $data = [
+            'status' => 200,
+            'message' => "Del cuccess",
+        ];
+        return response()->json($data, 200);
     }
 }

@@ -9,13 +9,15 @@ import { message } from "antd";
 import { HOST } from "../../configs/DataEnv";
 import "../admin/productadmin.css";
 const EditProductAdmin = (props) => {
-  const { show, onShow, dataProduct } = props;
+  const { show, onShow, dataProduct, onLoad } = props;
   const [dataTest, setdataTest] = useState({});
   const [imgs, setimgs] = useState([]);
   const [blob, setblob] = useState([]);
   const [loading, setloading] = useState(false);
+
   useEffect(() => {
     const fetch = async () => {
+      setimgDelete([]);
       setblob([]);
       setimgs([]);
       setloading(true);
@@ -35,45 +37,79 @@ const EditProductAdmin = (props) => {
     reset,
     setValue,
   } = useForm();
-
+  const [imgDelete, setimgDelete] = useState([]);
   const HandleDelBlob = (item, index) => {
-    console.log(item);
-    // const arr = Object.values(watch("imgs"));
-    // arr.splice(index, 1);
-    // setValue("imgs", arr, { shouldValidate: true });
-    // URL.revokeObjectURL(item);
-    // const chay = imgBlob.filter((img) => img !== item);
-    // setimgBlob(chay);
+    if (typeof item === "object") {
+      setimgDelete((pre) => [...pre, item.url]);
+      setimgs(imgs.filter((img) => img.url !== item.url));
+    } else {
+      const arr = Object.values(dataTest.img[0]);
+      arr.splice(index, 1);
+      setValue("imgs", arr, { shouldValidate: true });
+      URL.revokeObjectURL(item);
+    }
+  };
+
+  const check = () => {
+    if (Object.keys(dataTest).length <= 0) return;
+    if (
+      dataTest.name.trim() === "" ||
+      dataTest.description.trim() === "" ||
+      dataTest.quantity === "" ||
+      dataTest.price === "" ||
+      dataTest.saleoff === ""
+    ) {
+      return false;
+    } else if (Number(dataTest.price) < Number(dataTest.saleoff)) {
+      return false;
+    } else if (
+      Number(dataTest.price) < 1 ||
+      Number(dataTest.saleoff) < 0 ||
+      Number(dataTest.quantity) < 1
+    ) {
+      return false;
+    } else {
+      return true;
+    }
   };
   const handleEditPro = async () => {
-    // console.log(dataTest);
-    try {
-      const formData = new FormData();
-      if (dataTest.img) {
-        const arr = Object.values(dataTest.img[0]);
-        console.log(arr);
-        arr.map((item) => {
-          formData.append("images[]", item);
-        });
+    const validate = check();
+    console.log(validate);
+    if (validate) {
+      try {
+        if (imgDelete.length > 0) {
+          const data = await imgsService.deleteListImg(imgDelete);
+          console.log(data);
+        }
+        const formData = new FormData();
+        if (dataTest.img) {
+          const arr = Object.values(dataTest.img[0]);
+          // console.log(arr);
+          arr.map((item) => {
+            formData.append("images[]", item);
+          });
+        }
+        formData.append("name", dataTest.name);
+        formData.append("description", dataTest.description);
+        formData.append("price", dataTest.price);
+        formData.append("quantity", dataTest.quantity);
+        formData.append("saleoff", dataTest.saleoff);
+        formData.append("status", dataTest.status);
+        const addProduct = await ProductService.edit(formData, dataTest.id);
+        console.log(addProduct);
+        if (addProduct.status === 200) {
+          message.success("Add success!");
+          onShow();
+          onLoad();
+        }
+        reset();
+      } catch (error) {
+        console.error("Error:", error);
       }
-      formData.append("name", dataTest.name);
-      formData.append("description", dataTest.description);
-      formData.append("price", dataTest.price);
-      formData.append("quantity", dataTest.quantity);
-      formData.append("saleoff", dataTest.saleoff);
-      formData.append("status", dataTest.status);
-      const addProduct = await ProductService.edit(formData, dataTest.id);
-      console.log(addProduct);
-      // if (addProduct.status === 200) {
-      //   message.success("Add success!");
-      // }
-      // reset();
-    } catch (error) {
-      console.error("Error:", error);
     }
   };
   useEffect(() => {
-    if (watch("imgs") && watch("imgs").length > 0) {
+    if (watch("imgs")) {
       setdataTest({
         ...dataTest,
         img: [watch("imgs")],
@@ -85,6 +121,34 @@ const EditProductAdmin = (props) => {
       setloading(false);
     }
   }, [watch("imgs")]);
+
+  const checkSale = () => {
+    if (Object.keys(dataTest).length > 0 && dataTest.saleoff == "") {
+      return "Không bỏ trống";
+    } else if (dataTest.saleoff < 0) {
+      return "Số lớn hơn 0";
+    } else if (Number(dataTest.price) < Number(dataTest.saleoff)) {
+      return "Sale không lớn hơn hoặc bằng giá";
+    } else {
+      return true;
+    }
+  };
+
+  const checkNumber = (data) => {
+    if (Object.keys(dataTest).length > 0 && data === "") {
+      return "Không bỏ trống";
+    } else if (data < 1) {
+      return "Tối thiểu là 1";
+    } else {
+      return true;
+    }
+  };
+
+  // function currencyFormat(num) {
+  //   return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + " đ";
+  // }
+  // console.log(currencyFormat(100000)); // $2,665.00
+
   return (
     <div>
       <Modal
@@ -101,7 +165,6 @@ const EditProductAdmin = (props) => {
         <Modal.Body>
           <div className="row">
             <div className="col-md-6">
-              {/* <Form.Group className="mb-3"> */}
               <Form.Label>Name</Form.Label>
               <input
                 className="form-control"
@@ -111,8 +174,11 @@ const EditProductAdmin = (props) => {
                   setdataTest({ ...dataTest, name: e.target.value })
                 }
               />
-              <p className="text-danger" role="alert"></p>
-              {/* </Form.Group> */}
+              <p className="text-danger" role="alert">
+                {Object.keys(dataTest).length > 0 &&
+                  dataTest.name.trim() == "" &&
+                  "Không bỏ trống"}
+              </p>
             </div>
             <div className="col-md-6">
               <Form.Group className="mb-3">
@@ -212,7 +278,7 @@ const EditProductAdmin = (props) => {
                   required:
                     watch("imgs") &&
                     Object.values(watch("imgs")).length > 0 &&
-                    imgs.length === 0
+                    imgs.length > 0
                       ? false
                       : "img is required",
                 })}
@@ -238,9 +304,11 @@ const EditProductAdmin = (props) => {
                   })
                 }
               ></textarea>
-              {/* <p className="text-danger" role="alert">
-                test
-              </p> */}
+              <p className="text-danger" role="alert">
+                {Object.keys(dataTest).length > 0 &&
+                  dataTest.description.trim() == "" &&
+                  "Không bỏ trống"}
+              </p>
             </Form.Group>
 
             <div className="col-md-4">
@@ -257,9 +325,9 @@ const EditProductAdmin = (props) => {
                     })
                   }
                 />
-                {/* <p className="text-danger" role="alert">
-                  test
-                </p> */}
+                <p className="text-danger" role="alert">
+                  {checkNumber(dataTest.quantity)}
+                </p>
               </Form.Group>
             </div>
             <div className="col-md-4">
@@ -276,9 +344,9 @@ const EditProductAdmin = (props) => {
                     })
                   }
                 />
-                {/* <p className="text-danger" role="alert">
-                  test
-                </p> */}
+                <p className="text-danger" role="alert">
+                  {checkNumber(dataTest.price)}
+                </p>
               </Form.Group>
             </div>
             <div className="col-md-4">
@@ -295,9 +363,9 @@ const EditProductAdmin = (props) => {
                     })
                   }
                 />
-                {/* <p className="text-danger" role="alert">
-                  test
-                </p> */}
+                <p className="text-danger" role="alert">
+                  {checkSale()}
+                </p>
               </Form.Group>
             </div>
             <Button
@@ -314,7 +382,7 @@ const EditProductAdmin = (props) => {
               style={{ width: 120, marginLeft: 12 }}
               variant="primary"
               onClick={handleEditPro}
-              //   disabled={isObjectEmpty(dataEdited)}
+              disabled={!check()}
             >
               Save
             </Button>

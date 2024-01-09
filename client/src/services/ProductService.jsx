@@ -39,5 +39,18 @@ const crawl = async (p) => {
   const res = await request.GET(`/api/crawl/${p}`);
   return res;
 };
+const crawlDetail = async (path) => {
+  const res = await request.GET(`/api/crawl/detail/products/${path}`);
+  return res;
+};
 
-export { List, update, listProCategory, delProduct, edit, onceProduct, crawl };
+export {
+  List,
+  update,
+  listProCategory,
+  delProduct,
+  edit,
+  onceProduct,
+  crawl,
+  crawlDetail,
+};
