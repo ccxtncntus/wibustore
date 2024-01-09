@@ -11,6 +11,8 @@ use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\UpdateImg;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
+use Symfony\Component\DomCrawler\Crawler;
 
 class ProductsController extends Controller
 {
@@ -220,15 +222,23 @@ class ProductsController extends Controller
         }
     }
 
-    public function sreach(string $id)
+    public function crawl($p)
     {
-        // BookingDates::where('email', Input::get('email'))
-        //     ->orWhere('name', 'like', '%' . Input::get('name') . '%')->get();
+        $client = new Client();
+        $response = $client->request('GET', "https://toyz.vn/categories/one-piece?&page=$p");
+        $html = $response->getBody()->getContents();
 
-        // public function scopeWhereLike($query, $column, $value)
-        // {
-        //     return $query->where($column, 'like', '%' . $value . '%');
-        // }
+        $crawler = new Crawler($html);
+        $data = $crawler->filter('.product_grid_item');
+        // $result = $data->count(); 
 
+        $result = [];
+        $data->each(function (Crawler $node) use (&$result) {
+            $img = $node->filter('img')->attr('src');
+            $name = $node->filter('h3')->html();
+            // $count = $node->filter('.product-sale-price')->text();
+            $result[] = ['img' => $img, 'name' => $name];
+        });
+        return $result;
     }
 }

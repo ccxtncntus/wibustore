@@ -35,5 +35,9 @@ const edit = async (formData, id) => {
   const res = await request.POST(`/api/products/edit/${id}`, formData);
   return res;
 };
+const crawl = async (p) => {
+  const res = await request.GET(`/api/crawl/${p}`);
+  return res;
+};
 
-export { List, update, listProCategory, delProduct, edit, onceProduct };
+export { List, update, listProCategory, delProduct, edit, onceProduct, crawl };

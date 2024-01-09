@@ -22,3 +22,13 @@
   color: gray;
   font-size: 0.9rem;
 }
+
+.crawl {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.crawl_child img {
+  height: 400px;
+}

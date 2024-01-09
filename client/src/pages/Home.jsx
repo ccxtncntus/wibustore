@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AutoComplete } from "antd";
 import "./home.css";
 import * as ProductService from "../services/ProductService";
+import { NavLink } from "react-router-dom";
 const mockVal = (str, repeat = 1) => ({
   value: str.repeat(repeat),
 });
@@ -39,6 +40,9 @@ const Home = () => {
   }, [products]);
   return (
     <>
+      <NavLink to="/crawl" className={"btn btn-primary"}>
+        Crawl
+      </NavLink>
       <div
         style={{
           textAlign: "center",

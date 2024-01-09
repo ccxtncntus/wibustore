@@ -35,3 +35,5 @@ Route::delete('products/delete/{id}', [ProductsController::class, 'delete']);
 // images
 Route::get('imagesProduct/{id}', [ImagesController::class, 'index']);
 Route::get('imagesProduct/delonce/{id}', [ImagesController::class, 'deleteOnce']);
+// crawl
+Route::get('crawl/{p}', [ProductsController::class, 'crawl']);
