@@ -3,10 +3,12 @@ import { AutoComplete } from "antd";
 import "./home.css";
 import * as ProductService from "../services/ProductService";
 import { NavLink } from "react-router-dom";
+import Slider from "../layout/slider/Slider";
 const mockVal = (str, repeat = 1) => ({
   value: str.repeat(repeat),
 });
 import { HOST } from "../configs/DataEnv";
+import Nav from "../layout/nav/Nav";
 const Home = () => {
   const [options, setOptions] = useState([]);
   const getPanelValue = (searchText) =>
@@ -40,6 +42,8 @@ const Home = () => {
   // }, [products]);
   return (
     <>
+      <Nav />
+      {/* <Slider /> */}
       <NavLink to="/crawl" className={"btn btn-primary m-2"}>
         Crawl
       </NavLink>

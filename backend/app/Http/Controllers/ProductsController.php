@@ -222,6 +222,8 @@ class ProductsController extends Controller
 
     public function crawl($p)
     {
+        // use GuzzleHttp\Client;
+        // use Symfony\Component\DomCrawler\Crawler;
         $client = new Client();
         $response = $client->request('GET', "https://toyz.vn/categories/one-piece?&page=$p");
         $html = $response->getBody()->getContents();

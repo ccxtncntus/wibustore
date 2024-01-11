@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ImagesController;
+use App\Http\Controllers\UserCotroller;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,7 +21,12 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 // categorys
-Route::get('categorys', [CategoryController::class, 'index']);
+Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
+    Route::get('categorys', [CategoryController::class, 'index']);
+});
+
+
+// Route::get('categorys', [CategoryController::class, 'index']);
 Route::post('categorys', [CategoryController::class, 'upload']);
 Route::put('categorys/edit/{id}', [CategoryController::class, 'edit']);
 Route::delete('categorys/delete/{id}', [CategoryController::class, 'delete']);
@@ -39,3 +45,9 @@ Route::delete('im/del/{imgs}', [ImagesController::class, 'destroy']);
 // crawl
 Route::get('crawl/detail/products/{path}', [ProductsController::class, 'crawlDetail']);
 Route::get('crawl/{p}', [ProductsController::class, 'crawl']);
+// users
+// Route::apiResource('login', UserCotroller::class);
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('account', [UserCotroller::class, 'index']);
+});
+Route::post('login', [UserCotroller::class, 'login']);
