@@ -5,6 +5,11 @@ const List = async (page) => {
   return res;
 };
 
+const productId = async (id) => {
+  const res = await request.GET(`/api/products/${id}`);
+  return res;
+};
+
 const onceProduct = async (value) => {
   const res = await request.GET(`/api/products/once/${value}`);
   return res;
@@ -53,4 +58,5 @@ export {
   onceProduct,
   crawl,
   crawlDetail,
+  productId,
 };

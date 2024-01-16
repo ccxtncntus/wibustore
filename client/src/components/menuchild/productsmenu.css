@@ -1,0 +1,11 @@
+.productsMenu {
+  padding: 20px;
+}
+
+.img_s {
+  display: flex;
+  gap: 10px;
+}
+.img_ss_s {
+  width: 200px;
+}

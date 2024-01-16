@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import * as ProductService from "../services/ProductService";
+import * as ProductService from "../../services/ProductService";
 import parse from "html-react-parser";
 import { NavLink } from "react-router-dom";
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\UserCotroller;
+use App\Http\Controllers\MailController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,9 +22,9 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 // categorys
-Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
-    Route::get('categorys', [CategoryController::class, 'index']);
-});
+// Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
+Route::get('categorys', [CategoryController::class, 'index']);
+// });
 
 
 // Route::get('categorys', [CategoryController::class, 'index']);
@@ -48,6 +49,15 @@ Route::get('crawl/{p}', [ProductsController::class, 'crawl']);
 // users
 // Route::apiResource('login', UserCotroller::class);
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('account', [UserCotroller::class, 'index']);
+    Route::post('logout', [UserCotroller::class, 'logout']);
 });
+Route::get('account', [UserCotroller::class, 'index']);
 Route::post('login', [UserCotroller::class, 'login']);
+Route::post('authentication', [UserCotroller::class, 'authentication']);
+// upload
+
+// send mail
+Route::get(
+    'send',
+    [MailController::class, 'index']
+);

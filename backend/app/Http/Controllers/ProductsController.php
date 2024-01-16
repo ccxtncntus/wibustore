@@ -129,7 +129,28 @@ class ProductsController extends Controller
     }
     public function show(string $id)
     {
-        $products = Products::find($id);
+        $products = Products::select(
+            'products.id',
+            'products.name',
+            'products.status',
+            'products.description',
+            'products.quantity',
+            'products.price',
+            'products.saleoff',
+            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+        )
+            ->join('images', 'images.product_id', '=', 'products.id')
+            ->where('products.id', '=', $id)
+            ->groupBy(
+                'products.id',
+                'products.status',
+                'products.saleoff',
+                'products.price',
+                'products.quantity',
+                'products.description',
+                'products.name',
+            )
+            ->get();
         if ($products->count() === 0) {
             $upData = [
                 "status" => 400,

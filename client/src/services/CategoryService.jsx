@@ -1,14 +1,17 @@
 import * as request from "../configs/Axios";
 
 const List = async (page) => {
-  const res = await request.GET(`/api/categorys?pageNumber=${page}`, {
-    headers: {
-      // Adding a token to the request headers for authentication
-      // token:,
-      Authorization:
-        "Bearer 15|rzi6R4uzCRx32pAFHm5ZkGR2LCTU7J8zIvekgkRfd69329cc",
-    },
-  });
+  const res = await request.GET(
+    `/api/categorys?pageNumber=${page}`
+    //  {
+    //   headers: {
+    //     // Adding a token to the request headers for authentication
+    //     // token:,
+    //     Authorization:
+    //       "Bearer 15|rzi6R4uzCRx32pAFHm5ZkGR2LCTU7J8zIvekgkRfd69329cc",
+    //   },
+    // }
+  );
   return res;
 };
 

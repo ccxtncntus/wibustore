@@ -8,8 +8,15 @@ const CategoriesAdminLazy = lazy(() =>
   import("./components/admin/CategoriesAdmin")
 );
 const ListProductLazy = lazy(() => import("./components/admin/ListProducts"));
-const CrawlLazy = lazy(() => import("./pages/Crawl"));
-const CrawDetaillLazy = lazy(() => import("./pages/CrawlDetail"));
+const CrawlLazy = lazy(() => import("./pages/crawl/Crawl"));
+const CrawDetaillLazy = lazy(() => import("./pages/crawl/CrawlDetail"));
+
+const ShopllLazy = lazy(() => import("./pages/shop/Shop"));
+const PostsllLazy = lazy(() => import("./pages/posts/Posts"));
+const ContactllLazy = lazy(() => import("./pages/contact/Contact"));
+const HomeContentllLazy = lazy(() => import("./pages/home/HomeContent"));
+const ProductsDetailllLazy = lazy(() => import("./pages/shop/ProductsDetail"));
+const LoginllLazy = lazy(() => import("./pages/login/Login"));
 
 function App() {
   return (
@@ -22,7 +29,56 @@ function App() {
               <HomeLazy />
             </Suspense>
           }
-        />
+        >
+          <Route
+            path="/login"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <LoginllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/shop"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ShopllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/shop/:slug"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProductsDetailllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/posts"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <PostsllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ContactllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <HomeContentllLazy />
+              </Suspense>
+            }
+          />
+        </Route>
         <Route
           path="/admin"
           element={
@@ -66,6 +122,7 @@ function App() {
             </Suspense>
           }
         />
+
         <Route
           path="/crawl/products/:name"
           element={
