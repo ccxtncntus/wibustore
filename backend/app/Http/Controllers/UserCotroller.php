@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\Token;
+use Illuminate\Support\Facades\Validator;
 
 class UserCotroller extends Controller
 {
@@ -31,7 +32,7 @@ class UserCotroller extends Controller
         $token = $user->createToken('wibu_token')->plainTextToken;
         $response = [
             'status' => 200,
-            'user' => $user,
+            // 'user' => $user,
             'token' => $token
         ];
         return response($response, 201);
@@ -79,25 +80,77 @@ class UserCotroller extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function register(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'unique:users', 'max:255', 'email'],
+            "name" => ['required'],
+            "password" =>  ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $user = new User;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->role = $request->name === 'admin' ? 'admin' : 'user';
+            $user->password =
+                Hash::make($request->password);
+            $user->save();
+            $data = [
+                "status" => 200,
+                "message" => "Đăng kí thành công",
+            ];
+            return response()->json($data, 200);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function changePass(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'max:255', 'email'],
+            "passwordOld" =>  ['required'],
+            "password" =>  ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $user = User::where('email', $request->email)->first();
+            if ($user) {
+                if (!Hash::check($request->passwordOld, $user->password)) {
+                    $data = [
+                        "status" => 400,
+                        "message" => "Sai mật khẩu hoặc email",
+                    ];
+                    return response()->json($data, 200);
+                }
+                $user->password =
+                    Hash::make($request->password);
+                $user->save();
+                $data = [
+                    "status" => 200,
+                    "message" => "Đổi mật khẩu thành công",
+                ];
+                return response()->json($data, 200);
+            } else {
+                $data = [
+                    "status" => 400,
+                    "message" => "Sai emal hoặc mật khẩu",
+                ];
+                return response()->json($data, 200);
+            }
+        }
     }
 
     /**

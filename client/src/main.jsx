@@ -5,10 +5,13 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import CardContext from "./components/context/Contexts.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <CardContext>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </CardContext>
   </React.StrictMode>
 );

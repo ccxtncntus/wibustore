@@ -1,8 +1,12 @@
-import React from "react";
+import { useEffect } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
+import { NavLink } from "react-router-dom";
 const ShopNav = ({ cate, setPC }) => {
   const handleChangeCate = (i) => {
     setPC(i);
+  };
+  const chanPath = (name) => {
+    return name.replace(/ /g, "-").toLowerCase();
   };
   return (
     <ListGroup>
@@ -15,13 +19,22 @@ const ShopNav = ({ cate, setPC }) => {
             key={index}
             onClick={() => handleChangeCate(item)}
           >
-            {item.name}
+            <NavLink
+              style={{
+                color: "black",
+                textDecoration: "none",
+              }}
+              to={`/shop/${chanPath(item.name)}/${item.id}`}
+            >
+              {" "}
+              {item.name}
+            </NavLink>
           </ListGroup.Item>
         ))}
       <ListGroup.Item
         style={{ border: "none", borderBottom: "0.5px solid gray" }}
         action
-        onClick={() => handleChangeCate("sale")}
+        onClick={() => handleChangeCate({ name: "sale" })}
       >
         Sale
       </ListGroup.Item>

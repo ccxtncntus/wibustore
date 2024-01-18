@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import * as ProductsService from "../../services/ProductService";
 import "./productdetail.css";
 import { HOST } from "../../configs/DataEnv";
+import { Contexts } from "../../components/context/Contexts";
+import { useContext } from "react";
+import { useParams } from "react-router-dom";
 const ProductsDetail = () => {
+  const { addCard, delCard, cardNumber } = useContext(Contexts);
   const data = window.location.pathname;
   const datas = data.split("/").pop();
   const [Product, setProduct] = useState("");
@@ -31,12 +35,10 @@ const ProductsDetail = () => {
     setValue(e.target.value);
   };
   const handleAddcard = () => {
-    const money = Number(value) * Number(Product.price - Product.saleoff);
-    console.log(money);
+    addCard({ Product: Product, number: Number(value) });
   };
   const handleBuyNow = () => {
-    const money = Number(value) * Number(Product.price - Product.saleoff);
-    console.log(money);
+    console.log(cardNumber);
   };
   return (
     <div className="container">

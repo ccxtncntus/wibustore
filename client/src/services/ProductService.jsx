@@ -25,9 +25,9 @@ const update = async (formData) => {
 };
 
 const listProCategory = async (id, page) => {
-  const res = await request.GET(`/api/products/listPro/${id}`, {
-    pageNumber: page,
-  });
+  const res = await request.GET(
+    `/api/products/listPro/${id}?pageNumber=${page}`
+  );
   return res;
 };
 

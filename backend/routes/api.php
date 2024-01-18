@@ -54,10 +54,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 Route::get('account', [UserCotroller::class, 'index']);
 Route::post('login', [UserCotroller::class, 'login']);
 Route::post('authentication', [UserCotroller::class, 'authentication']);
+Route::post('register', [UserCotroller::class, 'register']);
+Route::patch('changePass', [UserCotroller::class, 'changePass']);
+Route::post('forgotPass', [UserCotroller::class, 'forgotPass']);
+
 // upload
 
 // send mail
-Route::get(
-    'send',
-    [MailController::class, 'index']
+Route::post(
+    'sendPass',
+    [MailController::class, 'mailPass']
 );

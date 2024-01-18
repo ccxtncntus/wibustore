@@ -7,4 +7,28 @@ const login = async (email, password) => {
   });
   return res;
 };
-export { login };
+const register = async (email, name, password) => {
+  const res = await request.POST(`/api/register`, {
+    email: email,
+    name: name,
+    password: password,
+  });
+  return res;
+};
+
+const changePass = async (email, password, passwordOld) => {
+  const res = await request.PATCH(`/api/changePass`, {
+    email: email,
+    passwordOld: passwordOld,
+    password: password,
+  });
+  return res;
+};
+const authen = async (token) => {
+  const res = await request.POST(`/api/authentication`, {
+    token: token,
+  });
+  return res;
+};
+
+export { login, register, changePass, authen };

@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import "./shopproductschild.css";
+import * as ProductsServices from "../../services/ProductService";
 const ShopProducts = ({ Products }) => {
   const [ListProducts, setListProducts] = useState([]);
+  const path = window.location.pathname;
+  const [pathOk, setpathOk] = useState("");
+  useEffect(() => {
+    setpathOk(path);
+  }, [path]);
   useEffect(() => {
     if (Products !== "") {
       setListProducts(Products.data.data);
@@ -32,7 +38,7 @@ const ShopProducts = ({ Products }) => {
                 src="https://i.pinimg.com/564x/6b/c8/43/6bc843572895746afca2772add4f9e97.jpg"
                 alt=""
               />
-              <NavLink to={"/shop/" + item.id}>{item.name}</NavLink>
+              <NavLink to={pathOk + "/" + item.id}>{item.name}</NavLink>
               <div>
                 {currencyFormat(item.price - item.saleoff)}{" "}
                 <strike className="shop_product_child_sale">

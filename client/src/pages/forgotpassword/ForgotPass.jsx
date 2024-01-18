@@ -1,20 +1,12 @@
 import { useForm } from "react-hook-form";
-import "./login.css";
 import { NavLink } from "react-router-dom";
-import * as AccountService from "../../services/AccountService";
+import * as MailService from "../../services/MailService";
 import { message } from "antd";
-import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { orbit } from "ldrs";
-
 orbit.register();
-
-// Default values shown
-
-const Login = () => {
+const ForgotPass = () => {
   // Default values shown
-
-  const [cookies, setCookie] = useCookies(["token"]);
   const [Loading, setLoading] = useState(false);
   const {
     register,
@@ -25,19 +17,14 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      const login = await AccountService.login(data.email, data.password);
-      if (login.status === 400) {
-        console.log(login);
-        message.error(login.message);
+      const send = await MailService.sendPass(data.email);
+      if (send.status === 400) {
+        message.error(send.message);
         setLoading(false);
-      } else {
-        console.log(login);
-        let d = new Date();
-        d.setTime(d.getTime() + 120 * 60 * 1000);
-        message.success("Đăng nhập thành công");
-        setCookie("token", login.token, { path: "/", expires: d });
-        setLoading(false);
+        return;
       }
+      message.success("Kiểm tra mật khẩu mới trong email");
+      setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -45,16 +32,16 @@ const Login = () => {
   };
   return (
     <>
-      <h4 style={{ textAlign: "center" }}>Login</h4>
+      <h4 style={{ textAlign: "center" }}>Quyên mật khẩu</h4>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mx-auto"
         style={{ width: 600 }}
       >
-        <p>Email</p>
+        {/* email */}
+        <p className="mt-2">Email</p>
         <input
           className="form-control"
-          placeholder="..."
           {...register("email", {
             required: {
               value: true,
@@ -69,13 +56,7 @@ const Login = () => {
         {errors.email && (
           <span className="text-danger">{errors.email?.message}</span>
         )}
-        <p className="mt-4">Password</p>
-        <input
-          className="form-control"
-          type="password"
-          {...register("password", { required: true })}
-        />
-        {errors.password && <span className="text-danger">Không bỏ trống</span>}
+        {/* submit */}
         <div>
           {Loading ? (
             <button className="btn btn-primary mt-2" disabled={true}>
@@ -85,21 +66,15 @@ const Login = () => {
             <input
               className="btn btn-primary mt-2"
               type="submit"
-              value={"Đăng nhập"}
+              value={"Gửi yêu cầu"}
             />
           )}
         </div>
-        <div>
-          <NavLink to={"/register"} style={{ textDecoration: "none" }}>
-            Đăng kí
+        <div className="mt-2">
+          <NavLink to={"/login"} style={{ textDecoration: "none" }}>
+            Đăng nhập
           </NavLink>
-        </div>
-        <div>
-          <NavLink to={"/forgotpass"} style={{ textDecoration: "none" }}>
-            Quyên mật khẩu
-          </NavLink>
-        </div>
-        <div>
+          {" --- "}
           <NavLink to={"/changepass"} style={{ textDecoration: "none" }}>
             Đổi mật khẩu
           </NavLink>
@@ -109,4 +84,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPass;

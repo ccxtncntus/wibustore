@@ -19,13 +19,33 @@ class ProductsController extends Controller
     public function index(Request $request)
     {
         $pageNumber = $request->pageNumber;
-        $products = Products::paginate(10, ['*'], 'page', $pageNumber);
+        $products = Products::select(
+            'products.id',
+            'products.name',
+            'products.status',
+            'products.description',
+            'products.quantity',
+            'products.price',
+            'products.saleoff',
+            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+        )
+            ->join('images', 'images.product_id', '=', 'products.id')
+            ->groupBy(
+                'products.id',
+                'products.status',
+                'products.saleoff',
+                'products.price',
+                'products.quantity',
+                'products.description',
+                'products.name',
+            )
+            ->paginate(10, ['*'], 'page', $pageNumber);
         if ($products->count() === 0) {
             $upData = [
                 "status" => 400,
                 "message" => "There aren't any products",
             ];
-            return response()->json($upData, 400);
+            return response()->json($upData, 200);
         } else {
             $data = [
                 "status" => 200,
@@ -59,17 +79,46 @@ class ProductsController extends Controller
                 'products.name',
             )
             ->get();
-        $data = [
-            "status" => 200,
-            "data" => $products,
-        ];
-        return response()->json($products, 200);
+        if ($products->count() === 0) {
+            $upData = [
+                "status" => 400,
+                "message" => "There aren't any products",
+            ];
+            return response()->json($upData, 200);
+        } else {
+            $data = [
+                "status" => 200,
+                "data" => $products,
+            ];
+            return response()->json($data, 200);
+        }
     }
 
     public function listProductOfCategory(Request $request, $id)
     {
         $pageNumber = $request->pageNumber;
-        $products = Products::where('category_id', $id)->paginate(10, ['*'], 'page', $pageNumber);
+        $products = Products::select(
+            'products.id',
+            'products.name',
+            'products.status',
+            'products.description',
+            'products.quantity',
+            'products.price',
+            'products.saleoff',
+            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+        )
+            ->join('images', 'images.product_id', '=', 'products.id')
+            ->where('products.category_id', $id)
+            ->groupBy(
+                'products.id',
+                'products.status',
+                'products.saleoff',
+                'products.price',
+                'products.quantity',
+                'products.description',
+                'products.name',
+            )
+            ->paginate(10, ['*'], 'page', $pageNumber);
         $data = [
             "status" => 200,
             "data" => $products,

@@ -17,6 +17,13 @@ const ContactllLazy = lazy(() => import("./pages/contact/Contact"));
 const HomeContentllLazy = lazy(() => import("./pages/home/HomeContent"));
 const ProductsDetailllLazy = lazy(() => import("./pages/shop/ProductsDetail"));
 const LoginllLazy = lazy(() => import("./pages/login/Login"));
+const RegisterllLazy = lazy(() => import("./pages/register/Register"));
+const ForgotPassllLazy = lazy(() =>
+  import("./pages/forgotpassword/ForgotPass")
+);
+const ChangePassllLazy = lazy(() =>
+  import("./pages/changepassword/ChangePass")
+);
 
 function App() {
   return (
@@ -38,6 +45,32 @@ function App() {
               </Suspense>
             }
           />
+
+          <Route
+            path="/register"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <RegisterllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/forgotpass"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ForgotPassllLazy />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="/changepass"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ChangePassllLazy />
+              </Suspense>
+            }
+          />
           <Route
             path="/shop"
             element={
@@ -47,13 +80,54 @@ function App() {
             }
           />
           <Route
-            path="/shop/:slug"
+            path="/shop/page/:page"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ShopllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/shop/:idProduct"
             element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProductsDetailllLazy />
               </Suspense>
             }
           />
+          <Route
+            path="/shop/:category/:idcategory"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ShopllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/shop/:category/:idcategory/page/:pageCate"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ShopllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/shop/:category/:idcategory/:idProduct"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProductsDetailllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/shop/:category/:idcategory/page/:pageCate/:idProduct"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProductsDetailllLazy />
+              </Suspense>
+            }
+          />
+
           <Route
             path="/posts"
             element={

@@ -1,60 +1,63 @@
 import { useForm } from "react-hook-form";
-import "./login.css";
+// import "./login.css";
 import { NavLink } from "react-router-dom";
 import * as AccountService from "../../services/AccountService";
 import { message } from "antd";
-import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { orbit } from "ldrs";
-
 orbit.register();
-
-// Default values shown
-
-const Login = () => {
+const Register = () => {
   // Default values shown
-
-  const [cookies, setCookie] = useCookies(["token"]);
   const [Loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      const login = await AccountService.login(data.email, data.password);
-      if (login.status === 400) {
-        console.log(login);
-        message.error(login.message);
-        setLoading(false);
-      } else {
-        console.log(login);
-        let d = new Date();
-        d.setTime(d.getTime() + 120 * 60 * 1000);
-        message.success("Đăng nhập thành công");
-        setCookie("token", login.token, { path: "/", expires: d });
-        setLoading(false);
+      const { name, email, password } = data;
+      const regis = await AccountService.register(email, name, password);
+      console.log(regis);
+      if (regis.status == 200) {
+        message.success(regis.message);
       }
+      setLoading(false);
     } catch (error) {
-      console.log(error);
+      //   console.log(error.response.data.message);
+      message.error(error.response.data.message);
       setLoading(false);
     }
   };
   return (
     <>
-      <h4 style={{ textAlign: "center" }}>Login</h4>
+      <h4 style={{ textAlign: "center" }}>Đăng kí</h4>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mx-auto"
         style={{ width: 600 }}
       >
-        <p>Email</p>
+        {/* name */}
+        <p>Tên</p>
         <input
           className="form-control"
-          placeholder="..."
+          {...register("name", {
+            required: {
+              value: true,
+              message: "Không bỏ trống",
+            },
+          })}
+        />
+        {errors.name && (
+          <span className="text-danger">{errors.name?.message}</span>
+        )}
+        {/* email */}
+        <p className="mt-2">Email</p>
+        <input
+          className="form-control"
           {...register("email", {
             required: {
               value: true,
@@ -69,13 +72,32 @@ const Login = () => {
         {errors.email && (
           <span className="text-danger">{errors.email?.message}</span>
         )}
-        <p className="mt-4">Password</p>
+        {/* password */}
+        <p className="mt-2">Mật khẩu</p>
         <input
           className="form-control"
           type="password"
           {...register("password", { required: true })}
         />
         {errors.password && <span className="text-danger">Không bỏ trống</span>}
+        {/* Change pass */}
+        <p className="mt-2">Nhập lại mật khẩu</p>
+        <input
+          className="form-control"
+          type="password"
+          {...register("passwordCheck", {
+            required: {
+              value: true,
+              message: "Không bỏ trống",
+            },
+            validate: (value) =>
+              value === watch("password") || "Nhập lại không đúng",
+          })}
+        />
+        {errors.passwordCheck && (
+          <span className="text-danger">{errors.passwordCheck?.message}</span>
+        )}
+        {/* submit */}
         <div>
           {Loading ? (
             <button className="btn btn-primary mt-2" disabled={true}>
@@ -85,23 +107,13 @@ const Login = () => {
             <input
               className="btn btn-primary mt-2"
               type="submit"
-              value={"Đăng nhập"}
+              value={"Đăng kí"}
             />
           )}
         </div>
         <div>
-          <NavLink to={"/register"} style={{ textDecoration: "none" }}>
-            Đăng kí
-          </NavLink>
-        </div>
-        <div>
-          <NavLink to={"/forgotpass"} style={{ textDecoration: "none" }}>
-            Quyên mật khẩu
-          </NavLink>
-        </div>
-        <div>
-          <NavLink to={"/changepass"} style={{ textDecoration: "none" }}>
-            Đổi mật khẩu
+          <NavLink to={"/login"} style={{ textDecoration: "none" }}>
+            Đăng nhập.
           </NavLink>
         </div>
       </form>
@@ -109,4 +121,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

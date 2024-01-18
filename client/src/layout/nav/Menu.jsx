@@ -56,7 +56,7 @@ const Menu = () => {
               : "opacity-0 pointer-events nav_hover_s"
           }
         >
-          {hovering === 0 ? <ProductsMenu /> : <PostsMenu />}
+          {hovering === 0 && <ProductsMenu />}
         </div>
       </ul>
     </div>
