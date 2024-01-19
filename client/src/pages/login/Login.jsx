@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import "./login.css";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import * as AccountService from "../../services/AccountService";
 import { message } from "antd";
 import { useCookies } from "react-cookie";
@@ -8,13 +8,10 @@ import { useState } from "react";
 import { orbit } from "ldrs";
 
 orbit.register();
-
-// Default values shown
-
 const Login = () => {
   // Default values shown
-
-  const [cookies, setCookie] = useCookies(["token"]);
+  const natigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies(["token", "path_end"]);
   const [Loading, setLoading] = useState(false);
   const {
     register,
@@ -35,6 +32,8 @@ const Login = () => {
         let d = new Date();
         d.setTime(d.getTime() + 120 * 60 * 1000);
         message.success("Đăng nhập thành công");
+        cookies.path_end ? natigate(cookies.path_end) : natigate("/");
+        await removeCookie("path_end");
         setCookie("token", login.token, { path: "/", expires: d });
         setLoading(false);
       }
@@ -82,11 +81,18 @@ const Login = () => {
               <l-orbit size="35" speed="1.5" color="black"></l-orbit>
             </button>
           ) : (
-            <input
-              className="btn btn-primary mt-2"
-              type="submit"
-              value={"Đăng nhập"}
-            />
+            <>
+              <input
+                className="btn btn-primary mt-2"
+                type="submit"
+                value={"Đăng nhập"}
+              />{" "}
+              {cookies.path_end && (
+                <Link to={cookies.path_end} className="btn btn-secondary mt-2">
+                  hủy
+                </Link>
+              )}
+            </>
           )}
         </div>
         <div>

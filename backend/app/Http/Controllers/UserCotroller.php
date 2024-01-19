@@ -52,7 +52,12 @@ class UserCotroller extends Controller
             ];
             return response($data, 201);
         } else {
-            $user = $token->tokenable;
+            $user = [
+                'id' => $token->tokenable->id ?? null,
+                'name' => $token->tokenable->name ?? null,
+                'role' => $token->tokenable->role ?? null,
+                'email' => $token->tokenable->email ?? null,
+            ];
             $data = [
                 'status' => 200,
                 'data' =>  $user

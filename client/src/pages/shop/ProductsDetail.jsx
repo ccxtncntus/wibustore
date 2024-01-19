@@ -5,20 +5,31 @@ import { HOST } from "../../configs/DataEnv";
 import { Contexts } from "../../components/context/Contexts";
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
+import LoginModal from "../../components/modal/LoginModal";
+import * as AccountService from "../../services/AccountService";
+import { useCookies } from "react-cookie";
+
 const ProductsDetail = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(["token", "path_end"]);
   const { addCard, delCard, cardNumber } = useContext(Contexts);
   const data = window.location.pathname;
   const datas = data.split("/").pop();
   const [Product, setProduct] = useState("");
   const [ListImg, setListImg] = useState([]);
   const [ViewImg, setViewImg] = useState(0);
-
+  const [IsLogin, setIsLogin] = useState(false);
   useEffect(() => {
     const run = async () => {
       const data = await ProductsService.productId(datas);
       setProduct(data.data[0]);
       const imgs = data.data[0].all_images.split(",");
       setListImg(imgs);
+      if (Object.values(cookies.length > 0)) {
+        if (cookies.token) {
+          const login = await AccountService.authen(cookies.token);
+          login.status === 200 ? setIsLogin(true) : setIsLogin(false);
+        }
+      }
     };
     run();
   }, []);
@@ -34,14 +45,19 @@ const ProductsDetail = () => {
   const handleChangeQuantity = (e) => {
     setValue(e.target.value);
   };
+  const [modalShow, setModalShow] = useState(false);
   const handleAddcard = () => {
-    addCard({ Product: Product, number: Number(value) });
+    IsLogin ? console.log("Thêm sản phẩm") : setModalShow(true);
+    //
+    // addCard({ Product: Product, number: Number(value) });
   };
   const handleBuyNow = () => {
-    console.log(cardNumber);
+    IsLogin ? console.log("Mua ngay") : setModalShow(true);
+    // console.log(cardNumber);
   };
   return (
     <div className="container">
+      <LoginModal show={modalShow} onHide={() => setModalShow(false)} />
       {Product !== "" ? (
         <>
           <div className="row mt-5">

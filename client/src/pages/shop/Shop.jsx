@@ -1,29 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import ShopNav from "../../components/shopcom/ShopNav";
 import ShopProducts from "../../components/shopcom/shopProducts";
 import * as CategoriesServices from "../../services/CategoryService";
 import * as ProductsServices from "../../services/ProductService";
 import { useParams } from "react-router-dom";
+import { CategoriesContexts } from "../../components/context/CategoriesContexts";
 const Shop = () => {
+  const { ListCategories } = useContext(CategoriesContexts);
   const paths = useParams();
   const [cate, SetCate] = useState("");
   const [productCate, setproductCate] = useState("");
   const [Products, setProducts] = useState("");
-
   const setPC = (i) => {
     setproductCate(i);
   };
   useEffect(() => {
+    if (ListCategories !== "") {
+      SetCate(ListCategories.data.data);
+    }
+  }, [ListCategories]);
+
+  useEffect(() => {
     const listCate = async () => {
-      const list = await CategoriesServices.List(1);
-      SetCate(list.data.data);
       if (Object.values(paths).length > 0) {
         const list = await ProductsServices.listProCategory(
           paths.idcategory,
           paths.pageCate ? paths.pageCate : 1
         );
         setProducts(list);
-
         if (paths.page) {
           const listAll = await ProductsServices.List(
             paths.page ? paths.page : 1
@@ -37,10 +41,6 @@ const Shop = () => {
     };
     listCate();
   }, [paths]);
-  useEffect(() => {
-    Products.status === 200 && console.log(Products.data.data);
-  }, [Products]);
-
   return (
     <div className="container mt-2">
       <div className="row">

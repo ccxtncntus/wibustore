@@ -1,5 +1,4 @@
 import { createContext, useState } from "react";
-
 export const Contexts = createContext();
 
 function CardContext({ children }) {

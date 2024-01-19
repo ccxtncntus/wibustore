@@ -12,7 +12,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $pageNumber = $request->pageNumber;
-        $categorys = Category::orderBy('id', 'DESC')->paginate(10, ['*'], 'page', $pageNumber);
+        $categorys = Category::select('id', 'name', 'status')->orderBy('id', 'DESC')->paginate(10, ['*'], 'page', $pageNumber);
         if ($categorys->count() === 0) {
             $upData = [
                 "status" => 400,
