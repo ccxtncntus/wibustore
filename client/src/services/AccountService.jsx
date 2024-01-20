@@ -30,5 +30,18 @@ const authen = async (token) => {
   });
   return res;
 };
+const tokenComfirm = async (email, token) => {
+  const res = await request.POST(`/api/checkTokenConfirm`, {
+    email: email,
+    token: token,
+  });
+  return res;
+};
+const delTokenComfirm = async (email, token) => {
+  const res = await request.DELETE(
+    `/api/delTokenConfirm?email=${email}&token=${token}`
+  );
+  return res;
+};
 
-export { login, register, changePass, authen };
+export { login, register, changePass, authen, tokenComfirm, delTokenComfirm };

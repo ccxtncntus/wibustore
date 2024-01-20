@@ -10,7 +10,6 @@
 
 <body>
     <h2>{{ $mailData['title'] }}</h2>
-    <h4>{{ $mailData['body'] }}</h4>
     <h2>{{ $mailData['pass'] }}</h2>
     <p>Vip</p>
 </body>

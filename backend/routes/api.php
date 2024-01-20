@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\UserCotroller;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\ShoppingCardController;;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -57,6 +58,8 @@ Route::post('authentication', [UserCotroller::class, 'authentication']);
 Route::post('register', [UserCotroller::class, 'register']);
 Route::patch('changePass', [UserCotroller::class, 'changePass']);
 Route::post('forgotPass', [UserCotroller::class, 'forgotPass']);
+Route::post('checkTokenConfirm', [UserCotroller::class, 'checkTokenConfirm']);
+Route::delete('delTokenConfirm', [UserCotroller::class, 'delTokenConfirm']);
 
 // upload
 
@@ -65,3 +68,7 @@ Route::post(
     'sendPass',
     [MailController::class, 'mailPass']
 );
+
+// shoppingcart
+Route::get('shoppingcard', [ShoppingCardController::class, 'index']);
+Route::post('shoppingcard/adOneProduct', [ShoppingCardController::class, 'addOneProduct']);

@@ -4,9 +4,9 @@ const HomeContent = () => {
   // <h3>First slide label</h3>
   // <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
   let imgs = [
-    "https://i.pinimg.com/originals/e9/fe/0e/e9fe0e16a126714f09d2e1cfae7379ce.jpg",
-    "https://i.pinimg.com/originals/7a/a1/31/7aa131f899b2361a43503102af6e670e.jpg",
-    "https://i.pinimg.com/originals/f6/72/f8/f672f84a2a8149fdfb9f162c7c0d1902.jpg",
+    "https://i.pinimg.com/originals/b5/2d/5a/b52d5a95a538c4f8a1a568fcabd99310.jpg",
+    "https://i.pinimg.com/originals/73/d6/f2/73d6f2ef18f085de49cdcf8e4fe0a4b9.jpg",
+    "https://i.pinimg.com/originals/43/10/02/4310026929ab146ac1c6884f9546987f.jpg",
   ];
   return (
     <div>

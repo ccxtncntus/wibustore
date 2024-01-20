@@ -9,6 +9,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\Token;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class UserCotroller extends Controller
 {
@@ -158,11 +159,72 @@ class UserCotroller extends Controller
         }
     }
 
+    public function checkTokenConfirm(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|max:255',
+            'token' => 'required',
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 200);
+        } else {
+            $user = DB::table('password_reset_tokens')
+                ->select('email', 'token')
+                ->where('email', $request->email)
+                ->where('token', $request->token)->first();
+            if ($user) {
+                $data = [
+                    "status" => 200,
+                    "message" => $user,
+                ];
+                return response()->json($data, 200);
+            }
+            $data = [
+                "status" => 400,
+                "message" => 'Nobody',
+            ];
+            return response()->json($data, 200);
+        }
+    }
+    public function delTokenConfirm(Request $request)
+    {
+        // $validator = Validator::make($request->all(), [
+        //     'email' => 'required|email|max:255',
+        //     'token' => 'required',
+        // ]);
+        // if ($validator->fails()) {
+        //     $data = [
+        //         "status" => 400,
+        //         "message" => $validator->errors()->first(),
+        //     ];
+        //     return response()->json($data, 200);
+        // } 
+        $user = DB::table('password_reset_tokens')
+            ->select('email', 'token')
+            ->where('email', $request->email)
+            ->where('token', $request->token)->delete();
+        if ($user) {
+            $data = [
+                "status" => 200,
+                "message" => 'Xóa token confirm thành công',
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                "status" => 400,
+                "message" => 'Lỗi xóa token confirm',
+            ];
+            return response()->json($data, 200);
+        }
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
     }
 }

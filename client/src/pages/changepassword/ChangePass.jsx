@@ -1,14 +1,37 @@
 import { useForm } from "react-hook-form";
 // import "./login.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import * as AccountService from "../../services/AccountService";
 import { message } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { orbit } from "ldrs";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import "./changepassword.css";
 orbit.register();
 const ChangePass = () => {
-  // Default values shown
+  const { state } = useLocation();
   const [Loading, setLoading] = useState(false);
+  const [Email, setEmail] = useState("");
+  useEffect(() => {
+    const run = async () => {
+      AOS.init({
+        duration: 1000,
+      });
+      AOS.refresh();
+      if (state) {
+        const { tokenConfirm, email } = state;
+        setEmail(email);
+        const delTokenC = await AccountService.delTokenComfirm(
+          email,
+          tokenConfirm
+        );
+        delTokenC.status === 200 && console.log(delTokenC);
+      }
+    };
+    run();
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -38,17 +61,22 @@ const ChangePass = () => {
     }
   };
   return (
-    <>
-      <h4 style={{ textAlign: "center" }}>Đổi mật khẩu</h4>
+    <div className="changepassword">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mx-auto"
+        className="mx-auto form_changepassword"
         style={{ width: 600 }}
+        data-aos="fade-up"
       >
+        <h4 style={{ textAlign: "center" }}>Cập nhật mật khẩu</h4>
         {/* email */}
-        <p className="mt-2">Email</p>
+        <p className="mt-2" style={{ margin: 0 }}>
+          Email
+        </p>
         <input
-          className="form-control"
+          defaultValue={Email}
+          disabled
+          className="form-control mt-2"
           {...register("email", {
             required: {
               value: true,
@@ -74,9 +102,11 @@ const ChangePass = () => {
           <span className="text-danger">Không bỏ trống</span>
         )}
         {/* password new */}
-        <p className="mt-2">Mật khẩu mới</p>
+        <p className="mt-2" style={{ margin: 0 }}>
+          Mật khẩu mới
+        </p>
         <input
-          className="form-control"
+          className="form-control mt-2"
           type="password"
           {...register("password", {
             required: {
@@ -91,9 +121,11 @@ const ChangePass = () => {
           <span className="text-danger">{errors.password?.message}</span>
         )}
         {/* Change pass */}
-        <p className="mt-2">Nhập lại mật khẩu</p>
+        <p className="mt-2" style={{ margin: 0 }}>
+          Nhập lại mật khẩu
+        </p>
         <input
-          className="form-control"
+          className="form-control mt-2"
           type="password"
           {...register("passwordCheck", {
             required: {
@@ -110,24 +142,27 @@ const ChangePass = () => {
         {/* submit */}
         <div>
           {Loading ? (
-            <button className="btn btn-primary mt-2" disabled={true}>
+            <button className="btn btn-primary mt-3" disabled={true}>
               <l-orbit size="35" speed="1.5" color="black"></l-orbit>
             </button>
           ) : (
             <input
-              className="btn btn-primary mt-2"
+              className="btn btn-primary mt-3"
               type="submit"
               value={"Đổi mật khẩu"}
             />
           )}
         </div>
-        <div>
-          <NavLink to={"/login"} style={{ textDecoration: "none" }}>
-            Đăng nhập.
-          </NavLink>
+        <div className="mt-2">
+          <span>
+            Đã có tài khoản?{" "}
+            <NavLink to={"/login"} style={{ textDecoration: "none" }}>
+              Đăng nhập.
+            </NavLink>
+          </span>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 export default ChangePass;

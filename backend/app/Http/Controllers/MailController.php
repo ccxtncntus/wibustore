@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class MailController extends Controller
 {
@@ -26,20 +27,22 @@ class MailController extends Controller
         } else {
             $user = User::where('email', $request->email)->first();
             if ($user) {
-                $newPass = Str::upper(Str::random(6));
-                $user->password =
-                    Hash::make($newPass);
-                $user->save();
+                $tokenConfirm = Str::upper(Str::random(6));
                 $email = $request->email;
+                DB::table('password_reset_tokens')->insert(
+                    [
+                        'email' => $email,
+                        'token' => $tokenConfirm
+                    ]
+                );
                 $mailData = [
-                    "title" => "Thông tin Mật khẩu Mới cho Tài Khoản Của Bạn",
-                    "body" => "Mật khẩu mới của bạn là :",
-                    "pass" => $newPass,
+                    "title" => "Mã xác nhận của bạn là :",
+                    "pass" => $tokenConfirm,
                 ];
                 Mail::to($email)->send(new ForgotPassMail($mailData));
                 $data = [
                     "status" => 200,
-                    "message" => "Kiểm tra mật khẩu mới trong email",
+                    "message" => "Lấy mã xác nhận trong email",
                 ];
                 return response()->json($data, 200);
             } else {

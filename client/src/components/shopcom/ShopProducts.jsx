@@ -19,7 +19,7 @@ const ShopProducts = ({ Products }) => {
   useEffect(() => {
     if (Products !== "") {
       setListProducts(Products.data.data);
-      console.log(Products.data.data);
+      // console.log(Products.data.data);
     }
     return () => {};
   }, [Products]);
