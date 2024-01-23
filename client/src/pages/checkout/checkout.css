@@ -1,0 +1,37 @@
+.checkout {
+  padding: 40px 100px;
+  background-color: rgb(237, 239, 240);
+}
+.checkout h3 {
+  color: gray;
+  font-size: 1.4rem;
+  margin: 10px 0;
+}
+.checkout_information_user {
+  padding-left: 80px;
+}
+.checkout_information_user * {
+  margin-top: 5px;
+}
+.checkout_cart_child {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.checkout_cart_child img {
+  height: 120px;
+  width: 100px;
+  object-fit: cover;
+}
+.checkout_cart_child i:hover {
+  cursor: pointer;
+  color: red;
+  transition: all 0.5s;
+}
+.checkout_temporary_money {
+  font-weight: 500;
+}
+.checkout_information_user_radio {
+  display: flex;
+  flex-direction: column;
+}

@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { useParams } from "react-router-dom";
 import LoginModal from "../../components/modal/LoginModal";
 import * as AccountService from "../../services/AccountService";
+import * as ShoppingCartsService from "../../services/ShoppingCartsService";
 import { useCookies } from "react-cookie";
 
 const ProductsDetail = () => {
@@ -18,6 +19,7 @@ const ProductsDetail = () => {
   const [ListImg, setListImg] = useState([]);
   const [ViewImg, setViewImg] = useState(0);
   const [IsLogin, setIsLogin] = useState(false);
+  const [IdUser, setIdUser] = useState("");
   useEffect(() => {
     const run = async () => {
       const data = await ProductsService.productId(datas);
@@ -27,7 +29,12 @@ const ProductsDetail = () => {
       if (Object.values(cookies.length > 0)) {
         if (cookies.token) {
           const login = await AccountService.authen(cookies.token);
-          login.status === 200 ? setIsLogin(true) : setIsLogin(false);
+          if (login.status === 200) {
+            setIsLogin(true);
+            setIdUser(login.data.id);
+          } else {
+            setIsLogin(false);
+          }
         }
       }
     };
@@ -46,15 +53,26 @@ const ProductsDetail = () => {
     setValue(e.target.value);
   };
   const [modalShow, setModalShow] = useState(false);
-  const handleAddcard = () => {
-    IsLogin ? console.log("Thêm sản phẩm") : setModalShow(true);
-    //
-    // addCard({ Product: Product, number: Number(value) });
+  const handleAddcard = async () => {
+    if (IsLogin) {
+      const img = Product.all_images.split(",")[0];
+      // console.log(value);
+      await addCard({ sp: Product, sl: value, img: img });
+      const chay = await ShoppingCartsService.add(
+        IdUser,
+        Product.id,
+        img,
+        value
+      );
+      console.log(chay);
+    } else {
+      setModalShow(true);
+    }
   };
-  const handleBuyNow = () => {
-    IsLogin ? console.log("Mua ngay") : setModalShow(true);
-    // console.log(cardNumber);
-  };
+  // const handleBuyNow = () => {
+  //   IsLogin ? console.log("Mua ngay") : setModalShow(true);
+  //   // console.log(cardNumber);
+  // };
   return (
     <div className="container">
       <LoginModal show={modalShow} onHide={() => setModalShow(false)} />
@@ -116,7 +134,7 @@ const ProductsDetail = () => {
                 >
                   Thêm vào giỏ hàng
                 </button>{" "}
-                <button
+                {/* <button
                   className="btn btn-secondary"
                   disabled={
                     value > 0 && value <= Product.quantity ? false : true
@@ -124,7 +142,7 @@ const ProductsDetail = () => {
                   onClick={handleBuyNow}
                 >
                   Mua ngay
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

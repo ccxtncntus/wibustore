@@ -4,13 +4,27 @@ import "./cardmodal.css";
 import * as Helpers from "../../helpers/FormatNumber";
 import { Contexts } from "../../components/context/Contexts";
 import { useContext } from "react";
-
+import { HOST } from "../../configs/DataEnv";
+import * as ShoppingCartsService from "../../services/ShoppingCartsService";
+import { useNavigate } from "react-router-dom";
 const CardModal = ({ placement, show, onClose }) => {
   const { delCard, cardNumber } = useContext(Contexts);
+  const natigate = useNavigate();
+  // useEffect(() => {
+  //   if (cardNumber.length > 0) {
+  //     console.log(cardNumber);
+  //   }
+  // }, [show]);
+  const handleDel = async (i) => {
+    delCard(i);
+    const del = await ShoppingCartsService.delCart(i.id);
+    console.log(del);
+  };
+  let tong = 0;
 
-  const handleDel = (i) => {
-    delCard(i.Product);
-    // console.log(i.Product);
+  const handleBuy = () => {
+    natigate("/carts");
+    console.log("buy npw");
   };
   return (
     <>
@@ -21,27 +35,27 @@ const CardModal = ({ placement, show, onClose }) => {
         <Offcanvas.Body>
           {cardNumber.length > 0
             ? cardNumber.map((item, index) => {
+                {
+                  tong += (item.price - item.saleoff) * item.quantity;
+                }
                 return (
                   <div key={index}>
                     <div className="cardModal">
                       <div>
                         <span>
-                          {item.Product.name} {item.number}
+                          {item.name} {item.quantity}
                           {" * "}
-                          {Helpers.FormatNumber(
-                            item.Product.price - item.Product.saleoff
-                          )}
+                          {Helpers.FormatNumber(item.price - item.saleoff)}
                         </span>
                         <p>
                           {Helpers.FormatNumber(
-                            (item.Product.price - item.Product.saleoff) *
-                              item.number
+                            (item.price - item.saleoff) * item.quantity
                           )}
                         </p>
                       </div>
                       <img
-                        src="https://i.pinimg.com/564x/7a/c8/28/7ac828473bbd28aa710d0291d41fb68e.jpg"
-                        alt=""
+                        src={HOST + "/uploads/" + item.img}
+                        alt={item.name}
                       />
                       <i
                         onClick={() => handleDel(item)}
@@ -53,6 +67,10 @@ const CardModal = ({ placement, show, onClose }) => {
                 );
               })
             : "Không có sản phẩm trong đây"}
+          <div>Tổng tiền: {Helpers.FormatNumber(tong)}</div>
+          <button onClick={handleBuy} className={"btn btn-secondary mt-2"}>
+            Giỏ hàng
+          </button>
         </Offcanvas.Body>
       </Offcanvas>
     </>

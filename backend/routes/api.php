@@ -8,6 +8,9 @@ use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\UserCotroller;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\ShoppingCardController;;
+
+use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\OrderDetailController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -60,6 +63,7 @@ Route::patch('changePass', [UserCotroller::class, 'changePass']);
 Route::post('forgotPass', [UserCotroller::class, 'forgotPass']);
 Route::post('checkTokenConfirm', [UserCotroller::class, 'checkTokenConfirm']);
 Route::delete('delTokenConfirm', [UserCotroller::class, 'delTokenConfirm']);
+Route::post('changePassWithToken', [UserCotroller::class, 'changePassWithToken']);
 
 // upload
 
@@ -72,3 +76,14 @@ Route::post(
 // shoppingcart
 Route::get('shoppingcard', [ShoppingCardController::class, 'index']);
 Route::post('shoppingcard/adOneProduct', [ShoppingCardController::class, 'addOneProduct']);
+Route::get('shoppingcard/listOfUser/{idUser}', [ShoppingCardController::class, 'listOfUser']);
+Route::post('shoppingcard/delCart', [ShoppingCardController::class, 'delCart']);
+Route::post('shoppingcard/changeQuatityProduct', [ShoppingCardController::class, 'changeQuatityProduct']);
+Route::get('shoppingcard/product', [ShoppingCardController::class, 'product']);
+Route::post('shoppingcard/productBuyed', [ShoppingCardController::class, 'productBuyed']);
+// orders
+Route::post('orders/create', [OrdersController::class, 'create']);
+
+
+// orderDetails
+Route::post('ordersDetails/create', [OrderDetailController::class, 'create']);

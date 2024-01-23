@@ -43,5 +43,20 @@ const delTokenComfirm = async (email, token) => {
   );
   return res;
 };
+const changePassWithToken = async (email, password) => {
+  const res = await request.POST(`/api/changePassWithToken`, {
+    email: email,
+    password: password,
+  });
+  return res;
+};
 
-export { login, register, changePass, authen, tokenComfirm, delTokenComfirm };
+export {
+  login,
+  register,
+  changePass,
+  authen,
+  tokenComfirm,
+  delTokenComfirm,
+  changePassWithToken,
+};

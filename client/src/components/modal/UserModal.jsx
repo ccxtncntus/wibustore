@@ -18,7 +18,6 @@ const UserModal = ({ placement, show, onClose }) => {
           const isLogin = await AccountService.authen(cookies.token);
           setIsLogin(isLogin.status === 200 ? true : false);
           setIsAdmin(isLogin.data.role == "user" ? false : true);
-          setIsAdmin;
           setLoading(false);
           console.log();
           return;
@@ -70,12 +69,13 @@ const UserModal = ({ placement, show, onClose }) => {
                         Quản lí đơn hàng
                       </li>
                     )}
-                    <li
-                      to={"/3"}
+
+                    <NavLink
+                      to={"/changepass"}
                       className="list-group-item list-group-item-action"
                     >
                       Đổi mật khẩu
-                    </li>
+                    </NavLink>
                     <li
                       className="list-group-item list-group-item-action"
                       onClick={() => logOut()}

@@ -20,19 +20,19 @@ const Nav = () => {
     if (Object.values(cookies).length > 0) {
       const lo = await AccountService.authen(cookies.token);
       if (lo.status == 200) {
-        console.log("đã đăng nhập");
+        // console.log("đã đăng nhập");
         setShowCard(true);
         cookies.path_end && console.log(cookies.path_end);
         return;
       }
       setCookie("path_end", window.location.pathname, { path: "/" });
       navigate("/login");
-      console.log("Lỗi người dùng");
+      // console.log("Lỗi người dùng");
       return;
     }
     setCookie("path_end", window.location.pathname, { path: "/" });
     navigate("/login");
-    console.log("Chưa đăng nhập");
+    // console.log("Chưa đăng nhập");
   };
   const handleClose = () => setShowCard(false);
   const handleShowModalUser = () => {
@@ -40,7 +40,6 @@ const Nav = () => {
     setShowUser(true);
   };
   const handleCloseUsers = () => setShowUser(false);
-
   return (
     <div className="nav container-fluit">
       <CardModal placement={"end"} show={showCard} onClose={handleClose} />

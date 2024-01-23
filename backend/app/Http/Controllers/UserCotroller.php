@@ -224,6 +224,40 @@ class UserCotroller extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+    public function changePassWithToken(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'max:255', 'email'],
+            "password" =>  ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $user = User::where('email', $request->email)->first();
+            if ($user) {
+                $user->password =
+                    Hash::make($request->password);
+                $user->save();
+                $data = [
+                    "status" => 200,
+                    "message" => "Đổi mật khẩu thành công",
+                ];
+                return response()->json($data, 200);
+            } else {
+                $data = [
+                    "status" => 400,
+                    "message" => "Sai emal hoặc mật khẩu",
+                ];
+                return response()->json($data, 200);
+            }
+        }
+    }
+
     public function destroy(string $id)
     {
     }

@@ -1,6 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
+import CheckOutSuccess from "./pages/checkout/CheckOutSuccess";
 const HomeLazy = lazy(() => import("./pages/Home"));
 const AdminLazy = lazy(() => import("./pages/Admin"));
 const ProductAdminLazy = lazy(() => import("./components/admin/ProductAdmin"));
@@ -18,6 +19,8 @@ const HomeContentllLazy = lazy(() => import("./pages/home/HomeContent"));
 const ProductsDetailllLazy = lazy(() => import("./pages/shop/ProductsDetail"));
 const LoginllLazy = lazy(() => import("./pages/login/Login"));
 const RegisterllLazy = lazy(() => import("./pages/register/Register"));
+const CheckOutllLazy = lazy(() => import("./pages/checkout/CheckOut"));
+const CartsllLazy = lazy(() => import("./pages/carts/Carts"));
 const ForgotPassllLazy = lazy(() =>
   import("./pages/forgotpassword/ForgotPass")
 );
@@ -127,7 +130,23 @@ function App() {
               </Suspense>
             }
           />
-
+          <Route
+            path="/check-out"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <CheckOutllLazy />
+              </Suspense>
+            }
+          />
+          <Route path="/check-out/success" element={<CheckOutSuccess />} />
+          <Route
+            path="/carts"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <CartsllLazy />
+              </Suspense>
+            }
+          />
           <Route
             path="/posts"
             element={

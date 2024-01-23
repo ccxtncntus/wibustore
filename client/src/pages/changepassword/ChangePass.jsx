@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 // import "./login.css";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import * as AccountService from "../../services/AccountService";
 import { message } from "antd";
 import { useEffect, useState } from "react";
@@ -8,8 +8,12 @@ import { orbit } from "ldrs";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./changepassword.css";
+
+import { useCookies } from "react-cookie";
 orbit.register();
 const ChangePass = () => {
+  const natigate = useNavigate();
+  const [cookies] = useCookies(["token", "path_end"]);
   const { state } = useLocation();
   const [Loading, setLoading] = useState(false);
   const [Email, setEmail] = useState("");
@@ -28,6 +32,10 @@ const ChangePass = () => {
         );
         delTokenC.status === 200 && console.log(delTokenC);
       }
+      if (cookies && cookies.token) {
+        const user = await AccountService.authen(cookies.token);
+        user.status === 200 && setEmail(user.data.email);
+      }
     };
     run();
   }, []);
@@ -42,23 +50,46 @@ const ChangePass = () => {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      const { email, passwordOld, password } = data;
-      const change = await AccountService.changePass(
-        email,
-        password,
-        passwordOld
-      );
-      if (change.status === 400) {
-        message.error(change.message);
+      if (state) {
+        const changeWithToken = await AccountService.changePassWithToken(
+          state.email,
+          data.password
+        );
+        console.log(changeWithToken);
+        if (changeWithToken.status === 400) {
+          message.error(changeWithToken.message);
+          setLoading(false);
+          return;
+        }
+        message.success(changeWithToken.message);
+        natigate("/login");
         setLoading(false);
-        return;
+      } else {
+        console.log(cookies.token);
+        if (cookies && cookies.token) {
+          const { passwordOld, password } = data;
+          const change = await AccountService.changePass(
+            Email,
+            password,
+            passwordOld
+          );
+          if (change.status === 400) {
+            message.error(change.message);
+            setLoading(false);
+            return;
+          }
+          message.success(change.message);
+        }
       }
-      message.success(change.message);
       setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
+  };
+  const handleCancel = () => {
+    // console.log(cookies.path_end);
+    natigate(cookies.path_end);
   };
   return (
     <div className="changepassword">
@@ -75,31 +106,25 @@ const ChangePass = () => {
         </p>
         <input
           defaultValue={Email}
-          disabled
+          disabled={true}
           className="form-control mt-2"
-          {...register("email", {
-            required: {
-              value: true,
-              message: "Không bỏ trống",
-            },
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Không đúng email",
-            },
-          })}
         />
         {errors.email && (
           <span className="text-danger">{errors.email?.message}</span>
         )}
-        {/* password old */}
-        <p className="mt-2">Mật khẩu cũ</p>
-        <input
-          className="form-control"
-          type="password"
-          {...register("passwordOld", { required: true })}
-        />
-        {errors.passwordOld && (
-          <span className="text-danger">Không bỏ trống</span>
+        {!state && (
+          <>
+            {/* password old */}
+            <p className="mt-2">Mật khẩu cũ</p>
+            <input
+              className="form-control"
+              type="password"
+              {...register("passwordOld", { required: true })}
+            />
+            {errors.passwordOld && (
+              <span className="text-danger">Không bỏ trống</span>
+            )}
+          </>
         )}
         {/* password new */}
         <p className="mt-2" style={{ margin: 0 }}>
@@ -146,21 +171,32 @@ const ChangePass = () => {
               <l-orbit size="35" speed="1.5" color="black"></l-orbit>
             </button>
           ) : (
-            <input
-              className="btn btn-primary mt-3"
-              type="submit"
-              value={"Đổi mật khẩu"}
-            />
+            <>
+              <input
+                className="btn btn-primary mt-3"
+                type="submit"
+                value={"Đổi mật khẩu"}
+              />{" "}
+              <button
+                className={"btn btn-secondary mt-3"}
+                onClick={handleCancel}
+                style={{ textDecoration: "none" }}
+              >
+                Quay lại
+              </button>
+            </>
           )}
         </div>
-        <div className="mt-2">
-          <span>
-            Đã có tài khoản?{" "}
-            <NavLink to={"/login"} style={{ textDecoration: "none" }}>
-              Đăng nhập.
-            </NavLink>
-          </span>
-        </div>
+        {!cookies && (
+          <div className="mt-2">
+            <span>
+              Đã có tài khoản?{" "}
+              <NavLink to={"/login"} style={{ textDecoration: "none" }}>
+                Đăng nhập.
+              </NavLink>
+            </span>
+          </div>
+        )}
       </form>
     </div>
   );
