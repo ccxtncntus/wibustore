@@ -3,27 +3,36 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import "./cardmodal.css";
 import * as Helpers from "../../helpers/FormatNumber";
 import { Contexts } from "../../components/context/Contexts";
+import { UContexts } from "../../components/context/UserContext";
 import { useContext } from "react";
 import { HOST } from "../../configs/DataEnv";
 import * as ShoppingCartsService from "../../services/ShoppingCartsService";
 import { useNavigate } from "react-router-dom";
 const CardModal = ({ placement, show, onClose }) => {
-  const { delCard, cardNumber } = useContext(Contexts);
+  const { delCard } = useContext(Contexts);
+  const { User } = useContext(UContexts);
+  const [ListCarts, setListCarts] = useState([]);
+  const [Load, setLoad] = useState(false);
   const natigate = useNavigate();
-  // useEffect(() => {
-  //   if (cardNumber.length > 0) {
-  //     console.log(cardNumber);
-  //   }
-  // }, [show]);
+  useEffect(() => {
+    const chay = async () => {
+      if (User) {
+        const list = await ShoppingCartsService.listOfUser(User.id);
+        setListCarts(list);
+      }
+    };
+    chay();
+  }, [show, Load]);
   const handleDel = async (i) => {
+    await ShoppingCartsService.delCart(i.id);
     delCard(i);
-    const del = await ShoppingCartsService.delCart(i.id);
-    console.log(del);
+    setLoad((pre) => !pre);
   };
   let tong = 0;
 
   const handleBuy = () => {
-    natigate("/carts");
+    onClose();
+    natigate("/carts", { state: { list: ListCarts } });
     console.log("buy npw");
   };
   return (
@@ -33,8 +42,8 @@ const CardModal = ({ placement, show, onClose }) => {
           <Offcanvas.Title>Card</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          {cardNumber.length > 0
-            ? cardNumber.map((item, index) => {
+          {ListCarts.length > 0
+            ? ListCarts.map((item, index) => {
                 {
                   tong += (item.price - item.saleoff) * item.quantity;
                 }
@@ -68,7 +77,11 @@ const CardModal = ({ placement, show, onClose }) => {
               })
             : "Không có sản phẩm trong đây"}
           <div>Tổng tiền: {Helpers.FormatNumber(tong)}</div>
-          <button onClick={handleBuy} className={"btn btn-secondary mt-2"}>
+          <button
+            onClick={handleBuy}
+            className={"btn btn-secondary mt-2"}
+            disabled={!ListCarts.length}
+          >
             Giỏ hàng
           </button>
         </Offcanvas.Body>

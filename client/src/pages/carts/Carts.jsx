@@ -1,19 +1,35 @@
 import Table from "react-bootstrap/Table";
 import "./carts.css";
 import { useContext, useEffect, useState } from "react";
+import { UContexts } from "../../components/context/UserContext";
 import { Contexts } from "../../components/context/Contexts";
 import { FormatNumber } from "../../helpers/FormatNumber";
 import { HOST } from "../../configs/DataEnv";
 import * as ShoppingCartService from "../../services/ShoppingCartsService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Button, message, Popconfirm } from "antd";
+
 const Carts = () => {
   const navigate = useNavigate();
-  const { cardNumber } = useContext(Contexts);
+  const { state } = useLocation();
+  const { User } = useContext(UContexts);
+  const { delCard } = useContext(Contexts);
   const [isCheck, setisCheck] = useState([]);
   const [ListCart, setListCart] = useState([]);
   useEffect(() => {
-    cardNumber.length > 0 && setListCart(cardNumber);
-  }, [cardNumber]);
+    const chay = async () => {
+      if (state) {
+        const { list } = state;
+        setListCart(list);
+      } else {
+        if (User) {
+          const lists = await ShoppingCartService.listOfUser(User.id);
+          setListCart(lists);
+        }
+      }
+    };
+    chay();
+  }, [User]);
 
   const handleChange = (e) => {
     const is = isCheck.some((item) => item === e);
@@ -25,7 +41,7 @@ const Carts = () => {
     }
   };
   const handleCheckAll = (e) => {
-    setisCheck(e.target.checked ? cardNumber : []);
+    setisCheck(e.target.checked ? ListCart : []);
   };
   const [AllTotail, setAllTotail] = useState(0);
   useEffect(() => {
@@ -50,18 +66,27 @@ const Carts = () => {
     if (product.quantity < e.target.value) {
       e.target.value = product.quantity;
     }
+    const update = await ShoppingCartService.updateQuantity(
+      item.id,
+      e.target.value
+    );
+    console.log(update);
     ListCart[index].quantity = e.target.value;
     setListCart([...ListCart]);
   };
-  const handleDelCart = async (i) => {
-    console.log({ del: i });
-    // const data = ListCart.filter((item) => item !== i);
-    // setListCart(data);
-  };
   const handleCheckOut = () => {
-    // console.log(isCheck);
+    console.log(isCheck);
     navigate("/check-out", { state: { listCart: isCheck } });
   };
+
+  const confirm = async (i) => {
+    delCard(i);
+    await ShoppingCartService.delCart(i.id);
+    const del = ListCart.filter((item) => item.id !== i.id);
+    setListCart(del);
+    message.success("Xóa thành công");
+  };
+  const cancel = () => {};
   return (
     <div className="carts container mt-2">
       {ListCart.length > 0 ? (
@@ -120,10 +145,18 @@ const Carts = () => {
                       )}
                     </td>
                     <td>
-                      <i
-                        className="fa-solid fa-trash-can"
-                        onClick={() => handleDelCart(item)}
-                      ></i>
+                      <Popconfirm
+                        title="Delete the product"
+                        description="Xóa sản phẩm này khỏi giỏ hàng?"
+                        onConfirm={() => confirm(item)}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <Button danger>
+                          <i className="fa-solid fa-trash-can"></i>
+                        </Button>
+                      </Popconfirm>
                     </td>
                   </tr>
                 );

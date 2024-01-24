@@ -9,7 +9,7 @@ import LoginModal from "../../components/modal/LoginModal";
 import * as AccountService from "../../services/AccountService";
 import * as ShoppingCartsService from "../../services/ShoppingCartsService";
 import { useCookies } from "react-cookie";
-
+import { message } from "antd";
 const ProductsDetail = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token", "path_end"]);
   const { addCard, delCard, cardNumber } = useContext(Contexts);
@@ -56,15 +56,14 @@ const ProductsDetail = () => {
   const handleAddcard = async () => {
     if (IsLogin) {
       const img = Product.all_images.split(",")[0];
-      // console.log(value);
-      await addCard({ sp: Product, sl: value, img: img });
+      addCard(Product);
       const chay = await ShoppingCartsService.add(
         IdUser,
         Product.id,
         img,
         value
       );
-      console.log(chay);
+      chay.status === 200 && message.success(chay.message);
     } else {
       setModalShow(true);
     }

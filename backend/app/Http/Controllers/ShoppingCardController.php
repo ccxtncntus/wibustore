@@ -23,25 +23,60 @@ class ShoppingCardController extends Controller
             ->where('shopping_carts.status', 'Chưa mua')->get();
         return response()->json($shoppingCard, 200);
     }
+
+
+    function updateQuantity(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => ['required'],
+            "quantity" => ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $cart = DB::table('shopping_carts')->where('id',  $request->id)->get();
+            if (count($cart) > 0) {
+                $editCart = DB::table('shopping_carts')->where('id', $request->id)
+                    ->update(['quantity' => $request->quantity]);
+                $data = [
+                    "status" => 200,
+                    "message" => "update thành công",
+                ];
+                $dataNG = [
+                    "status" => 400,
+                    "message" => "Bạn chưa thay đổi",
+                ];
+                return $editCart ?  response()->json($data, 200) : response()->json($dataNG, 200);
+            } else {
+                $data = [
+                    "status" => 400,
+                    "message" => "Không tìm thấy sản phẩm trong giỏ hàng",
+                ];
+                return response()->json($data, 200);
+            }
+        }
+    }
     function productBuyed(Request $request)
     {
-        $cart = DB::table('shopping_carts')->where('id',  $request->id)->get();
-        $product = DB::table('products')->where('id',  $request->idProduct)->get();
-        if ($cart && $product) {
-            $sl = $product[0]->quantity - $request->quantity;
-            $editCart = DB::table('shopping_carts')->where('id', $request->id)
-                ->update(['status' => 'Đã mua']);
+        $product = DB::table('products')->where('id',  $request->idProduct)->first();
+        if ($product) {
+            $sl = $product->quantity - $request->quantity;
             $editProduct = DB::table('products')->where('id', $request->idProduct)
                 ->update(['quantity' => $sl]);
             $data = [
                 "status" => 200,
                 "message" => "update thành công",
+                "messageư" => $sl,
             ];
             $dataNG = [
                 "status" => 400,
-                "message" => "Lỗi update",
+                "message" => "Không thay đổi gì",
             ];
-            return $editCart && $editProduct ?  response()->json($data, 200) : response()->json($dataNG, 400);
+            return $editProduct ?  response()->json($data, 200) : response()->json($dataNG, 400);
         } else {
             $data = [
                 "status" => 400,
@@ -54,23 +89,21 @@ class ShoppingCardController extends Controller
 
     function productCancelBuy(Request $request)
     {
-        $cart = DB::table('shopping_carts')->where('id',  $request->id)->get();
-        $product = DB::table('products')->where('id',  $request->idProduct)->get();
-        if ($cart && $product) {
-            $sl = $product[0]->quantity + $request->quantity;
-            $editCart = DB::table('shopping_carts')->where('id', $request->id)
-                ->update(['status' => 'Chưa mua']);
+        $product = DB::table('products')->where('id',  $request->idProduct)->first();
+        if ($product) {
+            $sl = $product->quantity + $request->quantity;
             $editProduct = DB::table('products')->where('id', $request->idProduct)
                 ->update(['quantity' => $sl]);
             $data = [
                 "status" => 200,
                 "message" => "update thành công",
+                "messageư" => $sl,
             ];
             $dataNG = [
                 "status" => 400,
-                "message" => "Lỗi update",
+                "message" => "Không thay đổi gì",
             ];
-            return $editCart && $editProduct ?  response()->json($data, 200) : response()->json($dataNG, 400);
+            return $editProduct ?  response()->json($data, 200) : response()->json($dataNG, 400);
         } else {
             $data = [
                 "status" => 400,
@@ -102,7 +135,7 @@ class ShoppingCardController extends Controller
                     ->update(['quantity' => $sl]);
                 $data = [
                     "status" => 200,
-                    "message" => "update thành công",
+                    "message" => "Thêm số lượng thành công",
                 ];
                 $dataNG = [
                     "status" => 400,
@@ -119,7 +152,7 @@ class ShoppingCardController extends Controller
                 $shoppingCard->save();
                 $data = [
                     "status" => 200,
-                    "message" => "add thành công",
+                    "message" => "Thêm giỏ hàng thành công",
                 ];
                 return response()->json($data, 200);
             }

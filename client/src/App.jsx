@@ -27,6 +27,7 @@ const ForgotPassllLazy = lazy(() =>
 const ChangePassllLazy = lazy(() =>
   import("./pages/changepassword/ChangePass")
 );
+const MyCartsllLazy = lazy(() => import("./pages/orders/MyOders"));
 
 function App() {
   return (
@@ -144,6 +145,14 @@ function App() {
             element={
               <Suspense fallback={<div>Loading...</div>}>
                 <CartsllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/my-orders"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <MyCartsllLazy />
               </Suspense>
             }
           />

@@ -35,7 +35,7 @@ const Login = () => {
         message.error(login.message);
         setLoading(false);
       } else {
-        console.log(login);
+        // console.log(login.token);
         let d = new Date();
         d.setTime(d.getTime() + 120 * 60 * 1000);
         message.success("Đăng nhập thành công");

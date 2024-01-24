@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('quantity')->nullable(false);
             $table->string('img')->nullable(false);
             $table->string('status')->nullable(false);
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

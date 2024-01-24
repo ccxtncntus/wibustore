@@ -24,6 +24,7 @@ class OrderDetailController extends Controller
         $validator = Validator::make($request->all(), [
             "order_id" => "required",
             "product_id" => "required",
+            "img" => "required",
             "quantitybuy" => "required|integer|min:1",
         ]);
         if ($validator->fails()) {
@@ -37,6 +38,7 @@ class OrderDetailController extends Controller
                 'order_id' => $request->order_id,
                 'product_id' => $request->product_id,
                 'quantitybuy' => $request->quantitybuy,
+                'img' => $request->img,
             ]);
             $data = [
                 "status" => 200,

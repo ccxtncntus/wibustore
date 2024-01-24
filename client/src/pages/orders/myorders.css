@@ -1,0 +1,15 @@
+.my_orders {
+  background-color: rgb(211, 203, 203);
+  padding: 20px 100px;
+}
+.modalMyOrdersImg {
+  display: flex;
+  align-items: top;
+  gap: 10px;
+}
+.modalMyOrdersImg img {
+  width: 120px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 4%;
+}

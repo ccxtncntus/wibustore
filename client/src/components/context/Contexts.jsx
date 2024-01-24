@@ -7,19 +7,18 @@ function CardContext({ children }) {
     console.log(data);
     setcardNumber(data);
   };
-
   const addCard = async (data) => {
-    const test = cardNumber.some((item) => item.name == data.sp.name);
+    const test = cardNumber.some((item) => item.name == data.name);
     if (test) {
-      const index = cardNumber.findIndex((item) => item.name === data.sp.name);
-      cardNumber[index].quantity += Number(data.sl);
+      // cộng
+      console.log("không làm gì");
     } else {
-      data.sp.img = data.img;
-      setcardNumber([...cardNumber, data.sp]);
+      // thêm
+      setcardNumber([...cardNumber, data]);
     }
   };
   const delCard = async (data) => {
-    const test = cardNumber.filter((item) => item !== data);
+    const test = cardNumber.filter((item) => item.name !== data.name);
     setcardNumber(test);
   };
   return (

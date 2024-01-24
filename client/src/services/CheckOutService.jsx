@@ -10,11 +10,12 @@ const create = async (user_id, address, pay, phoneNumbers, totail) => {
   });
   return res;
 };
-const createDetail = async (order_id, product_id, quantitybuy) => {
+const createDetail = async (order_id, product_id, quantitybuy, img) => {
   const res = await request.POST(`/api/ordersDetails/create`, {
     order_id: order_id,
     product_id: product_id,
     quantitybuy: quantitybuy,
+    img: img,
   });
   return res;
 };

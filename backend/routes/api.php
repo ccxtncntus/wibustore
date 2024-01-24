@@ -11,6 +11,7 @@ use App\Http\Controllers\ShoppingCardController;;
 
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\OrderDetailController;
+use App\Http\Controllers\VnPayController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -81,9 +82,13 @@ Route::post('shoppingcard/delCart', [ShoppingCardController::class, 'delCart']);
 Route::post('shoppingcard/changeQuatityProduct', [ShoppingCardController::class, 'changeQuatityProduct']);
 Route::get('shoppingcard/product', [ShoppingCardController::class, 'product']);
 Route::post('shoppingcard/productBuyed', [ShoppingCardController::class, 'productBuyed']);
+Route::post('shoppingcard/productCancelBuy', [ShoppingCardController::class, 'productCancelBuy']);
+Route::post('shoppingcard/updateQuantity', [ShoppingCardController::class, 'updateQuantity']);
 // orders
 Route::post('orders/create', [OrdersController::class, 'create']);
 
 
 // orderDetails
 Route::post('ordersDetails/create', [OrderDetailController::class, 'create']);
+// vnpay
+Route::post('vnpay', [VnPayController::class, 'pay']);

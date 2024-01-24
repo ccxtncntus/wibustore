@@ -1,13 +1,16 @@
 import { createContext, useState } from "react";
 import CardContext from "./Contexts";
 import CateContext from "./CategoriesContexts";
+import UserContext from "./UserContext";
 export const Contexts = createContext();
 function All({ children }) {
   return (
     <Contexts.Provider value={null}>
-      <CateContext>
-        <CardContext>{children}</CardContext>
-      </CateContext>
+      <UserContext>
+        <CateContext>
+          <CardContext>{children}</CardContext>
+        </CateContext>
+      </UserContext>
     </Contexts.Provider>
   );
 }

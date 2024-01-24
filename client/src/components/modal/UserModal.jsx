@@ -34,6 +34,9 @@ const UserModal = ({ placement, show, onClose }) => {
     onClose();
     await natigate("/");
   };
+  const handleClose = () => {
+    onClose();
+  };
   return (
     <>
       <Offcanvas show={show} onHide={onClose} placement={placement}>
@@ -62,12 +65,13 @@ const UserModal = ({ placement, show, onClose }) => {
                       Trang cá nhân
                     </li>
                     {!IsAdmin && (
-                      <li
-                        to={"/3"}
+                      <NavLink
+                        onClick={handleClose}
+                        to={"/my-orders"}
                         className="list-group-item list-group-item-action"
                       >
-                        Quản lí đơn hàng
-                      </li>
+                        Đơn hàng của bạn
+                      </NavLink>
                     )}
 
                     <NavLink

@@ -1,9 +1,28 @@
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import * as CheckOutService from "../../services/CheckOutService";
 import * as ShoppingCartsService from "../../services/ShoppingCartsService";
-import { useNavigate } from "react-router-dom";
+import * as pay from "../../services/VnPayService";
+import { useNavigate, useParams } from "react-router-dom";
+import { Contexts } from "../../components/context/Contexts";
+
 const CheckOutInformation = (props) => {
+  useEffect(() => {
+    const currentUrl = window.location.href;
+    const urlParams = new URLSearchParams(currentUrl);
+    const vnp_BankCode = urlParams.get("vnp_BankCode");
+    const vnp_BankTranNo = urlParams.get("vnp_BankTranNo");
+    const vnp_CardType = urlParams.get("vnp_OrderInfo");
+    console.log("Mã ngân hàng:", vnp_BankCode);
+    console.log("Số giao dịch ngân hàng:", vnp_BankTranNo);
+    console.log("Số giao dịch ngân hàng:", vnp_CardType);
+    // ...
+  }, []);
+  const handleVN = async () => {
+    const da = await pay.pay();
+    console.log(da);
+  };
+  const { delCard } = useContext(Contexts);
   const natigate = useNavigate();
   const { Carts, User, Totail } = props;
   const [value, setValue] = useState(0);
@@ -23,6 +42,8 @@ const CheckOutInformation = (props) => {
       console.log({ Carts: Carts });
       const address = data.address + ", " + data.huyen + ", " + data.tinh;
       const Totails = Totail + 30000;
+      // console.log(address);
+      // console.log(Totails);
       const addOrders = await CheckOutService.create(
         User.id,
         address,
@@ -36,10 +57,19 @@ const CheckOutInformation = (props) => {
             const da = await CheckOutService.createDetail(
               addOrders.lastID,
               item.idProduct,
-              Number(item.quantity)
+              Number(item.quantity),
+              item.img
             );
-            // await ShoppingCartsService.productBuyed(item.id, item.quantity);
-            console.log("Detail created:", da);
+            if (da.status === 200) {
+              // bớt số lượng trong product
+              delCard(item);
+              await ShoppingCartsService.productBuyed(
+                item.idProduct,
+                Number(item.quantity)
+              );
+              // xóa trong giỏ hàng
+              await ShoppingCartsService.delCart(item.id);
+            }
           } catch (error) {
             console.error("Error creating detail:", error);
             return;
@@ -129,6 +159,7 @@ const CheckOutInformation = (props) => {
           />
         </div>
       </form>
+      <button onClick={handleVN}>thanh toán</button>
     </div>
   );
 };
