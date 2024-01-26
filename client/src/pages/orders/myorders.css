@@ -1,6 +1,7 @@
 .my_orders {
   background-color: rgb(211, 203, 203);
   padding: 20px 100px;
+  min-height: 80vh;
 }
 .modalMyOrdersImg {
   display: flex;

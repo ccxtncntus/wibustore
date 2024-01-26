@@ -59,9 +59,18 @@ class OrderDetailController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function listsOfOrder($idOrder)
     {
-        //
+        $users = DB::table('order_details')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->select('products.name', DB::raw('(products.price - products.saleoff) as price'), 'order_details.img', 'order_details.quantitybuy')
+            ->where('order_details.order_id', $idOrder)
+            ->get();
+        $data = [
+            "status" => 200,
+            "message" => $users,
+        ];
+        return response()->json($data, 200);
     }
 
     /**

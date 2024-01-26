@@ -51,7 +51,7 @@ const UserModal = ({ placement, show, onClose }) => {
                   <>
                     {IsAdmin && (
                       <NavLink
-                        to={"/admin/categories"}
+                        to={"/admin/dashboard"}
                         className="list-group-item list-group-item-action"
                       >
                         Admin

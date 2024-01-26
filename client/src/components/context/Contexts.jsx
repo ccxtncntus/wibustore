@@ -4,7 +4,7 @@ export const Contexts = createContext();
 function CardContext({ children }) {
   const [cardNumber, setcardNumber] = useState([]);
   const list = (data) => {
-    console.log(data);
+    // console.log(data);
     setcardNumber(data);
   };
   const addCard = async (data) => {
@@ -18,8 +18,8 @@ function CardContext({ children }) {
     }
   };
   const delCard = async (data) => {
-    const test = cardNumber.filter((item) => item.name !== data.name);
-    setcardNumber(test);
+    const index = cardNumber.findIndex((item) => item.name !== data.name);
+    cardNumber.splice(index, 1);
   };
   return (
     <Contexts.Provider value={{ cardNumber, addCard, delCard, list }}>

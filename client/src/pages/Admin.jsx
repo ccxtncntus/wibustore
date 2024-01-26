@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import * as AccountService from "../services/AccountService";
 import { useCookies } from "react-cookie";
+import AdminNav from "./admin/AdminNav";
+import "./admin/admincontent.css";
+import "./admin/adminnav.css";
 const Admin = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [IsAdmin, setIsAdmin] = useState(false);
@@ -24,30 +27,16 @@ const Admin = () => {
     adminCheck();
   }, []);
   return (
-    <div className="container">
+    <div className="container-fluit admin">
       {!Loading ? (
         IsAdmin ? (
-          <div className="row mt-2">
-            <div className="col-md-3">
-              <ul className="list-group">
-                <NavLink to={"products"} className="list-group-item">
-                  Products
-                </NavLink>
-                <NavLink to={"list-products"} className="list-group-item">
-                  List products
-                </NavLink>
-                <NavLink to={"categories"} className="list-group-item">
-                  Categories
-                </NavLink>
-                <li className="list-group-item">Tài khoản</li>
-                <li className="list-group-item">Thống kê</li>
-                <li className="list-group-item">Đơn hàng</li>
-                <NavLink to={"/"} className="list-group-item">
-                  Thoát
-                </NavLink>
-              </ul>
+          <div className="row">
+            <div className="col-md-2">
+              <div className="admin_nav">
+                <AdminNav />
+              </div>
             </div>
-            <div className="col-md-9">
+            <div className="col-md-10 admin_content">
               <Outlet />
             </div>
           </div>

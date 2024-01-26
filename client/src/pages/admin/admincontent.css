@@ -1,0 +1,6 @@
+.admin_content {
+  padding: 20px;
+  background-color: var(--acrtive);
+  border-radius: 8px;
+  min-height: 80vh;
+}

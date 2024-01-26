@@ -1,24 +1,40 @@
 // import Button from "react-bootstrap/Button";
 import { Button, message } from "antd";
+import { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useForm } from "react-hook-form";
+import * as OrdersService from "../../services/OrdersService";
 const MyOrdersEditModal = (props) => {
-  const { show, onHide } = props;
-  // useEffect(() => {
-  //   if (show) {
-  //     console.log("run");
-  //   }
-  //   return () => {};
-  // }, [show]);
+  const { show, onHide, Edit } = props;
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
+  useEffect(() => {
+    const run = async () => {
+      if (Edit !== "") {
+        setValue("address", Edit.address);
+        setValue("phoneNumbers", Edit.phoneNumbers);
+      }
+    };
+    run();
+  }, [Edit, setValue]);
+  const onSubmit = async (data) => {
+    const updateAddress = await OrdersService.updateAddress(
+      Edit.id,
+      data.address,
+      data.phoneNumber
+    );
+    console.log(updateAddress);
     onHide();
     message.success("Sửa thông tin thành công");
+  };
+  const handleHide = () => {
+    setValue("address", Edit.address);
+    onHide();
   };
   return (
     <>
@@ -34,40 +50,39 @@ const MyOrdersEditModal = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            {/* <div>Tình trạng</div>
-            <select {...register("status")} className="form-control">
-              <option value="Chờ xử lí">Chờ xử lí</option>
-              <option value="Xác nhận">Xác nhận</option>
-              <option value="Đang vận chuyển">Đang vận chuyển</option>
-              <option value="Đã nhận hàng">Đã nhận hàng</option>
-            </select> */}
-            {/* <p className="text-danger"></p> */}
-            <div className="mt-2">Địa chỉ</div>
-            <input
-              defaultValue="test"
-              className="form-control mt-2"
-              {...register("example", { required: true })}
-            />
-            {errors.example && (
-              <p className="text-danger">This field is required</p>
-            )}
-            {/* số điện thoại */}
-            <div className="mt-2">Số điện thoại</div>
-            <input
-              defaultValue="test"
-              className="form-control mt-2"
-              {...register("exampleRequired", { required: true })}
-            />
-            {errors.exampleRequired && (
-              <p className="text-danger">This field is required</p>
-            )}
+          {Edit != "" && (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              {/* địa chỉ */}
+              <div className="mt-2">Địa chỉ</div>
+              <input
+                defaultValue={Edit.address}
+                className="form-control mt-2"
+                {...register("address", { required: true })}
+              />
+              {errors.example && (
+                <p className="text-danger">This field is required</p>
+              )}
+              {/* số điện thoại */}
+              <div className="mt-2">Số điện thoại</div>
+              <input
+                defaultValue={Edit.phoneNumbers}
+                className="form-control mt-2"
+                {...register("phoneNumber", { required: true })}
+              />
+              {errors.exampleRequired && (
+                <p className="text-danger">This field is required</p>
+              )}
 
-            <input type="submit" className="btn btn-secondary mt-3" />
-          </form>
+              <input
+                type="submit"
+                className="btn btn-secondary mt-3"
+                value={"Xác nhận"}
+              />
+            </form>
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button type="primary" onClick={onHide}>
+          <Button type="primary" onClick={handleHide}>
             Hủy
           </Button>
         </Modal.Footer>

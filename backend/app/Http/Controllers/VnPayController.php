@@ -14,12 +14,12 @@ class VnPayController extends Controller
         $vnp_TmnCode = "QSY6QCVM"; //Mã website tại VNPAY 
         $vnp_HashSecret = "LHQREIUFBFTFWJIHMAMBEVSMDFHMSPZT"; //Chuỗi bí mật
 
-        $vnp_TxnRef = 'Mt-2dsddssds'; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
+        $vnp_TxnRef = 'Mt-2dllssddssds'; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = 'Thanh toán hóa đơn';
         $vnp_OrderType = 'WibuStore';
         $vnp_Amount = 350000 * 100;
         $vnp_Locale = 'VN';
-        $vnp_BankCode = 'NCB';
+        // $vnp_BankCode = 'NCB';
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
         $inputData = array(
             "vnp_Version" => "2.1.0",

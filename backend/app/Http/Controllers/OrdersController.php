@@ -14,12 +14,19 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        // $orders = Orders::orderBy("created_at", "desc")->paginate(10);
+        $orders = DB::table("orders")->get();
+        return $orders;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function listOfUser($Uid)
+    {
+        $orders = DB::table("orders")->where('user_id', $Uid)->orderBy('id', 'desc')->get();
+        $data = [
+            "status" => 200,
+            "message" => $orders,
+        ];
+        return response()->json($data, 200);
+    }
     public function create(Request $request)
     {
 
@@ -58,9 +65,65 @@ class OrdersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function updateAddress(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'id' => ['required'],
+            'address' => ['required'],
+            "phoneNumbers" => ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $orderId = DB::table('orders')->where('id', $request->id)->update([
+                'address' => $request->address,
+                'phoneNumbers' => $request->phoneNumbers,
+            ]);
+            $s = $orderId ? "Update thành công" : 'Lỗi gì rồi';
+            $data = [
+                "status" => 200,
+                "message" => $s,
+            ];
+            return response()->json($data, 200);
+        }
+    }
+    public function updateStatusOrder(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => ['required'],
+            'status' => ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $orderId = DB::table('orders')->where('id', $request->id)->update([
+                'status' => $request->status,
+            ]);
+            $s = $orderId ? "Update thành công" : 'Lỗi gì rồi';
+            $data = [
+                "status" => 200,
+                "message" => $s,
+            ];
+            return response()->json($data, 200);
+        }
+    }
+    public function delOrder($id)
+    {
+        $orderId = DB::table('orders')->where('id', $id)->delete();
+        $s = $orderId ? "Xóa thành công" : 'Lỗi gì rồi';
+        $data = [
+            "status" => 200,
+            "message" => $s,
+        ];
+        return response()->json($data, 200);
     }
 
     /**

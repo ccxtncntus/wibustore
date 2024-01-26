@@ -2,9 +2,14 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import CheckOutSuccess from "./pages/checkout/CheckOutSuccess";
+import Loading from "./components/loading/Loading";
+
 const HomeLazy = lazy(() => import("./pages/Home"));
 const AdminLazy = lazy(() => import("./pages/Admin"));
 const ProductAdminLazy = lazy(() => import("./components/admin/ProductAdmin"));
+const DashBoardAdminLazy = lazy(() =>
+  import("./pages/admin/dashboard/DashBoard")
+);
 const CategoriesAdminLazy = lazy(() =>
   import("./components/admin/CategoriesAdmin")
 );
@@ -28,7 +33,6 @@ const ChangePassllLazy = lazy(() =>
   import("./pages/changepassword/ChangePass")
 );
 const MyCartsllLazy = lazy(() => import("./pages/orders/MyOders"));
-
 function App() {
   return (
     <>
@@ -36,7 +40,7 @@ function App() {
         <Route
           path="/"
           element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading />}>
               <HomeLazy />
             </Suspense>
           }
@@ -44,7 +48,7 @@ function App() {
           <Route
             path="/login"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <LoginllLazy />
               </Suspense>
             }
@@ -53,7 +57,7 @@ function App() {
           <Route
             path="/register"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <RegisterllLazy />
               </Suspense>
             }
@@ -61,7 +65,7 @@ function App() {
           <Route
             path="/forgotpass"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ForgotPassllLazy />
               </Suspense>
             }
@@ -70,7 +74,7 @@ function App() {
           <Route
             path="/changepass"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ChangePassllLazy />
               </Suspense>
             }
@@ -78,7 +82,7 @@ function App() {
           <Route
             path="/shop"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ShopllLazy />
               </Suspense>
             }
@@ -86,7 +90,7 @@ function App() {
           <Route
             path="/shop/page/:page"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ShopllLazy />
               </Suspense>
             }
@@ -94,7 +98,7 @@ function App() {
           <Route
             path="/shop/:idProduct"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ProductsDetailllLazy />
               </Suspense>
             }
@@ -102,7 +106,7 @@ function App() {
           <Route
             path="/shop/:category/:idcategory"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ShopllLazy />
               </Suspense>
             }
@@ -110,7 +114,7 @@ function App() {
           <Route
             path="/shop/:category/:idcategory/page/:pageCate"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ShopllLazy />
               </Suspense>
             }
@@ -118,7 +122,7 @@ function App() {
           <Route
             path="/shop/:category/:idcategory/:idProduct"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ProductsDetailllLazy />
               </Suspense>
             }
@@ -126,7 +130,7 @@ function App() {
           <Route
             path="/shop/:category/:idcategory/page/:pageCate/:idProduct"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ProductsDetailllLazy />
               </Suspense>
             }
@@ -134,7 +138,7 @@ function App() {
           <Route
             path="/check-out"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <CheckOutllLazy />
               </Suspense>
             }
@@ -143,7 +147,7 @@ function App() {
           <Route
             path="/carts"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <CartsllLazy />
               </Suspense>
             }
@@ -151,7 +155,7 @@ function App() {
           <Route
             path="/my-orders"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <MyCartsllLazy />
               </Suspense>
             }
@@ -159,7 +163,7 @@ function App() {
           <Route
             path="/posts"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <PostsllLazy />
               </Suspense>
             }
@@ -167,7 +171,7 @@ function App() {
           <Route
             path="/contact"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ContactllLazy />
               </Suspense>
             }
@@ -175,7 +179,7 @@ function App() {
           <Route
             path="/"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <HomeContentllLazy />
               </Suspense>
             }
@@ -184,7 +188,7 @@ function App() {
         <Route
           path="/admin"
           element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading />}>
               <AdminLazy />
             </Suspense>
           }
@@ -192,15 +196,23 @@ function App() {
           <Route
             path="list-products"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ListProductLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="dashboard"
+            element={
+              <Suspense fallback={<Loading />}>
+                <DashBoardAdminLazy />
               </Suspense>
             }
           />
           <Route
             path="products"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <ProductAdminLazy />
               </Suspense>
             }
@@ -209,7 +221,7 @@ function App() {
           <Route
             path="categories"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <CategoriesAdminLazy />
               </Suspense>
             }
@@ -219,7 +231,7 @@ function App() {
         <Route
           path="/crawl"
           element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading />}>
               <CrawlLazy />
             </Suspense>
           }
@@ -228,11 +240,12 @@ function App() {
         <Route
           path="/crawl/products/:name"
           element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading />}>
               <CrawDetaillLazy />
             </Suspense>
           }
         />
+        <Route path="/loading" element={<Loading />} />
       </Routes>
     </>
   );

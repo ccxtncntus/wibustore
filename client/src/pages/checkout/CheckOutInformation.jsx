@@ -8,6 +8,18 @@ import { Contexts } from "../../components/context/Contexts";
 
 const CheckOutInformation = (props) => {
   useEffect(() => {
+    // http://localhost:5173/check-out
+    // ?vnp_Amount=35000000
+    // &vnp_BankCode=NCB
+    // &vnp_BankTranNo=VNP14291669
+    // &vnp_CardType=ATM
+    // &vnp_OrderInfo=Thanh+to%C3%A1n+h%C3%B3a+%C4%91%C6%A1n
+    // &vnp_PayDate=20240125002913
+    // &vnp_ResponseCode=00
+    // &vnp_TmnCode=QSY6QCVM&vnp_TransactionNo=14291669
+    // &vnp_TransactionStatus=00
+    // &vnp_TxnRef=Mt-2dsddssds
+    // &vnp_SecureHash=db8c420ec15d77be72cf878e6137e54cc195740f9d7d0083af833c32aa90ec7e7bfcefb4fab58e254b7a58c55304de6e0a92f4a617201317c6b56b73bfc526fc
     const currentUrl = window.location.href;
     const urlParams = new URLSearchParams(currentUrl);
     const vnp_BankCode = urlParams.get("vnp_BankCode");
@@ -16,8 +28,8 @@ const CheckOutInformation = (props) => {
     console.log("Mã ngân hàng:", vnp_BankCode);
     console.log("Số giao dịch ngân hàng:", vnp_BankTranNo);
     console.log("Số giao dịch ngân hàng:", vnp_CardType);
-    // ...
   }, []);
+
   const handleVN = async () => {
     const da = await pay.pay();
     console.log(da);

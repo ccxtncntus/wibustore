@@ -37,7 +37,7 @@ const Login = () => {
       } else {
         // console.log(login.token);
         let d = new Date();
-        d.setTime(d.getTime() + 120 * 60 * 1000);
+        d.setTime(d.getTime() + 1200 * 60 * 1000);
         message.success("Đăng nhập thành công");
         cookies.path_end ? natigate(cookies.path_end) : natigate("/");
         await removeCookie("path_end");

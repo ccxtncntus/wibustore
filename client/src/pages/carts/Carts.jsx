@@ -75,7 +75,7 @@ const Carts = () => {
     setListCart([...ListCart]);
   };
   const handleCheckOut = () => {
-    console.log(isCheck);
+    // console.log(isCheck);
     navigate("/check-out", { state: { listCart: isCheck } });
   };
 

@@ -1,0 +1,36 @@
+.overview_all {
+  background-color: rgb(255, 255, 255);
+  border-radius: 8px;
+  padding: 8px;
+}
+.overview {
+  display: flex;
+  justify-content: center;
+  /* padding: 0 15px; */
+}
+.overview_child {
+  background-color: rgb(67, 93, 118);
+  border-radius: 8px;
+  color: white;
+  padding: 20px;
+  margin: 8px;
+}
+.chart_mid {
+  margin-top: 20px;
+}
+.chart {
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px;
+}
+/* img */
+.overview_all_imgstt {
+  width: 36px;
+  border-radius: 50%;
+}
+.overview_all_imgssp {
+  width: 60px;
+  height: 80px;
+  border-radius: 4px;
+  object-fit: cover;
+}

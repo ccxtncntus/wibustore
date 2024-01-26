@@ -1,0 +1,80 @@
+:root {
+  --bg: rgb(67, 93, 118);
+  --acrtive: #d4d4d5;
+  --child: white;
+}
+.admin {
+  background-color: aliceblue;
+  padding: 20px;
+  min-height: 100vh;
+}
+.admin_nav {
+  height: 100vh;
+  background-color: rgb(67, 93, 118);
+  border-radius: 8px;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  width: 16%;
+  left: 8px;
+}
+.admin_nav_ul {
+  border-radius: 0;
+}
+.admin_nav_ul a {
+  background-color: rgb(67, 93, 118);
+  border: 0;
+  color: var(--child);
+}
+.admin_nav_ul a:hover {
+  background-color: var(--acrtive);
+  color: black;
+  transition: all 0.5s;
+}
+.admin_nav_ul a.active {
+  background-color: var(--acrtive);
+  border: 0;
+  color: black;
+}
+/* logo */
+.admin_nav_logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  height: 80px;
+}
+.admin_nav_logo i {
+  color: var(--child);
+  font-size: 1.3rem;
+}
+.admin_nav_logo span {
+  color: var(--child);
+  font-size: 1.3rem;
+}
+.admin_nav_out {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  text-align: center;
+}
+.admin_nav_out img {
+  width: 100%;
+  filter: drop-shadow(0 0 10px var(--acrtive));
+}
+/* .admin_nav_out img:hover {
+  filter: drop-shadow(0 0 10px var(--acrtive));
+  transition: all 0.5s;
+} */
+.admin_nav_out p {
+  color: var(--child);
+}
+.admin_nav_out p i {
+  transform: rotate(180deg);
+}
+.admin_nav_out p:hover {
+  cursor: pointer;
+  transition: all 0.5s;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #00f,
+    0 0 70px #00f, 0 0 80px #00f;
+}

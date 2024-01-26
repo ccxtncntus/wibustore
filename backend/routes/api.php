@@ -86,9 +86,14 @@ Route::post('shoppingcard/productCancelBuy', [ShoppingCardController::class, 'pr
 Route::post('shoppingcard/updateQuantity', [ShoppingCardController::class, 'updateQuantity']);
 // orders
 Route::post('orders/create', [OrdersController::class, 'create']);
+Route::get('orders/listOfUser/{Uid}', [OrdersController::class, 'listOfUser']);
+Route::post('orders/updateAddress', [OrdersController::class, 'updateAddress']);
+Route::patch('orders/updateStatusOrder', [OrdersController::class, 'updateStatusOrder']);
+Route::delete('orders/delOrder/{id}', [OrdersController::class, 'delOrder']);
 
 
 // orderDetails
 Route::post('ordersDetails/create', [OrderDetailController::class, 'create']);
+Route::get('ordersDetails/listsOfOrder/{idOrder}', [OrderDetailController::class, 'listsOfOrder']);
 // vnpay
 Route::post('vnpay', [VnPayController::class, 'pay']);
