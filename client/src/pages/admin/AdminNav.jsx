@@ -25,10 +25,10 @@ const AdminNav = () => {
         <NavLink to={"categories"} className="list-group-item">
           Categories
         </NavLink>
-        <NavLink to={"/45"} className="list-group-item">
+        <NavLink to={"account"} className="list-group-item">
           Tài khoản
         </NavLink>
-        <NavLink to={"/"} className="list-group-item">
+        <NavLink to={"orders"} className="list-group-item">
           Orders
         </NavLink>
         <div className="admin_nav_out">

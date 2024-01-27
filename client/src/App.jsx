@@ -7,6 +7,8 @@ import Loading from "./components/loading/Loading";
 const HomeLazy = lazy(() => import("./pages/Home"));
 const AdminLazy = lazy(() => import("./pages/Admin"));
 const ProductAdminLazy = lazy(() => import("./components/admin/ProductAdmin"));
+const OrderAdminLazy = lazy(() => import("./components/admin/OrderAdmin"));
+const AccountAdminLazy = lazy(() => import("./components/admin/AccountAdmin"));
 const DashBoardAdminLazy = lazy(() =>
   import("./pages/admin/dashboard/DashBoard")
 );
@@ -217,7 +219,22 @@ function App() {
               </Suspense>
             }
           />
-
+          <Route
+            path="orders"
+            element={
+              <Suspense fallback={<Loading />}>
+                <OrderAdminLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="account"
+            element={
+              <Suspense fallback={<Loading />}>
+                <AccountAdminLazy />
+              </Suspense>
+            }
+          />
           <Route
             path="categories"
             element={
