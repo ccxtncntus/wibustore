@@ -1,0 +1,50 @@
+:root {
+  --color-red: hsl(0deg 80% 50%);
+  --color-blue: hsl(270, 81%, 11%);
+}
+
+.home_product {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px;
+}
+
+.home_pro_child {
+  width: 300px;
+}
+.home_pro_child > img {
+  width: 300px;
+  height: 350px;
+  object-fit: cover;
+}
+.home_pro_child div > span {
+  color: gray;
+  font-size: 0.9rem;
+}
+.home_pro_child div > s {
+  color: gray;
+  font-size: 0.9rem;
+}
+
+.crawl {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.crawl_child {
+  display: flex;
+  flex-direction: column;
+  color: black;
+  text-decoration: none;
+}
+
+.crawl_child:hover {
+  cursor: pointer;
+  color: red;
+}
+.crawl_child img {
+  height: 400px;
+}

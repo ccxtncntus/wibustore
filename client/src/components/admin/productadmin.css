@@ -1,0 +1,13 @@
+.fa-circle-xmark:hover {
+  cursor: pointer;
+  color: red;
+  transition: 0.5s;
+}
+.fa-image:hover {
+  cursor: pointer;
+  color: red;
+  transition: 0.5s;
+}
+.product_admin {
+  margin-bottom: 40px;
+}

@@ -1,0 +1,14 @@
+.login {
+  /* background-color: rgb(198, 203, 201); */
+  background: url("https://i.pinimg.com/originals/53/04/92/530492db472a655cb5595857fbf2aa1c.jpg")
+    center/cover no-repeat;
+  height: 80vh;
+  display: grid;
+  place-items: center;
+}
+.login_form {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0;
+}

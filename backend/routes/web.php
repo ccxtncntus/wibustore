@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return 'Hello world';
 });
+Route::get('/email', function () {
+    return view('emails.demo');
+});
 // Route::get('/home', function () {
 //     return ['Laravel' => app()->version()];
 // });

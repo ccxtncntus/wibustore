@@ -9,17 +9,17 @@ class UpdateImg extends Controller
 {
     public function upload(Request $request)
     {
-        if ($request->has('img')) {
-            $images = $request->file('img');
-            return response()->json($request->img);
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            $uploadedImages = [];
             foreach ($images as $image) {
                 $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->storeAs('public/img', $imageName);
-                // Lưu tên file ảnh vào cơ sở dữ liệu hoặc thực hiện các thao tác khác
+                $image->move(public_path('uploads'), $imageName);
+                $uploadedImages[] = $imageName;
             }
-            return response()->json('Upload nhiều ảnh thành công');
+            return $uploadedImages;
         } else {
-            return response()->json('Không có ảnh được chọn');
+            return 400;
         }
     }
     public function show(string $id)

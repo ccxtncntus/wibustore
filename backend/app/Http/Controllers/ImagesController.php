@@ -4,18 +4,38 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Images;
+use Illuminate\Support\Facades\File;
 
 class ImagesController extends Controller
 {
-    public function index()
+    public function index($product_id)
     {
-        return '123';
+        $images = Images::where('product_id', $product_id)->get();
+        return response()->json($images);
     }
-    public function upload(Request $request, $id)
+    public function deleteOnce($id)
     {
-        if ($request->has('img') && is_array($request->img) && count($request->img) > 0) {
+        $image = Images::find($id);
+        if ($image) {
+            $image->delete();
+            $data = [
+                "status" => 200,
+                "message" => "del success",
+            ];
+            return response()->json($data, 200);
+        }
+        $data = [
+            "status" => 400,
+            "message" => "no img",
+        ];
+        return response()->json($data, 200);
+    }
+
+    public function upload($uploadSuccess, $id)
+    {
+        if (count($uploadSuccess) > 0) {
             $allAdd = [];
-            foreach ($request->img as $item) {
+            foreach ($uploadSuccess as $item) {
                 $image = new Images;
                 $image->url = $item;
                 $image->product_id = $id;
@@ -37,5 +57,21 @@ class ImagesController extends Controller
         } else {
             return response()->json('Không có img', 200);
         }
+    }
+    public function destroy($imgs)
+    {
+        $arrImgs = preg_split("/[,]/", $imgs);
+        foreach ($arrImgs as $img) {
+            Images::where("url", $img)->delete();
+            $imagePath = public_path('uploads') . '/' . $img;
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
+            }
+        }
+        $data = [
+            'status' => 200,
+            'message' => "Del cuccess",
+        ];
+        return response()->json($data, 200);
     }
 }

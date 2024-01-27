@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categorys = Category::all();
+        $pageNumber = $request->pageNumber;
+        $categorys = Category::select('id', 'name', 'status')->orderBy('id', 'DESC')->paginate(10, ['*'], 'page', $pageNumber);
         if ($categorys->count() === 0) {
             $upData = [
                 "status" => 400,
@@ -40,6 +42,7 @@ class CategoryController extends Controller
         } else {
             $categorys = new Category;
             $categorys->name = $request->name;
+            $categorys->status = $request->status;
             $categorys->save();
             $data = [
                 "status" => 200,
@@ -50,8 +53,9 @@ class CategoryController extends Controller
     }
     public function edit(Request $request, $id)
     {
+
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'unique:categories', 'max:255'],
+            'name' => ['required', Rule::unique('categories')->ignore($id), 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -63,6 +67,7 @@ class CategoryController extends Controller
         } else {
             $categorys = Category::find($id);
             $categorys->name = $request->name;
+            $categorys->status = $request->status;
             $categorys->save();
             $data = [
                 "status" => 200,
