@@ -1,6 +1,9 @@
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import { Button, message, Popconfirm } from "antd";
+import { useState } from "react";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 const OrderAdmin = () => {
   const selects = [
     "Tất cả",
@@ -8,6 +11,7 @@ const OrderAdmin = () => {
     "Xác nhận",
     "Đang vẫn chuyển",
     "Nhận hàng thành công",
+    "Hủy",
   ];
   const handleSelect = (e) => {
     console.log(e.target.value);
@@ -22,6 +26,11 @@ const OrderAdmin = () => {
   const cancel = (e) => {
     console.log(e);
     message.error("Click on No");
+  };
+  const [page, setPage] = useState(1);
+  const handleChange = (event, value) => {
+    console.log(value);
+    setPage(value);
   };
   return (
     <>
@@ -42,7 +51,7 @@ const OrderAdmin = () => {
         <thead>
           <tr>
             <th>#</th>
-            <th>Tên khách hàng</th>
+            <th>Khách hàng</th>
             <th>Địa chỉ</th>
             <th>Thanh toán</th>
             <th>Tổng tiền</th>
@@ -91,6 +100,15 @@ const OrderAdmin = () => {
           </tr>
         </tbody>
       </Table>
+      <Stack style={{ float: "right" }}>
+        <Pagination
+          count={10}
+          page={page}
+          variant="outlined"
+          color="primary"
+          onChange={handleChange}
+        />
+      </Stack>
     </>
   );
 };

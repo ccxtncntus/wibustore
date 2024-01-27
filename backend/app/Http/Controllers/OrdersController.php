@@ -12,10 +12,19 @@ class OrdersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($page = 1, $perPage = 8)
     {
-        $orders = DB::table("orders")->get();
-        return $orders;
+        $orders = DB::table("orders")->orderBy('id', 'desc')->paginate($perPage, ['*'], 'page', $page);
+        return response()->json($orders, 200);
+    }
+    public function listOfO($Uid)
+    {
+        $orders = DB::table("orders")->where('user_id', $Uid)->orderBy('id', 'desc')->get();
+        $data = [
+            "status" => 200,
+            "message" => $orders,
+        ];
+        return response()->json($data, 200);
     }
 
     public function listOfUser($Uid)
@@ -29,7 +38,6 @@ class OrdersController extends Controller
     }
     public function create(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'user_id' => ['required'],
             "address" => ['required'],

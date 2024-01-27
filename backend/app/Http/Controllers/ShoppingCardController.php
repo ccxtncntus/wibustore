@@ -15,12 +15,12 @@ class ShoppingCardController extends Controller
         return $shoppingCard;
     }
 
-    function listOfUser(Request $request)
+    function listOfUser($id)
     {
         $shoppingCard = ShoppingCart::select('shopping_carts.id', 'shopping_carts.img', 'shopping_carts.status', 'shopping_carts.quantity', 'products.id as idProduct',  'products.name', 'products.saleoff', 'products.price')
             ->join('products', 'shopping_carts.product_id', '=', 'products.id')
-            ->where('shopping_carts.user_id', $request->idUser)
-            ->where('shopping_carts.status', 'Chưa mua')->get();
+            ->where('shopping_carts.user_id', $id)
+            ->get();
         return response()->json($shoppingCard, 200);
     }
 

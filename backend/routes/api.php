@@ -23,6 +23,8 @@ use App\Http\Controllers\VnPayController;
 |
 */
 
+Route::get('orders/test', [OrdersController::class, 'testham']);
+
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -77,14 +79,18 @@ Route::post(
 // shoppingcart
 Route::get('shoppingcard', [ShoppingCardController::class, 'index']);
 Route::post('shoppingcard/adOneProduct', [ShoppingCardController::class, 'addOneProduct']);
-Route::get('shoppingcard/listOfUser/{idUser}', [ShoppingCardController::class, 'listOfUser']);
+Route::get('shoppingcard/listOfUser/{id}', [ShoppingCardController::class, 'listOfUser']);
 Route::post('shoppingcard/delCart', [ShoppingCardController::class, 'delCart']);
 Route::post('shoppingcard/changeQuatityProduct', [ShoppingCardController::class, 'changeQuatityProduct']);
 Route::get('shoppingcard/product', [ShoppingCardController::class, 'product']);
 Route::post('shoppingcard/productBuyed', [ShoppingCardController::class, 'productBuyed']);
 Route::post('shoppingcard/productCancelBuy', [ShoppingCardController::class, 'productCancelBuy']);
 Route::post('shoppingcard/updateQuantity', [ShoppingCardController::class, 'updateQuantity']);
+
+
+
 // orders
+// Route::get('orders/{page?}/{perPage?}', [OrdersController::class, 'index']);
 Route::post('orders/create', [OrdersController::class, 'create']);
 Route::get('orders/listOfUser/{Uid}', [OrdersController::class, 'listOfUser']);
 Route::post('orders/updateAddress', [OrdersController::class, 'updateAddress']);

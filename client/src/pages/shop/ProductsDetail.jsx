@@ -10,9 +10,11 @@ import * as AccountService from "../../services/AccountService";
 import * as ShoppingCartsService from "../../services/ShoppingCartsService";
 import { useCookies } from "react-cookie";
 import { message } from "antd";
+import { UContexts } from "../../components/context/UserContext";
 const ProductsDetail = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token", "path_end"]);
   const { addCard, delCard, cardNumber } = useContext(Contexts);
+  const { User } = useContext(UContexts);
   const data = window.location.pathname;
   const datas = data.split("/").pop();
   const [Product, setProduct] = useState("");
