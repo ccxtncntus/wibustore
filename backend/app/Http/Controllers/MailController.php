@@ -25,6 +25,7 @@ class MailController extends Controller
             ];
             return response()->json($data, 400);
         } else {
+            DB::table('password_reset_tokens')->where('email', $request->email)->delete();
             $user = User::where('email', $request->email)->first();
             if ($user) {
                 $tokenConfirm = Str::upper(Str::random(6));

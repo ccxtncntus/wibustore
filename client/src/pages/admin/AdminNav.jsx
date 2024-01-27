@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import img from "../../../public/hayate.png";
-import "./adminnav.css";
+// import "./adminnav.css";
 const AdminNav = () => {
   const navigate = useNavigate();
   const handleOut = () => {

@@ -32,7 +32,7 @@ const UserModal = ({ placement, show, onClose }) => {
     await removeToken(["token"]);
     await removeToken(["path_end"]);
     onClose();
-    await natigate("/");
+    await natigate("/login");
   };
   const handleClose = () => {
     onClose();
