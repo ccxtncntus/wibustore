@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 import AdminNav from "./admin/AdminNav";
 import "./admin/admincontent.css";
 import "./admin/adminnav.css";
+import LoadingComponent from "../components/loading/Loading";
 const Admin = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [IsAdmin, setIsAdmin] = useState(false);
@@ -44,7 +45,7 @@ const Admin = () => {
           <div style={{ textAlign: "center" }}>Bạn k đủ thẩm quyền</div>
         )
       ) : (
-        "loading..."
+        <LoadingComponent />
       )}
     </div>
   );
