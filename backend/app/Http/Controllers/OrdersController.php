@@ -17,9 +17,9 @@ class OrdersController extends Controller
         $orders = DB::table("orders")->orderBy('id', 'desc')->paginate($perPage, ['*'], 'page', $page);
         return response()->json($orders, 200);
     }
-    public function listOfO($Uid)
+    public function listOfStatus()
     {
-        $orders = DB::table("orders")->where('user_id', $Uid)->orderBy('id', 'desc')->get();
+        $orders = DB::table("orders")->get();
         $data = [
             "status" => 200,
             "message" => $orders,

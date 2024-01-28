@@ -1,67 +1,69 @@
-:root {
-  --colors: rgb(42, 42, 42);
-  --bg: rgb(255, 255, 255);
-}
-
 .nav {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  /* height: 46px; */
   background-color: var(--bg);
   padding: 0 160px;
+  border-bottom: 0.5px solid rgba(128, 128, 128, 0.5);
   align-items: center;
 }
-
+.nav_fixed {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+.nav_logo > a {
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--text);
+  text-decoration: none;
+}
+.nav_logo > a span {
+  color: var(--vip);
+}
+.nav_logo > img {
+  height: 60px;
+}
 .nav_icon {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.nav_logo > a {
-  font-size: 1.4rem;
-  color: var(--colors);
-  text-decoration: none;
+.nav_icon .fa-magnifying-glass {
+  font-size: 1.2rem;
+  display: block;
+  margin-top: 2px;
 }
-.nav_logo > img {
-  height: 60px;
-}
-
-.nav_menu {
-  margin: 20px 24px;
-  padding: 0;
-  position: relative;
-}
-.nav_menu a {
-  margin: 20px 24px;
-  font-size: 1.1rem;
-  border-top: 2px solid var(--bg);
-  position: relative;
-  text-decoration: none;
-  color: var(--colors);
-  padding-top: 4px;
-}
-.nav_menu .active {
-  border-top: 2px solid var(--colors);
-}
-.nav_menu a::before {
-  content: "";
-  position: absolute;
-  top: -2px;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background-color: var(--colors);
-  transition: width 0.4s ease-in-out, left 0.4s ease-in-out;
-  transform: translateX(-50%);
-}
-.nav_menu a:hover {
+.nav_icon .icon {
   cursor: pointer;
+  color: var(--text);
 }
-.nav_menu a:hover::before {
-  cursor: pointer;
-  width: 100%;
+.nav_icon .icon:hover {
+  color: var(--vip);
+  transition: all 0.5s;
 }
-.nav_icon_notification:hover {
-  cursor: pointer;
+@media screen and (max-width: 1280px) {
+  .nav {
+    padding: 0 120px;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .nav {
+    padding: 0 60px;
+  }
+}
+@media screen and (max-width: 768px) {
+}
+@media screen and (max-width: 599px) {
+  .nav {
+    padding: 0 20px;
+    justify-content: flex-end;
+  }
+  /* .navtop_none {
+    display: none;
+  } */
+}
+@media screen and (max-width: 375px) {
 }

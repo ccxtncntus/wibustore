@@ -1,13 +1,15 @@
 import { useEffect, useContext } from "react";
 import { Outlet } from "react-router-dom";
-import Nav from "../layout/nav/Nav";
-import * as CategoriesService from "../services/CategoryService";
-import * as ShoppingCartsService from "../services/ShoppingCartsService";
-import * as AccountService from "../services/AccountService";
 import { CategoriesContexts } from "../components/context/CategoriesContexts";
 import { UContexts } from "../components/context/UserContext";
 import { Contexts } from "../components/context/Contexts";
 import { useCookies } from "react-cookie";
+import Nav from "../layout/nav/Nav";
+import NavTop from "../layout/nav/NavTop";
+import * as CategoriesService from "../services/CategoryService";
+import * as ShoppingCartsService from "../services/ShoppingCartsService";
+import * as AccountService from "../services/AccountService";
+
 const Home = () => {
   const [cookies, setCookie] = useCookies(["token"]);
   const { addCate } = useContext(CategoriesContexts);
@@ -20,7 +22,6 @@ const Home = () => {
         if (user.status === 200) {
           addUser(user.data);
           const sss = await ShoppingCartsService.listOfUser(user.data.id);
-          // console.log(sss);
           list(sss);
         }
       }
@@ -32,6 +33,9 @@ const Home = () => {
 
   return (
     <>
+      <div>
+        <NavTop />
+      </div>
       <div>
         <Nav />
       </div>
