@@ -1,18 +1,41 @@
 import { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import "./sreachmodal.css";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useDebounce } from "@uidotdev/usehooks";
+import * as ProductService from "../../services/ProductService";
+import { HOST } from "../../configs/DataEnv";
+import { FormatNumber } from "../../helpers/FormatNumber";
+
 const SreachModal = (props) => {
   const { placement, show, onClose } = props;
   const [Sreach, setSreach] = useState("");
+  const [ListSreach, setListSreach] = useState([]);
+  const [IsSreach, setIsSreach] = useState(false);
+  const debouncedSearch = useDebounce(Sreach, 300);
   useEffect(() => {
-    if (Sreach != "") {
-      console.log(Sreach.trim());
-    }
-    return () => {};
-  }, [Sreach]);
-
+    const chay = async () => {
+      setListSreach([]);
+      setSreach("");
+    };
+    chay();
+  }, []);
+  useEffect(() => {
+    const chay = async () => {
+      if (Sreach != "") {
+        setIsSreach(true);
+        const data = await ProductService.onceProduct(Sreach.trim());
+        data.status === 200 ? setListSreach(data.data) : setListSreach([]);
+        console.log(data.data);
+        setIsSreach(false);
+      }
+    };
+    chay();
+  }, [debouncedSearch]);
+  const formatImg = (list) => {
+    const img = list.split(",")[0].trim();
+    return img;
+  };
   return (
     <>
       <Offcanvas show={show} onHide={onClose} placement={placement}>
@@ -31,16 +54,26 @@ const SreachModal = (props) => {
             />
             <hr className="mt-4" />
             {/* child */}
-            <div className="sreachModal">
-              <img
-                src="https://statics.pancake.vn/web-media/ff/d5/d9/56/5a78cf943a67fb9788d8484f620332e65bee1c2332aaed3591797b23.jpg"
-                alt=""
-              />
-              <span>
-                <Link>name</Link>
-                <p>Price</p>
-              </span>
-            </div>
+            {IsSreach
+              ? "đang tìm kiếm..."
+              : ListSreach.length > 0
+              ? ListSreach.map((item, index) => {
+                  return (
+                    <div className="sreachModal" key={index}>
+                      <img
+                        src={HOST + "/uploads/" + formatImg(item.all_images)}
+                        alt={item.name}
+                      />
+                      <span>
+                        <Link to={`shop/${item.id}`} onClick={onClose}>
+                          {item.name}
+                        </Link>
+                        <p>{FormatNumber(item.price - item.saleoff)}</p>
+                      </span>
+                    </div>
+                  );
+                })
+              : "..."}
           </div>
         </Offcanvas.Body>
       </Offcanvas>
