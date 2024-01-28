@@ -1,0 +1,25 @@
+.sreachModal {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-top: 4px;
+}
+.sreachModal img {
+  width: 120px;
+}
+.sreachModal a {
+  transition: all 0.5s;
+  transform: scale(1.1);
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 500px;
+}
+
+.sreachModal a:hover {
+  color: var(--vip);
+  transition: all 0.5s;
+  transform: scale(1.1);
+  cursor: pointer;
+}

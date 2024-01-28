@@ -8,10 +8,12 @@ import { Contexts } from "../../components/context/Contexts";
 import { useContext, useState } from "react";
 import { useCookies } from "react-cookie";
 import * as AccountService from "../../services/AccountService";
+import SreachModal from "../../components/modal/SreachModal";
 const Nav = () => {
   const navigate = useNavigate();
   const { cardNumber } = useContext(Contexts);
   const [showCard, setShowCard] = useState(false);
+  const [showSreach, setshowSreach] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["token", "path_end"]);
   const handleShowModalCard = async () => {
     if (Object.values(cookies).length > 0) {
@@ -31,9 +33,18 @@ const Nav = () => {
     navigate("/login");
     // console.log("Chưa đăng nhập");
   };
+  const handleShowModalSreach = async () => {
+    setshowSreach(true);
+  };
+  const handleCloseSreach = () => setshowSreach(false);
   const handleClose = () => setShowCard(false);
   return (
     <div className="nav">
+      <SreachModal
+        placement={"end"}
+        show={showSreach}
+        onClose={handleCloseSreach}
+      />
       <CardModal placement={"end"} show={showCard} onClose={handleClose} />
       <div className="nav_logo">
         <Link to={"/"}>
@@ -42,12 +53,7 @@ const Nav = () => {
       </div>
       <Menu />
       <div className="nav_icon">
-        <span>
-          {/* <input
-            type="text"
-            className="form-control"
-            placeholder="Tìm kiếm..."
-          /> */}
+        <span onClick={handleShowModalSreach}>
           <i className="fa-solid fa-magnifying-glass icon"></i>
         </span>
         <Badge
