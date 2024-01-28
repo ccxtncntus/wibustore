@@ -1,0 +1,35 @@
+.social {
+  padding: 0 160px;
+  margin-bottom: 40px;
+}
+.social_border {
+  padding: 20px;
+  border-image: url("https://statics.pancake.vn/web-media/47/b3/30/83/bcee54742d464d6cac3816fef2d346dd9415789eb69c1c368028b23b.jpg")
+    20 round;
+  border-width: 10px;
+  border-style: solid;
+}
+.social_list {
+  border-right: 0.5px solid rgba(128, 128, 128, 0.5);
+}
+
+@media screen and (max-width: 1280px) {
+  .social {
+    padding: 10px 120px;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .social {
+    padding: 10px 60px;
+  }
+}
+@media screen and (max-width: 768px) {
+}
+@media screen and (max-width: 599px) {
+  .social {
+    padding: 10px 20px;
+    justify-content: flex-end;
+  }
+}
+@media screen and (max-width: 375px) {
+}
