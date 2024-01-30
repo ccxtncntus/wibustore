@@ -16,7 +16,6 @@ const HomeContent = () => {
         <Policy />
         <ListFratured />
         <Social />
-        <Footer />
       </div>
     </>
   );

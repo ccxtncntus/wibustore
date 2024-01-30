@@ -9,11 +9,11 @@ import NavTop from "../layout/nav/NavTop";
 import * as CategoriesService from "../services/CategoryService";
 import * as ShoppingCartsService from "../services/ShoppingCartsService";
 import * as AccountService from "../services/AccountService";
-
+import Footer from "../layout/footer/Footer";
 const Home = () => {
   const [cookies, setCookie] = useCookies(["token"]);
   const { addCate } = useContext(CategoriesContexts);
-  const { addUser } = useContext(UContexts);
+  const { addUser, delUser } = useContext(UContexts);
   const { list } = useContext(Contexts);
   useEffect(() => {
     const cate = async () => {
@@ -24,6 +24,8 @@ const Home = () => {
           const sss = await ShoppingCartsService.listOfUser(user.data.id);
           list(sss);
         }
+      } else {
+        delUser();
       }
       const data = await CategoriesService.List(1);
       addCate(data);
@@ -42,7 +44,9 @@ const Home = () => {
       <div>
         <Outlet />
       </div>
-      <div>{/* footer */}</div>
+      <div>
+        <Footer />
+      </div>
     </>
   );
 };

@@ -7,8 +7,11 @@ function UserContext({ children }) {
   const addUser = (data) => {
     setUser(data);
   };
+  const delUser = () => {
+    setUser("");
+  };
   return (
-    <UContexts.Provider value={{ User, addUser }}>
+    <UContexts.Provider value={{ User, addUser, delUser }}>
       {children}
     </UContexts.Provider>
   );

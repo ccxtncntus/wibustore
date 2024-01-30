@@ -80,96 +80,99 @@ const MyOders = () => {
       </div>
       <hr />
       <div className="my_orders_body row">
-        <div>
-          <Table hover>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Tình trạng</th>
-                <th>Địa chỉ</th>
-                <th>Số điện thọai</th>
-                <th>Thanh toán</th>
-                <th>Số tiền</th>
-                <th>#</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {ListOrders.length > 0 &&
-                ListOrders.map((item, index) => (
-                  <tr key={index}>
-                    <td onClick={() => handleViewOrderDetail(item)}>
-                      M-{item.id}
-                    </td>
-                    <td onClick={() => handleViewOrderDetail(item)}>
-                      {item.status}
-                    </td>
-                    <td onClick={() => handleViewOrderDetail(item)}>
-                      {item.address}
-                    </td>
-                    <td onClick={() => handleViewOrderDetail(item)}>
-                      {item.phoneNumbers}
-                    </td>
-                    <td onClick={() => handleViewOrderDetail(item)}>
-                      {item.pay == 0 ? "Khi nhận hàng" : "VN PAY"}
-                    </td>
-                    <td onClick={() => setShow(true)}>
-                      {FormatNumber(item.totail)}
-                    </td>
-                    {item.status != "Hủy" && item.status != "Chờ xử lí" ? (
-                      <td></td>
-                    ) : item.status !== "Hủy" ? (
-                      <td>
-                        {item.pay == 0 && (
-                          <Popconfirm
-                            // title="Delete the product"
-                            description="Hủy đơn hàng này?"
-                            onConfirm={() => confirm(item)}
-                            onCancel={cancel}
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <Button danger>Hủy</Button>
-                          </Popconfirm>
-                        )}
-
-                        <Button
-                          className="m-1"
-                          onClick={() => handleEditOrder(item)}
-                          type="primary"
-                        >
-                          Sửa
-                        </Button>
+        {ListOrders.length > 0 ? (
+          <div>
+            <Table hover>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Tình trạng</th>
+                  <th>Địa chỉ</th>
+                  <th>Số điện thọai</th>
+                  <th>Thanh toán</th>
+                  <th>Số tiền</th>
+                  <th>#</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ListOrders.length > 0 &&
+                  ListOrders.map((item, index) => (
+                    <tr key={index}>
+                      <td onClick={() => handleViewOrderDetail(item)}>
+                        M-{item.id}
                       </td>
-                    ) : (
-                      <td>
-                        {item.pay == 0 && (
-                          <Popconfirm
-                            // title="Delete the product"
-                            description="Hủy đơn hàng này?"
-                            onConfirm={() => confirmDel(item)}
-                            onCancel={cancel}
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <Button danger>Xóa</Button>
-                          </Popconfirm>
-                        )}
-
-                        <Button
-                          className="m-1"
-                          onClick={() => handleRestoreOrder(item)}
-                          type="primary"
-                        >
-                          Khôi Phục
-                        </Button>
+                      <td onClick={() => handleViewOrderDetail(item)}>
+                        {item.status}
                       </td>
-                    )}
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
-        </div>
+                      <td onClick={() => handleViewOrderDetail(item)}>
+                        {item.address}
+                      </td>
+                      <td onClick={() => handleViewOrderDetail(item)}>
+                        {item.phoneNumbers}
+                      </td>
+                      <td onClick={() => handleViewOrderDetail(item)}>
+                        {item.pay == 0 ? "Khi nhận hàng" : "VN PAY"}
+                      </td>
+                      <td onClick={() => setShow(true)}>
+                        {FormatNumber(item.totail)}
+                      </td>
+                      {item.status != "Hủy" && item.status != "Chờ xử lí" ? (
+                        <td></td>
+                      ) : item.status !== "Hủy" ? (
+                        <td>
+                          {item.pay == 0 && (
+                            <Popconfirm
+                              // title="Delete the product"
+                              description="Hủy đơn hàng này?"
+                              onConfirm={() => confirm(item)}
+                              onCancel={cancel}
+                              okText="Yes"
+                              cancelText="No"
+                            >
+                              <Button danger>Hủy</Button>
+                            </Popconfirm>
+                          )}
+
+                          <Button
+                            className="m-1"
+                            onClick={() => handleEditOrder(item)}
+                            type="primary"
+                          >
+                            Sửa
+                          </Button>
+                        </td>
+                      ) : (
+                        <td>
+                          {item.pay == 0 && (
+                            <Popconfirm
+                              // title="Delete the product"
+                              description="Hủy đơn hàng này?"
+                              onConfirm={() => confirmDel(item)}
+                              onCancel={cancel}
+                              okText="Yes"
+                              cancelText="No"
+                            >
+                              <Button danger>Xóa</Button>
+                            </Popconfirm>
+                          )}
+
+                          <Button
+                            className="m-1"
+                            onClick={() => handleRestoreOrder(item)}
+                            type="primary"
+                          >
+                            Khôi Phục
+                          </Button>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+              </tbody>
+            </Table>
+          </div>
+        ) : (
+          "Bạn không có đơn hàng nào"
+        )}
       </div>
     </div>
   );

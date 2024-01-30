@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import "./cardmodal.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import * as AccountService from "../../services/AccountService";
+import { UContexts } from "../../components/context/UserContext";
 const UserModal = ({ placement, show, onClose }) => {
+  const { User } = useContext(UContexts);
   const [Loading, setLoading] = useState(false);
   const [cookies, setCookie, removeToken] = useCookies(["token"]);
   const [IsLogin, setIsLogin] = useState(false);
@@ -13,6 +15,7 @@ const UserModal = ({ placement, show, onClose }) => {
   useEffect(() => {
     const uModal = async () => {
       if (show) {
+        console.log(User);
         if (Object.values(cookies).length > 0) {
           setLoading(true);
           const isLogin = await AccountService.authen(cookies.token);

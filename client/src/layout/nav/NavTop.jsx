@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./navtop.css";
 import UserModal from "../../components/modal/UserModal";
 import { useCookies } from "react-cookie";
-
+import { useContext } from "react";
+import { UContexts } from "../../components/context/UserContext";
 const NavTop = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["token", "path_end"]);
+  const [cookie, setCookie] = useCookies(["token", "path_end"]);
+  const { User } = useContext(UContexts);
   const [Name, setName] = useState(null);
   const [ShowUser, setShowUser] = useState(false);
+
+  useEffect(() => {
+    setName(User != "" ? User.name : null);
+  }, [User]);
+
   const handleCloseUsers = () => setShowUser(false);
   const handleShowModalUser = () => {
     setCookie("path_end", window.location.pathname, { path: "/" });

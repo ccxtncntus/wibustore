@@ -1,7 +1,9 @@
 import * as request from "../configs/Axios";
 
-const List = async (page) => {
-  const res = await request.GET(`/api/products?pageNumber=${page}`);
+const List = async (page, sort) => {
+  const res = await request.GET(
+    `/api/products?pageNumber=${page}&sort=${sort}`
+  );
   return res;
 };
 
@@ -24,9 +26,9 @@ const update = async (formData) => {
   return res;
 };
 
-const listProCategory = async (id, page) => {
+const listProCategory = async (id, page, sort) => {
   const res = await request.GET(
-    `/api/products/listPro/${id}?pageNumber=${page}`
+    `/api/products/listPro/${id}?pageNumber=${page}&sort=${sort}`
   );
   return res;
 };

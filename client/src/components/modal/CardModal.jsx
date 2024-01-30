@@ -33,7 +33,6 @@ const CardModal = ({ placement, show, onClose }) => {
   const handleBuy = () => {
     onClose();
     natigate("/carts", { state: { list: ListCarts } });
-    console.log("buy npw");
   };
   return (
     <>

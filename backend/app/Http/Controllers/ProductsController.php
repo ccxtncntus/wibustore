@@ -18,6 +18,8 @@ class ProductsController extends Controller
 {
     public function index(Request $request)
     {
+        $CountProducts = Products::get();
+        $count = count($CountProducts);
         $pageNumber = $request->pageNumber;
         $products = Products::select(
             'products.id',
@@ -39,7 +41,8 @@ class ProductsController extends Controller
                 'products.description',
                 'products.name',
             )
-            ->paginate(10, ['*'], 'page', $pageNumber);
+            ->orderBy('products.price', $request->sort)
+            ->paginate(12, ['*'], 'page', $pageNumber);
         if ($products->count() === 0) {
             $upData = [
                 "status" => 400,
@@ -47,14 +50,16 @@ class ProductsController extends Controller
             ];
             return response()->json($upData, 200);
         } else {
+
             $data = [
                 "status" => 200,
+                'count' => $count,
                 "data" => $products,
             ];
             return response()->json($data, 200);
         }
     }
-
+    // sreach
     public function onceProduct($value)
     {
         $products = Products::select(
@@ -96,6 +101,8 @@ class ProductsController extends Controller
 
     public function listProductOfCategory(Request $request, $id)
     {
+        $countProducts = Products::where('products.category_id', $id)->get();
+        $count = count($countProducts);
         $pageNumber = $request->pageNumber;
         $products = Products::select(
             'products.id',
@@ -118,12 +125,22 @@ class ProductsController extends Controller
                 'products.description',
                 'products.name',
             )
-            ->paginate(10, ['*'], 'page', $pageNumber);
-        $data = [
-            "status" => 200,
-            "data" => $products,
-        ];
-        return response()->json($data, 200);
+            ->orderBy('products.price', $request->sort)
+            ->paginate(12, ['*'], 'page', $pageNumber);
+        if (count($products) > 0) {
+            $data = [
+                "status" => 200,
+                'count' => $count,
+                "data" => $products,
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                "status" => 400,
+                "data" => 'No products',
+            ];
+            return response()->json($data, 200);
+        }
     }
 
     public function upload(Request $request)
