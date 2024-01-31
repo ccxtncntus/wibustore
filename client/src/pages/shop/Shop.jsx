@@ -12,12 +12,12 @@ const Shop = () => {
     }
   }, [ListCategories]);
   return (
-    <div className="container mt-4 shop">
+    <div className="mt-4 shop">
       <div className="row">
-        <div className="col-md-3">
+        <div className="col-md-2">
           <ShopNav cate={cate} />
         </div>
-        <div className="col-md-9">
+        <div className="col-md-10">
           <ShopProducts />
         </div>
       </div>

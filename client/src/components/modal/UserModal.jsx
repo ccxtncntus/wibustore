@@ -15,17 +15,12 @@ const UserModal = ({ placement, show, onClose }) => {
   useEffect(() => {
     const uModal = async () => {
       if (show) {
-        console.log(User);
-        if (Object.values(cookies).length > 0) {
-          setLoading(true);
-          const isLogin = await AccountService.authen(cookies.token);
-          setIsLogin(isLogin.status === 200 ? true : false);
-          setIsAdmin(isLogin.data.role == "user" ? false : true);
-          setLoading(false);
-          console.log();
-          return;
+        if (User) {
+          setIsLogin(true);
+          setIsAdmin(User.role == "user" ? false : true);
+        } else {
+          setIsLogin(false);
         }
-        setIsLogin(false);
       }
     };
     uModal();
@@ -35,7 +30,7 @@ const UserModal = ({ placement, show, onClose }) => {
     await removeToken(["token"]);
     await removeToken(["path_end"]);
     onClose();
-    await natigate("/login");
+    // await natigate("/login");
   };
   const handleClose = () => {
     onClose();
@@ -47,63 +42,59 @@ const UserModal = ({ placement, show, onClose }) => {
           <Offcanvas.Title>Users</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          {!Loading ? (
-            <div>
-              <div className="list-group">
-                {IsLogin ? (
-                  <>
-                    {IsAdmin && (
-                      <NavLink
-                        to={"/admin/dashboard"}
-                        className="list-group-item list-group-item-action"
-                      >
-                        Admin
-                      </NavLink>
-                    )}
-
-                    <li
-                      to={"/3"}
-                      className="list-group-item list-group-item-action"
-                    >
-                      Trang cá nhân
-                    </li>
-                    {!IsAdmin && (
-                      <NavLink
-                        onClick={handleClose}
-                        to={"/my-orders"}
-                        className="list-group-item list-group-item-action"
-                      >
-                        Đơn hàng của bạn
-                      </NavLink>
-                    )}
-
+          <div>
+            <div className="list-group">
+              {IsLogin ? (
+                <>
+                  {IsAdmin && (
                     <NavLink
-                      to={"/changepass"}
+                      to={"/admin/dashboard"}
                       className="list-group-item list-group-item-action"
                     >
-                      Đổi mật khẩu
+                      Admin
                     </NavLink>
-                    <li
-                      className="list-group-item list-group-item-action"
-                      onClick={() => logOut()}
-                    >
-                      Đăng xuất
-                    </li>
-                  </>
-                ) : (
-                  <NavLink
-                    to={"/login"}
+                  )}
+
+                  <li
+                    to={"/3"}
                     className="list-group-item list-group-item-action"
-                    onClick={() => onClose()}
                   >
-                    Đăng nhập
+                    Trang cá nhân
+                  </li>
+                  {!IsAdmin && (
+                    <NavLink
+                      onClick={handleClose}
+                      to={"/my-orders"}
+                      className="list-group-item list-group-item-action"
+                    >
+                      Đơn hàng của bạn
+                    </NavLink>
+                  )}
+
+                  <NavLink
+                    to={"/changepass"}
+                    className="list-group-item list-group-item-action"
+                  >
+                    Đổi mật khẩu
                   </NavLink>
-                )}
-              </div>
+                  <li
+                    className="list-group-item list-group-item-action"
+                    onClick={() => logOut()}
+                  >
+                    Đăng xuất
+                  </li>
+                </>
+              ) : (
+                <NavLink
+                  to={"/login"}
+                  className="list-group-item list-group-item-action"
+                  onClick={() => onClose()}
+                >
+                  Đăng nhập
+                </NavLink>
+              )}
             </div>
-          ) : (
-            "Đang tải..."
-          )}
+          </div>
         </Offcanvas.Body>
       </Offcanvas>
     </>

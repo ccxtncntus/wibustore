@@ -6,12 +6,12 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 const OrderAdmin = () => {
   const selects = [
-    "Tất cả",
-    "Chờ xử lí",
-    "Xác nhận",
-    "Đang vẫn chuyển",
-    "Nhận hàng thành công",
-    "Hủy",
+    "all",
+    "pending",
+    "confirm",
+    "BeingShipped",
+    "successfully",
+    "cancel",
   ];
   const handleSelect = (e) => {
     console.log(e.target.value);
@@ -75,7 +75,7 @@ const OrderAdmin = () => {
               >
                 {selects.map(
                   (item, index) =>
-                    item !== "Tất cả" && (
+                    item !== "all" && (
                       <option value={item} key={index}>
                         {item}
                       </option>
@@ -85,7 +85,6 @@ const OrderAdmin = () => {
             </td>
             <td>@mdo</td>
             <td>
-              {" "}
               <Popconfirm
                 title="Delete the task"
                 description="Are you sure to delete this task?"

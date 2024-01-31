@@ -88,7 +88,7 @@ const Carts = () => {
   };
   const cancel = () => {};
   return (
-    <div className="carts container mt-2">
+    <div className="carts mt-2">
       {ListCart.length > 0 ? (
         <>
           <Table striped bordered hover>

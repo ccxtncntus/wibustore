@@ -53,12 +53,12 @@ Route::delete('im/del/{imgs}', [ImagesController::class, 'destroy']);
 // crawl
 Route::get('crawl/detail/products/{path}', [ProductsController::class, 'crawlDetail']);
 Route::get('crawl/{p}', [ProductsController::class, 'crawl']);
+
 // users
 // Route::apiResource('login', UserCotroller::class);
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [UserCotroller::class, 'logout']);
 });
-Route::get('account', [UserCotroller::class, 'index']);
 Route::post('login', [UserCotroller::class, 'login']);
 Route::post('authentication', [UserCotroller::class, 'authentication']);
 Route::post('register', [UserCotroller::class, 'register']);
@@ -67,6 +67,13 @@ Route::post('forgotPass', [UserCotroller::class, 'forgotPass']);
 Route::post('checkTokenConfirm', [UserCotroller::class, 'checkTokenConfirm']);
 Route::delete('delTokenConfirm', [UserCotroller::class, 'delTokenConfirm']);
 Route::post('changePassWithToken', [UserCotroller::class, 'changePassWithToken']);
+// uAdmin
+Route::get('account/{page}', [UserCotroller::class, 'index']);
+Route::get('account/listUserStatus/{role}/{page}', [UserCotroller::class, 'listUserStatus']);
+Route::patch('account/changeRole', [UserCotroller::class, 'changeRole']);
+Route::delete('account/delUser/{id}', [UserCotroller::class, 'delUser']);
+Route::post('account/registerOfAd', [UserCotroller::class, 'registerOfAd']);
+Route::post('account/editOfAd', [UserCotroller::class, 'editOfAd']);
 
 // upload
 

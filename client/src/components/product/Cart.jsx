@@ -2,7 +2,11 @@ import "./cart.css";
 import { FormatNumber } from "../../helpers/FormatNumber";
 import { HOST } from "../../configs/DataEnv";
 import { NavLink } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 const Cart = ({ item }) => {
+  const da = useParams();
+  const [path, setpath] = useState("/shop/");
   const format = (price, sale) => {
     return FormatNumber(price - sale);
   };
@@ -10,16 +14,43 @@ const Cart = ({ item }) => {
     const img = imgs.split(",")[0].trim();
     return img;
   };
+  useEffect(() => {
+    if (Object.values(da) != "") {
+      if (da.idcategory && da.category && da.pageCate) {
+        setpath(
+          "/shop/" +
+            da.category +
+            "/" +
+            da.idcategory +
+            "/page/" +
+            da.pageCate +
+            "/"
+        );
+        return;
+      }
+      if (da.idcategory && da.category) {
+        setpath("/shop/" + da.category + "/" + da.idcategory + "/");
+        return;
+      }
+    }
+    setpath("/shop/");
+  }, [da]);
+  const handleAddCart = async (i) => {
+    // add cart
+    console.log(i);
+  };
   return (
     <>
       {item ? (
         <div className="cart">
           <span className="cart_img">
             <img src={HOST + "/uploads/" + onceImg(item.all_images)} alt="" />
-            <span className="cart_img_add">Thêm vào giỏ hàng</span>
+            <span className="cart_img_add" onClick={() => handleAddCart(item)}>
+              Thêm vào giỏ hàng
+            </span>
           </span>
           <NavLink
-            to={`/shop/${item.id}`}
+            to={path + item.id}
             style={{ display: "block" }}
             className="mt-2"
           >
