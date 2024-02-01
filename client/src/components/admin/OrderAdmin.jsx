@@ -4,9 +4,15 @@ import { Button, message, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { Status, OrderStatus, CountPage } from "../../helpers/FormatNumber";
+import {
+  Status,
+  OrderStatus,
+  CountPage,
+  FormatNumber,
+} from "../../helpers/FormatNumber";
 import * as OrdersService from "../../services/OrdersService";
 import Dropdown from "react-bootstrap/Dropdown";
+import { read, utils, writeFile } from "xlsx";
 const OrderAdmin = () => {
   const [page, setPage] = useState(1);
   const [ListOrder, setListOrder] = useState([]);
@@ -59,7 +65,21 @@ const OrderAdmin = () => {
   };
   // export
   const hanldeExportOnePage = () => {
-    console.log(ListOrder);
+    const newArray = ListOrder.map(
+      ({ name, address, phoneNumbers, totail, status }) => ({
+        name,
+        address,
+        phoneNumbers,
+        totail: FormatNumber(totail),
+        status: OrderStatus(status),
+      })
+    );
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet(newArray);
+    const ws2 = utils.json_to_sheet(ListOrder);
+    utils.book_append_sheet(wb, ws, "s1");
+    utils.book_append_sheet(wb, ws2, "s2");
+    writeFile(wb, "oders.xlsx");
   };
   const hanldeExportAll = async () => {
     const dAll = await OrdersService.ListAlls();
