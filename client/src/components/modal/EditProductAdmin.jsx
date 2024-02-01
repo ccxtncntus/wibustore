@@ -17,18 +17,20 @@ const EditProductAdmin = (props) => {
 
   useEffect(() => {
     const fetch = async () => {
-      setimgDelete([]);
-      setblob([]);
-      setimgs([]);
-      setloading(true);
-      await setdataTest(dataProduct);
-      //   console.log(dataProduct);
-      const imgs = await imgsService.List(dataProduct.id);
-      setimgs(imgs);
-      setloading(false);
+      if (show) {
+        setimgDelete([]);
+        setblob([]);
+        setimgs([]);
+        setloading(true);
+        await setdataTest(dataProduct);
+        //   console.log(dataProduct);
+        const imgs = await imgsService.List(dataProduct.id);
+        setimgs(imgs);
+        setloading(false);
+      }
     };
     fetch();
-  }, [props]);
+  }, [show]);
 
   const {
     register,

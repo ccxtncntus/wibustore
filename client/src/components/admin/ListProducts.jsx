@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import * as CategoryService from "../../services/CategoryService";
 import * as ProductService from "../../services/ProductService";
 import EditProductAdmin from "../modal/EditProductAdmin";
+import Pagination from "@mui/material/Pagination";
+import { CountPage } from "../../helpers/FormatNumber";
 const ListProducts = () => {
   const { register, watch } = useForm();
   const [listCate, setlistCate] = useState([]);
@@ -13,6 +15,8 @@ const ListProducts = () => {
   const [delSuccess, setdelSuccess] = useState(false);
   const [loading, setloading] = useState(false);
   const [Cate, setCate] = useState(0);
+  const [CountAll, setCountAll] = useState(1);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     const listC = async () => {
       // console.log(watch("category"));
@@ -20,20 +24,27 @@ const ListProducts = () => {
         const data = await CategoryService.List(1);
         data.status == 200 && setlistCate(data.data.data);
         if (Cate == 0) {
-          const dataProCategory = await ProductService.List(1, "desc");
-          dataProCategory.status === 200
-            ? setlistProductCate(dataProCategory.data.data)
-            : setlistProductCate([]);
+          const dataProCategory = await ProductService.List(page, "desc");
+          console.log(dataProCategory);
+          if (dataProCategory.status === 200) {
+            setlistProductCate(dataProCategory.data.data);
+            setCountAll(dataProCategory.count);
+          } else {
+            setlistProductCate([]);
+          }
         } else {
           const dataProCategory = await ProductService.listProCategory(
             Cate,
-            1,
+            page,
             "desc"
           );
           console.log(dataProCategory);
-          dataProCategory.status === 200
-            ? setlistProductCate(dataProCategory.data.data)
-            : setlistProductCate([]);
+          if (dataProCategory.status === 200) {
+            setlistProductCate(dataProCategory.data.data);
+            setCountAll(dataProCategory.count);
+          } else {
+            setlistProductCate([]);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -41,7 +52,7 @@ const ListProducts = () => {
     };
     listC();
     return () => {};
-  }, [delSuccess, loading, Cate]);
+  }, [delSuccess, loading, Cate, page]);
 
   const confirm = async (item) => {
     const del = await ProductService.delProduct(item.id);
@@ -66,6 +77,9 @@ const ListProducts = () => {
   };
   const handleChaneAll = (e) => {
     setCate(e.target.value);
+  };
+  const handleChange = (event, value) => {
+    setPage(value);
   };
   return (
     <>
@@ -149,7 +163,15 @@ const ListProducts = () => {
           <br /> There are not products ...
         </span>
       )}
-      1
+      {CountPage(CountAll) > 1 && (
+        <Pagination
+          count={CountAll}
+          page={page}
+          onChange={handleChange}
+          color="primary"
+          style={{ float: "right" }}
+        />
+      )}
     </>
   );
 };

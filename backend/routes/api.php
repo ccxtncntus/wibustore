@@ -95,10 +95,11 @@ Route::post('shoppingcard/productCancelBuy', [ShoppingCardController::class, 'pr
 Route::post('shoppingcard/updateQuantity', [ShoppingCardController::class, 'updateQuantity']);
 
 // orders
-// Route::get('orders/{page?}/{perPage?}', [OrdersController::class, 'index']);
+Route::get('orders/all', [OrdersController::class, 'indexAll']);
+Route::get('orders/{page}', [OrdersController::class, 'index']);
 Route::post('orders/create', [OrdersController::class, 'create']);
-Route::get('orders/listOfUser/{Uid}', [OrdersController::class, 'listOfUser']);
-Route::get('orders/listOfStatus', [OrdersController::class, 'listOfStatus']);
+Route::get('orders/listOfUser/{Uid}/{page}', [OrdersController::class, 'listOfUser']);
+Route::get('orders/listOfStatus/{status}/{page}', [OrdersController::class, 'listOfStatus']);
 Route::post('orders/updateAddress', [OrdersController::class, 'updateAddress']);
 Route::patch('orders/updateStatusOrder', [OrdersController::class, 'updateStatusOrder']);
 Route::delete('orders/delOrder/{id}', [OrdersController::class, 'delOrder']);

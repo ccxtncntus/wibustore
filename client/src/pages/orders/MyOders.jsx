@@ -6,7 +6,13 @@ import MyOrdersModal from "../../components/modal/MyOrdersModal";
 import MyOrdersEditModal from "../../components/modal/MyOrdersEditModal";
 import { UContexts } from "../../components/context/UserContext";
 import * as OrdersService from "../../services/OrdersService";
-import { FormatNumber } from "../../helpers/FormatNumber";
+import Pagination from "@mui/material/Pagination";
+
+import {
+  FormatNumber,
+  OrderStatus,
+  CountPage,
+} from "../../helpers/FormatNumber";
 const MyOders = () => {
   const { User } = useContext(UContexts);
   const [ListOrders, setListOrders] = useState([]);
@@ -14,18 +20,25 @@ const MyOders = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [show, setShow] = useState(false);
   const [Load, setLoad] = useState(false);
+  const [CountAll, setCountAll] = useState(1);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     const run = async () => {
+      console.log(ListOrders);
       if (User) {
-        const data = await OrdersService.List(User.id);
-        data.status === 200 && setListOrders(data.message);
+        const data = await OrdersService.List(User.id, 1);
+        console.log(data);
+        if (data.status === 200) {
+          setListOrders(data.message.data);
+          setCountAll(data.count);
+        }
       }
     };
     run();
-  }, [User, showEdit, Load]);
+  }, [User, showEdit, Load, page]);
 
   const confirm = async (i) => {
-    const status = "Hủy";
+    const status = "cancel";
     const changeStatus = await OrdersService.updateStatusOrder(i.id, status);
     console.log(changeStatus);
     message.success("Hủy thành công");
@@ -57,7 +70,7 @@ const MyOders = () => {
     setLoad((pre) => !pre);
   };
   const handleRestoreOrder = async (i) => {
-    const status = "Chờ xử lí";
+    const status = "pending";
     const changeStatusRestore = await OrdersService.updateStatusOrder(
       i.id,
       status
@@ -65,6 +78,10 @@ const MyOders = () => {
     console.log(changeStatusRestore);
     setLoad((pre) => !pre);
     message.success("Khôi phuc thành công");
+  };
+  // console.log(CountPage(CountAll));
+  const handleChange = (event, value) => {
+    setPage(value);
   };
   return (
     <div className="my_orders">
@@ -102,7 +119,7 @@ const MyOders = () => {
                         M-{item.id}
                       </td>
                       <td onClick={() => handleViewOrderDetail(item)}>
-                        {item.status}
+                        {OrderStatus(item.status)}
                       </td>
                       <td onClick={() => handleViewOrderDetail(item)}>
                         {item.address}
@@ -116,9 +133,9 @@ const MyOders = () => {
                       <td onClick={() => setShow(true)}>
                         {FormatNumber(item.totail)}
                       </td>
-                      {item.status != "Hủy" && item.status != "Chờ xử lí" ? (
+                      {item.status != "cancel" && item.status != "pending" ? (
                         <td></td>
-                      ) : item.status !== "Hủy" ? (
+                      ) : item.status == "pending" ? (
                         <td>
                           {item.pay == 0 && (
                             <Popconfirm
@@ -132,7 +149,6 @@ const MyOders = () => {
                               <Button danger>Hủy</Button>
                             </Popconfirm>
                           )}
-
                           <Button
                             className="m-1"
                             onClick={() => handleEditOrder(item)}
@@ -169,6 +185,15 @@ const MyOders = () => {
                   ))}
               </tbody>
             </Table>
+            {CountPage(CountAll) > 1 && (
+              <Pagination
+                count={CountAll}
+                page={page}
+                onChange={handleChange}
+                color="primary"
+                style={{ float: "right" }}
+              />
+            )}
           </div>
         ) : (
           "Bạn không có đơn hàng nào"

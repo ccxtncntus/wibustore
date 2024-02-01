@@ -17,7 +17,7 @@ class ShoppingCardController extends Controller
 
     function listOfUser($id)
     {
-        $shoppingCard = ShoppingCart::select('shopping_carts.id', 'shopping_carts.img', 'shopping_carts.status', 'shopping_carts.quantity', 'products.id as idProduct',  'products.name', 'products.saleoff', 'products.price')
+        $shoppingCard = ShoppingCart::select('shopping_carts.id', 'shopping_carts.img', 'shopping_carts.quantity', 'products.id as idProduct',  'products.name', 'products.saleoff', 'products.price')
             ->join('products', 'shopping_carts.product_id', '=', 'products.id')
             ->where('shopping_carts.user_id', $id)
             ->get();
@@ -147,7 +147,7 @@ class ShoppingCardController extends Controller
                 $shoppingCard->user_id = $request->user_id;
                 $shoppingCard->product_id = $request->product_id;
                 $shoppingCard->img = $request->img;
-                $shoppingCard->status = 'Chưa mua';
+                // $shoppingCard->status = 'Chưa mua';
                 $shoppingCard->quantity = $request->quantity;
                 $shoppingCard->save();
                 $data = [
