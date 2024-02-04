@@ -12,7 +12,11 @@ class OrdersController extends Controller
     // get
     public function indexAll()
     {
-        $orders = DB::table("orders")->get();
+        $orders = DB::table('orders')
+            ->join('users', 'users.id', '=', 'orders.user_id')
+            ->select('orders.*', 'users.name', 'users.email')
+            ->orderBy('id', 'desc')
+            ->get();
         return response()->json($orders, 200);
     }
     public function index($page)
@@ -21,7 +25,7 @@ class OrdersController extends Controller
         $count = count($c);
         $orders = DB::table('orders')
             ->join('users', 'users.id', '=', 'orders.user_id')
-            ->select('orders.*', 'users.name')
+            ->select('orders.*', 'users.name', 'users.email')
             ->orderBy('id', 'desc')
             ->paginate(12, ['*'], 'page', $page);
         return response()->json([$orders, 'count' => $count], 200);

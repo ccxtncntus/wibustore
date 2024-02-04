@@ -5,8 +5,9 @@ import * as ShoppingCartsService from "../../services/ShoppingCartsService";
 import * as pay from "../../services/VnPayService";
 import { useNavigate, useParams } from "react-router-dom";
 import { Contexts } from "../../components/context/Contexts";
-
+import { UContexts } from "../../components/context/UserContext";
 const CheckOutInformation = (props) => {
+  const { User } = useContext(UContexts);
   // useEffect(() => {
   //   // http://localhost:5173/check-out
   //   // ?vnp_Amount=35000000
@@ -36,7 +37,8 @@ const CheckOutInformation = (props) => {
   // };
   const { delCard } = useContext(Contexts);
   const natigate = useNavigate();
-  const { Carts, User, Totail } = props;
+  const { Carts, Totail } = props;
+  const UserProps = props.User;
   const [value, setValue] = useState(0);
   const [Loading, setLoading] = useState(false);
   const handleChange = (e) => {
@@ -59,7 +61,7 @@ const CheckOutInformation = (props) => {
       // console.log(address);
       // console.log(Totails);
       const addOrders = await CheckOutService.create(
-        User.id,
+        UserProps.id,
         address,
         value,
         data.phoneNumber,
@@ -105,6 +107,7 @@ const CheckOutInformation = (props) => {
         <input
           placeholder="Họ và tên"
           className="form-control"
+          defaultValue={User.name}
           {...register("name", { required: true })}
         />
         {errors.name && <span className="text-danger">Không bỏ trống</span>}

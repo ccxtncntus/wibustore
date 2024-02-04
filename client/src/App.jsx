@@ -9,6 +9,7 @@ const AdminLazy = lazy(() => import("./pages/Admin"));
 const ProductAdminLazy = lazy(() => import("./components/admin/ProductAdmin"));
 const OrderAdminLazy = lazy(() => import("./components/admin/OrderAdmin"));
 const AccountAdminLazy = lazy(() => import("./components/admin/AccountAdmin"));
+const SlidersAdminLazy = lazy(() => import("./components/admin/SlidersAdmin"));
 const DashBoardAdminLazy = lazy(() =>
   import("./pages/admin/dashboard/DashBoard")
 );
@@ -232,6 +233,14 @@ function App() {
             element={
               <Suspense fallback={<Loading />}>
                 <AccountAdminLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="sliders"
+            element={
+              <Suspense fallback={<Loading />}>
+                <SlidersAdminLazy />
               </Suspense>
             }
           />

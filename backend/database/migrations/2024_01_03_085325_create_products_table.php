@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('price')->nullable(false);
             $table->integer('saleoff')->nullable();
             $table->string('status')->nullable(false)->default("1");
-            $table->integer('bought')->nullable(true);
+            $table->integer('bought')->nullable(true)->default("0");
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             // $table->timestamps();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

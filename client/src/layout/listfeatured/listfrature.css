@@ -15,15 +15,17 @@
   font-weight: 500;
   color: gray;
   margin-right: 15px;
+  border-bottom: 2px solid white;
 }
 .listfrature_title ul li:hover {
   cursor: pointer;
   color: var(--vip);
-  transition: all 0.5s;
+  transition: ease-in-out 0.5s;
+  border-bottom: 2px solid var(--vip);
 }
 .listfrature_title_active {
   color: var(--vip) !important;
-  border-bottom: 2px solid var(--vip);
+  border-bottom: 2px solid var(--vip) !important;
 }
 
 @media screen and (max-width: 1280px) {

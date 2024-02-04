@@ -59,6 +59,136 @@ class ProductsController extends Controller
             return response()->json($data, 200);
         }
     }
+
+    public function indexSale(Request $request)
+    {
+        $CountProducts = Products::get();
+        $count = count($CountProducts);
+        $pageNumber = $request->pageNumber;
+        $products = Products::select(
+            'products.id',
+            'products.name',
+            'products.status',
+            'products.description',
+            'products.quantity',
+            'products.price',
+            'products.saleoff',
+            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+        )
+            ->join('images', 'images.product_id', '=', 'products.id')
+            ->groupBy(
+                'products.id',
+                'products.status',
+                'products.saleoff',
+                'products.price',
+                'products.quantity',
+                'products.description',
+                'products.name',
+            )
+            ->where('products.saleoff', '>', 0)
+            ->orderBy('products.price', $request->sort)
+            ->paginate(12, ['*'], 'page', $pageNumber);
+        if ($products->count() === 0) {
+            $upData = [
+                "status" => 400,
+                "message" => "There aren't any products",
+            ];
+            return response()->json($upData, 200);
+        } else {
+
+            $data = [
+                "status" => 200,
+                'count' => $count,
+                "data" => $products,
+            ];
+            return response()->json($data, 200);
+        }
+    }
+    public function indexHot(Request $request)
+    {
+        $pageNumber = $request->pageNumber;
+        $products = Products::select(
+            'products.id',
+            'products.name',
+            'products.status',
+            'products.description',
+            'products.quantity',
+            'products.price',
+            'products.saleoff',
+            'products.bought',
+            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+        )
+            ->join('images', 'images.product_id', '=', 'products.id')
+            ->groupBy(
+                'products.id',
+                'products.status',
+                'products.saleoff',
+                'products.bought',
+                'products.price',
+                'products.quantity',
+                'products.description',
+                'products.name',
+            )
+            ->orderBy('products.bought', $request->sort)
+            ->paginate(2, ['*'], 'page', $pageNumber);
+        if ($products->count() === 0) {
+            $upData = [
+                "status" => 400,
+                "message" => "There aren't any products",
+            ];
+            return response()->json($upData, 200);
+        } else {
+
+            $data = [
+                "status" => 200,
+                "data" => $products,
+            ];
+            return response()->json($data, 200);
+        }
+    }
+    public function indexRandom(Request $request)
+    {
+        $id = $request->id;
+        $products = Products::select(
+            'products.id',
+            'products.name',
+            'products.status',
+            'products.description',
+            'products.quantity',
+            'products.price',
+            'products.saleoff',
+            'products.bought',
+            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+        )
+            ->join('images', 'images.product_id', '=', 'products.id')
+            ->groupBy(
+                'products.id',
+                'products.status',
+                'products.saleoff',
+                'products.bought',
+                'products.price',
+                'products.quantity',
+                'products.description',
+                'products.name',
+            )
+            ->where('products.id', '<>', $id)
+            ->inRandomOrder()->limit(4)->get();
+        if ($products->count() === 0) {
+            $upData = [
+                "status" => 400,
+                "message" => "There aren't any products",
+            ];
+            return response()->json($upData, 200);
+        } else {
+
+            $data = [
+                "status" => 200,
+                "data" => $products,
+            ];
+            return response()->json($data, 200);
+        }
+    }
+
     // sreach
     public function onceProduct($value)
     {

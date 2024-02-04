@@ -14,6 +14,7 @@ const ShopProducts = () => {
   const [PageAll, setPageAll] = useState(1);
   const [Sort, setSort] = useState("desc");
   const [Loading, setLoading] = useState(false);
+  const test = [1, 2, 3, 4];
   const setDefault = () => {
     setPageAll(1);
     setListProducts([]);
@@ -116,18 +117,11 @@ const ShopProducts = () => {
           )
         ) : (
           <>
-            <div className="ShopProducts_list_child col-md-3">
-              <ProductLoading />
-            </div>
-            <div className="ShopProducts_list_child col-md-3">
-              <ProductLoading />
-            </div>
-            <div className="ShopProducts_list_child col-md-3">
-              <ProductLoading />
-            </div>
-            <div className="ShopProducts_list_child col-md-3">
-              <ProductLoading />
-            </div>
+            {test.map((item, index) => (
+              <div className="ShopProducts_list_child col-md-3" key={index}>
+                <ProductLoading />
+              </div>
+            ))}
           </>
         )}
       </div>

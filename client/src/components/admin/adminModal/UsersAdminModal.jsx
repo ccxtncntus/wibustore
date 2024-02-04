@@ -1,7 +1,7 @@
 import { useEffect, useState, memo } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import * as AccountService from "../../services/AccountService";
+import * as AccountService from "../../../services/AccountService";
 import { message } from "antd";
 const UsersAdminModal = (props) => {
   const { onHide, show, onRun } = props;

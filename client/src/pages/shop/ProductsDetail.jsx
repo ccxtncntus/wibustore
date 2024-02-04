@@ -1,19 +1,18 @@
-import { useEffect, useState, useContext } from "react";
-import * as ProductsService from "../../services/ProductService";
 import "./productdetail.css";
+import { useEffect, useState, useContext } from "react";
 import { HOST } from "../../configs/DataEnv";
 import { Contexts } from "../../components/context/Contexts";
 import { useParams } from "react-router-dom";
-import LoginModal from "../../components/modal/LoginModal";
-import * as ShoppingCartsService from "../../services/ShoppingCartsService";
 import { useCookies } from "react-cookie";
-import { message } from "antd";
 import { UContexts } from "../../components/context/UserContext";
-import LoadingConponent from "../../components/loading/Loading";
-import Cart from "../../components/product/Cart";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import { message } from "antd";
 import { FormatNumber } from "../../helpers/FormatNumber";
+import * as ShoppingCartsService from "../../services/ShoppingCartsService";
+import * as ProductsService from "../../services/ProductService";
+import LoadingConponent from "../../components/loading/Loading";
+import LoginModal from "../../components/modal/LoginModal";
+import Cart from "../../components/product/Cart";
+import ProductLoading from "../../components/loadingProduct/ProductLoading";
 const ProductsDetail = () => {
   const paths = useParams();
   const [cookies, setCookie, removeCookie] = useCookies(["token", "path_end"]);
@@ -24,11 +23,17 @@ const ProductsDetail = () => {
   const [ViewImg, setViewImg] = useState(0);
   const [IsLogin, setIsLogin] = useState(false);
   const [IdUser, setIdUser] = useState("");
+  const [ListRandom, setListRandom] = useState([]);
+  const test = [1, 2, 3, 4];
   useEffect(() => {
     const run = async () => {
       if (paths && paths.idProduct) {
         const data = await ProductsService.productId(paths.idProduct);
+        // const ran = await ProductsService.ListRandom();
         setProduct(data.data[0]);
+
+        const ran = await ProductsService.ListRandom(data.data[0].id);
+        ran.status === 200 ? setListRandom(ran.data) : setListRandom([]);
         const imgs = data.data[0].all_images.split(",");
         setListImg(imgs);
       }
@@ -67,30 +72,12 @@ const ProductsDetail = () => {
       setModalShow(true);
     }
   };
-  const responsive = {
-    superLargeDesktop: {
-      breakpoint: { max: 4000, min: 1024 },
-      items: 4,
-    },
-    desktop: {
-      breakpoint: { max: 1024, min: 800 },
-      items: 4,
-    },
-    tablet: {
-      breakpoint: { max: 800, min: 464 },
-      items: 3,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 2,
-    },
-  };
   return (
     <div className="productDetail">
       <LoginModal show={modalShow} onHide={() => setModalShow(false)} />
       {Product !== "" ? (
         <>
-          <div className="row mt-4">
+          <div className="row mt-4 productDetail_img">
             <div className="product_detail col-md-6">
               {ListImg.length > 0 && (
                 <div className="row">
@@ -156,15 +143,18 @@ const ProductsDetail = () => {
           </div>
           <div className="mt-5 product_detail_more">
             <p>Sản phẩm liên quan</p>
-            <div className="product_detail_more_list mb-4">
-              <Carousel responsive={responsive}>
-                <Cart />
-                <Cart />
-                <Cart />
-                <Cart />
-                <Cart />
-                <Cart />
-              </Carousel>
+            <div className="product_detail_more_list mb-4 row">
+              {ListRandom.length > 0
+                ? ListRandom.map((item, index) => (
+                    <div className="col-md-3" key={index}>
+                      <Cart item={item} />
+                    </div>
+                  ))
+                : test.map((item, index) => (
+                    <div className="col-md-3" key={index}>
+                      <ProductLoading />
+                    </div>
+                  ))}
             </div>
           </div>
         </>

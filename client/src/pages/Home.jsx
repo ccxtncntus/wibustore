@@ -17,7 +17,6 @@ const Home = () => {
   const { list } = useContext(Contexts);
   useEffect(() => {
     const cate = async () => {
-      console.log(1);
       if (cookies && cookies.token) {
         const user = await AccountService.authen(cookies.token);
         if (user.status === 200) {

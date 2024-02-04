@@ -6,6 +6,23 @@ const List = async (page, sort) => {
   );
   return res;
 };
+const ListSale = async (page, sort) => {
+  const res = await request.GET(
+    `/api/products/sale?pageNumber=${page}&sort=${sort}`
+  );
+  return res;
+};
+const ListHot = async (page, sort) => {
+  const res = await request.GET(
+    `/api/products/hot?pageNumber=${page}&sort=${sort}`
+  );
+  return res;
+};
+
+const ListRandom = async (id) => {
+  const res = await request.GET(`/api/products/random/${id}`);
+  return res;
+};
 
 const productId = async (id) => {
   const res = await request.GET(`/api/products/${id}`);
@@ -61,4 +78,7 @@ export {
   crawl,
   crawlDetail,
   productId,
+  ListSale,
+  ListHot,
+  ListRandom,
 };

@@ -12,6 +12,7 @@ use App\Http\Controllers\ShoppingCardController;;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\VnPayController;
+use App\Http\Controllers\SlidersController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -40,6 +41,9 @@ Route::put('categorys/edit/{id}', [CategoryController::class, 'edit']);
 Route::delete('categorys/delete/{id}', [CategoryController::class, 'delete']);
 // products
 Route::get('products', [ProductsController::class, 'index']);
+Route::get('products/sale', [ProductsController::class, 'indexSale']);
+Route::get('products/hot', [ProductsController::class, 'indexHot']);
+Route::get('products/random/{id}', [ProductsController::class, 'indexRandom']);
 Route::get('products/once/{value}', [ProductsController::class, 'onceProduct']);
 Route::get('products/listPro/{id}', [ProductsController::class, 'listProductOfCategory']);
 Route::get('products/{id}', [ProductsController::class, 'show']);
@@ -110,3 +114,8 @@ Route::post('ordersDetails/create', [OrderDetailController::class, 'create']);
 Route::get('ordersDetails/listsOfOrder/{idOrder}', [OrderDetailController::class, 'listsOfOrder']);
 // vnpay
 Route::post('vnpay', [VnPayController::class, 'pay']);
+// slider
+Route::get('sliders', [SlidersController::class, 'index']);
+Route::post('sliders/add', [SlidersController::class, 'add']);
+Route::post('sliders/edit', [SlidersController::class, 'edit']);
+Route::delete('sliders/delSlider/{id}', [SlidersController::class, 'delSlider']);

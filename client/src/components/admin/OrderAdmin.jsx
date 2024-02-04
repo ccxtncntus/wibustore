@@ -9,6 +9,7 @@ import {
   OrderStatus,
   CountPage,
   FormatNumber,
+  ExportExcel,
 } from "../../helpers/FormatNumber";
 import * as OrdersService from "../../services/OrdersService";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -66,24 +67,33 @@ const OrderAdmin = () => {
   // export
   const hanldeExportOnePage = () => {
     const newArray = ListOrder.map(
-      ({ name, address, phoneNumbers, totail, status }) => ({
+      ({ name, email, address, phoneNumbers, totail, status }) => ({
         name,
+        email,
         address,
         phoneNumbers,
         totail: FormatNumber(totail),
         status: OrderStatus(status),
       })
     );
-    const wb = utils.book_new();
-    const ws = utils.json_to_sheet(newArray);
-    const ws2 = utils.json_to_sheet(ListOrder);
-    utils.book_append_sheet(wb, ws, "s1");
-    utils.book_append_sheet(wb, ws2, "s2");
-    writeFile(wb, "oders.xlsx");
+    // export
+    ExportExcel(newArray, "shheet1", "WibuStoreOrders");
   };
   const hanldeExportAll = async () => {
     const dAll = await OrdersService.ListAlls();
     console.log(dAll);
+    const newArray = dAll.map(
+      ({ name, email, address, phoneNumbers, totail, status }) => ({
+        name,
+        email,
+        address,
+        phoneNumbers,
+        totail: FormatNumber(totail),
+        status: OrderStatus(status),
+      })
+    );
+    // export
+    ExportExcel(newArray, "shheet1", "WibuStoreOrderAll");
   };
   return (
     <>
