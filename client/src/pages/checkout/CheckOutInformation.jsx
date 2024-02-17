@@ -8,6 +8,7 @@ import { Contexts } from "../../components/context/Contexts";
 import { UContexts } from "../../components/context/UserContext";
 const CheckOutInformation = (props) => {
   const { User } = useContext(UContexts);
+
   // useEffect(() => {
   //   // http://localhost:5173/check-out
   //   // ?vnp_Amount=35000000
@@ -35,10 +36,11 @@ const CheckOutInformation = (props) => {
   //   const da = await pay.pay();
   //   console.log(da);
   // };
+
   const { delCard } = useContext(Contexts);
   const natigate = useNavigate();
   const { Carts, Totail } = props;
-  const UserProps = props.User;
+
   const [value, setValue] = useState(0);
   const [Loading, setLoading] = useState(false);
   const handleChange = (e) => {
@@ -49,19 +51,15 @@ const CheckOutInformation = (props) => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
   const onSubmit = async (data) => {
     if (value == 1) {
       console.log("Thanh toán bằng VN Pay");
     } else {
       setLoading(true);
-      // console.log(Carts);
       const address = data.address + ", " + data.huyen + ", " + data.tinh;
       const Totails = Totail + 30000;
-      // console.log(address);
-      // console.log(Totails);
       const addOrders = await CheckOutService.create(
-        UserProps.id,
+        User.id,
         address,
         value,
         data.phoneNumber,
@@ -79,14 +77,16 @@ const CheckOutInformation = (props) => {
               item.img
             );
             if (da.status === 200) {
-              // bớt số lượng trong product
-              delCard(item);
-              await ShoppingCartsService.productBuyed(
-                item.idProduct,
-                Number(item.quantity)
-              );
-              // xóa trong giỏ hàng
-              await ShoppingCartsService.delCart(item.id);
+              if (item.id != 0) {
+                // bớt số lượng trong product
+                delCard(item);
+                await ShoppingCartsService.productBuyed(
+                  item.idProduct,
+                  Number(item.quantity)
+                );
+                // xóa trong giỏ hàng
+                await ShoppingCartsService.delCart(item.id);
+              }
             }
           } catch (error) {
             console.error("Error creating detail:", error);

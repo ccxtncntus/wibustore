@@ -105,7 +105,14 @@ const SlidersAdmin = () => {
   const handleEditSuccess = async () => {
     if (img != "") {
       if (img[0] == 1) {
-        console.log("không đổi img");
+        const i = await SliderService.editNoImg(idEdit, title, content, path);
+        if (i.status === 200) {
+          setLoad((pre) => !pre);
+          handleStart();
+          message.success("Edit success");
+          refForcus.current.focus();
+          setisEdit(false);
+        }
       } else {
         const formData = new FormData();
         formData.append("img", img[0]);
@@ -118,17 +125,20 @@ const SlidersAdmin = () => {
         if (i.status === 200) {
           setLoad((pre) => !pre);
           handleStart();
-          message.success("Add success");
+          message.success("Edit success");
           refForcus.current.focus();
           setisEdit(false);
         }
       }
     } else {
-      console.log("không đổi img");
-      console.log(title);
-      console.log(content);
-      console.log(path);
-      setisEdit(false);
+      const i = await SliderService.editNoImg(idEdit, title, content, path);
+      if (i.status === 200) {
+        setLoad((pre) => !pre);
+        handleStart();
+        message.success("Edit success");
+        refForcus.current.focus();
+        setisEdit(false);
+      }
     }
   };
   const handleEditCancel = () => {

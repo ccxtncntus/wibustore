@@ -21,7 +21,7 @@ const Nav = () => {
       if (lo.status == 200) {
         // console.log("đã đăng nhập");
         setShowCard(true);
-        cookies.path_end && console.log(cookies.path_end);
+        // cookies.path_end && console.log(cookies.path_end);
         return;
       }
       setCookie("path_end", window.location.pathname, { path: "/" });

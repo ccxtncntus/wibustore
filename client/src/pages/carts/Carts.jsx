@@ -6,6 +6,7 @@ import { Contexts } from "../../components/context/Contexts";
 import { FormatNumber } from "../../helpers/FormatNumber";
 import { HOST } from "../../configs/DataEnv";
 import * as ShoppingCartService from "../../services/ShoppingCartsService";
+import * as ProductService from "../../services/ProductService";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button, message, Popconfirm } from "antd";
 
@@ -16,11 +17,37 @@ const Carts = () => {
   const { delCard } = useContext(Contexts);
   const [isCheck, setisCheck] = useState([]);
   const [ListCart, setListCart] = useState([]);
+  const FormatImg = (imgs) => {
+    const img = imgs.split(",")[0];
+    return img;
+  };
   useEffect(() => {
     const chay = async () => {
+      console.log(state);
       if (state) {
-        const { list } = state;
-        setListCart(list);
+        if (state.list) {
+          const { list } = state;
+          setListCart(list);
+        }
+        if (state.id_product) {
+          const { id_product } = state;
+          const data = await ProductService.productId(id_product);
+          if (data.status == 200) {
+            const product = data.data[0];
+            const i = FormatImg(product.all_images);
+            const newItem = {
+              id: 0,
+              idProduct: product.id,
+              img: i,
+              name: product.name,
+              price: product.price,
+              quantity: 1,
+              saleoff: product.saleoff,
+            };
+            console.log(newItem);
+            setListCart([newItem]);
+          }
+        }
       } else {
         if (User) {
           const lists = await ShoppingCartService.listOfUser(User.id);
@@ -70,7 +97,7 @@ const Carts = () => {
       item.id,
       e.target.value
     );
-    console.log(update);
+    // console.log(update);
     ListCart[index].quantity = e.target.value;
     setListCart([...ListCart]);
   };

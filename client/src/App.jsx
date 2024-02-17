@@ -36,6 +36,9 @@ const ChangePassllLazy = lazy(() =>
   import("./pages/changepassword/ChangePass")
 );
 const MyCartsllLazy = lazy(() => import("./pages/orders/MyOders"));
+// profile
+const ProfilellLazy = lazy(() => import("./pages/profile/Profile"));
+
 function App() {
   return (
     <>
@@ -160,6 +163,14 @@ function App() {
             element={
               <Suspense fallback={<Loading />}>
                 <MyCartsllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/my-profile"
+            element={
+              <Suspense fallback={<Loading />}>
+                <ProfilellLazy />
               </Suspense>
             }
           />

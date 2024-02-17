@@ -22,20 +22,29 @@ const MyOders = () => {
   const [Load, setLoad] = useState(false);
   const [CountAll, setCountAll] = useState(1);
   const [page, setPage] = useState(1);
+  const [select, setselect] = useState(0);
+
   useEffect(() => {
     const run = async () => {
-      console.log(ListOrders);
       if (User) {
-        const data = await OrdersService.List(User.id, 1);
-        console.log(data);
-        if (data.status === 200) {
-          setListOrders(data.message.data);
-          setCountAll(data.count);
+        if (select) {
+          console.log("all");
+          const data = await OrdersService.ListOfUserAll(User.id, page);
+          if (data.status === 200) {
+            setListOrders(data.message.data);
+            setCountAll(data.count);
+          }
+        } else {
+          const data = await OrdersService.List(User.id, page);
+          if (data.status === 200) {
+            setListOrders(data.message.data);
+            setCountAll(data.count);
+          }
         }
       }
     };
     run();
-  }, [User, showEdit, Load, page]);
+  }, [User, showEdit, Load, page, select]);
 
   const confirm = async (i) => {
     const status = "cancel";
@@ -83,17 +92,30 @@ const MyOders = () => {
   const handleChange = (event, value) => {
     setPage(value);
   };
+
   return (
     <div className="my_orders">
       <MyOrdersModal
+        select={select}
         show={show}
         onHide={handleHide}
         ListOfOrder={ListOfOrder}
       />
       <MyOrdersEditModal show={showEdit} onHide={handleHideEdit} Edit={Edit} />
+      <h4>Lịch sử mua hàng</h4>
       <div className="my_orders_title">
-        <h4>Lịch sử mua hàng</h4>
-        <span>Đơn hàng chi tiết</span>
+        <span
+          className={select == 0 ? "my_orders_all" : ""}
+          onClick={() => setselect(0)}
+        >
+          Đơn hàng chi tiết
+        </span>
+        <div
+          className={select == 1 ? "my_orders_all" : ""}
+          onClick={() => setselect(1)}
+        >
+          Đã mua
+        </div>
       </div>
       <hr />
       <div className="my_orders_body row">
@@ -187,7 +209,7 @@ const MyOders = () => {
             </Table>
             {CountPage(CountAll) > 1 && (
               <Pagination
-                count={CountAll}
+                count={CountPage(CountAll)}
                 page={page}
                 onChange={handleChange}
                 color="primary"

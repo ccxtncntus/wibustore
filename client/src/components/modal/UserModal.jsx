@@ -55,12 +55,13 @@ const UserModal = ({ placement, show, onClose }) => {
                     </NavLink>
                   )}
 
-                  <li
-                    to={"/3"}
+                  <NavLink
+                    onClick={handleClose}
+                    to={"/my-profile"}
                     className="list-group-item list-group-item-action"
                   >
                     Trang cá nhân
-                  </li>
+                  </NavLink>
                   {!IsAdmin && (
                     <NavLink
                       onClick={handleClose}

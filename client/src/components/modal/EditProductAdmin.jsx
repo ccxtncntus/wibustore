@@ -22,8 +22,8 @@ const EditProductAdmin = (props) => {
         setblob([]);
         setimgs([]);
         setloading(true);
-        await setdataTest(dataProduct);
-        //   console.log(dataProduct);
+        setdataTest(dataProduct);
+        console.log(dataProduct);
         const imgs = await imgsService.List(dataProduct.id);
         setimgs(imgs);
         setloading(false);
@@ -55,11 +55,11 @@ const EditProductAdmin = (props) => {
   const check = () => {
     if (Object.keys(dataTest).length <= 0) return;
     if (
-      dataTest.name.trim() === "" ||
-      dataTest.description.trim() === "" ||
-      dataTest.quantity === "" ||
-      dataTest.price === "" ||
-      dataTest.saleoff === ""
+      dataTest.name.trim() == "" ||
+      dataTest.description.trim() == "" ||
+      dataTest.quantity == "" ||
+      dataTest.price == "" ||
+      dataTest.saleoff == ""
     ) {
       return false;
     } else if (Number(dataTest.price) < Number(dataTest.saleoff)) {
@@ -76,7 +76,6 @@ const EditProductAdmin = (props) => {
   };
   const handleEditPro = async () => {
     const validate = check();
-    console.log(validate);
     if (validate) {
       try {
         if (imgDelete.length > 0) {
@@ -86,7 +85,6 @@ const EditProductAdmin = (props) => {
         const formData = new FormData();
         if (dataTest.img) {
           const arr = Object.values(dataTest.img[0]);
-          // console.log(arr);
           arr.map((item) => {
             formData.append("images[]", item);
           });
@@ -145,12 +143,6 @@ const EditProductAdmin = (props) => {
       return true;
     }
   };
-
-  // function currencyFormat(num) {
-  //   return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + " đ";
-  // }
-  // console.log(currencyFormat(100000)); // $2,665.00
-
   return (
     <div>
       <Modal
@@ -298,7 +290,7 @@ const EditProductAdmin = (props) => {
                 placeholder="..."
                 id="floatingTextarea2"
                 style={{ height: "100px" }}
-                defaultValue={dataTest.description}
+                value={dataTest.description}
                 onChange={(e) =>
                   setdataTest({
                     ...dataTest,
@@ -319,7 +311,7 @@ const EditProductAdmin = (props) => {
                 <input
                   className="form-control"
                   type="number"
-                  defaultValue={dataTest.quantity}
+                  value={dataTest.quantity}
                   onChange={(e) =>
                     setdataTest({
                       ...dataTest,
@@ -338,7 +330,7 @@ const EditProductAdmin = (props) => {
                 <input
                   className="form-control"
                   type="number"
-                  defaultValue={dataTest.price}
+                  value={dataTest.price}
                   onChange={(e) =>
                     setdataTest({
                       ...dataTest,
@@ -357,7 +349,7 @@ const EditProductAdmin = (props) => {
                 <input
                   className="form-control"
                   type="number"
-                  defaultValue={dataTest.saleoff}
+                  value={dataTest.saleoff}
                   onChange={(e) =>
                     setdataTest({
                       ...dataTest,
@@ -370,6 +362,7 @@ const EditProductAdmin = (props) => {
                 </p>
               </Form.Group>
             </div>
+
             <Button
               style={{ width: 120, marginLeft: 12 }}
               variant="secondary"
@@ -390,7 +383,6 @@ const EditProductAdmin = (props) => {
             </Button>
           </div>
         </Modal.Body>
-
         <Modal.Footer></Modal.Footer>
       </Modal>
     </div>

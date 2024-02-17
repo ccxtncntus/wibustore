@@ -3,8 +3,20 @@ import Modal from "react-bootstrap/Modal";
 import Table from "react-bootstrap/Table";
 import { HOST } from "../../configs/DataEnv";
 import { FormatNumber } from "../../helpers/FormatNumber";
+import { useNavigate } from "react-router-dom";
 const MyOrdersModal = (props) => {
-  const { show, onHide, ListOfOrder } = props;
+  const { show, onHide, ListOfOrder, select } = props;
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (show) {
+      console.log(ListOfOrder);
+    }
+  }, [show]);
+  const handleBuyAgain = (i) => {
+    console.log({ id_product: i.product_id });
+    navigate("/carts", { state: { id_product: i.product_id } });
+    onHide();
+  };
   return (
     <>
       <Modal
@@ -39,6 +51,16 @@ const MyOrdersModal = (props) => {
                     <td>{item.quantitybuy}</td>
                     <td>{FormatNumber(item.price)}</td>
                     <td>{FormatNumber(item.price * item.quantitybuy)}</td>
+                    {select ? (
+                      <td>
+                        <button
+                          className="btn btn-secondary"
+                          onClick={() => handleBuyAgain(item)}
+                        >
+                          Mua lại
+                        </button>
+                      </td>
+                    ) : null}
                   </tr>
                 ))
               ) : (

@@ -17,6 +17,10 @@ const List = async (userID, page) => {
   const res = await request.GET(`/api/orders/listOfUser/${userID}/${page}`);
   return res;
 };
+const ListOfUserAll = async (userID, page) => {
+  const res = await request.GET(`/api/orders/listOfUserAll/${userID}/${page}`);
+  return res;
+};
 // get detail
 const listsOfOrder = async (idOrder) => {
   const res = await request.GET(`/api/ordersDetails/listsOfOrder/${idOrder}`);
@@ -53,4 +57,5 @@ export {
   ListAll,
   ListOfStatus,
   ListAlls,
+  ListOfUserAll,
 };

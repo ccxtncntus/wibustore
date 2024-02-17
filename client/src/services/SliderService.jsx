@@ -20,9 +20,18 @@ const edit = async (formData) => {
   });
   return res;
 };
+const editNoImg = async (idEdit, title, content, path) => {
+  const res = await request.PUT(`/api/sliders/editNoImg`, {
+    idEdit: idEdit,
+    title: title,
+    content: content,
+    path: path,
+  });
+  return res;
+};
 const del = async (id) => {
   const res = await request.DELETE(`/api/sliders/delSlider/${id}`);
   return res;
 };
 
-export { add, list, del, edit };
+export { add, list, del, edit, editNoImg };

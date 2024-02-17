@@ -18,6 +18,12 @@
 .my_orders {
   padding: 8px 160px;
 }
+.my_orders_all {
+  color: var(--vip);
+}
+.my_orders_title:hover * {
+  cursor: pointer;
+}
 
 @media screen and (max-width: 1280px) {
   .my_orders {

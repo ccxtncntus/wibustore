@@ -111,7 +111,26 @@ class SlidersController extends Controller
                 return response()->json($data, 200);
             }
         } else {
-            return 1;
+            $slider = DB::table('sliders')
+                ->where('id', $idEdit)
+                ->update([
+                    'title' => $title,
+                    'content' => $content,
+                    'path' => $path,
+                ]);
+            if ($slider) {
+                $data = [
+                    "status" => 200,
+                    "message" => "edit thành công",
+                ];
+                return response()->json($data, 200);
+            } else {
+                $data = [
+                    "status" => 400,
+                    "message" => "edit thất bại",
+                ];
+                return response()->json($data, 200);
+            }
         }
     }
 

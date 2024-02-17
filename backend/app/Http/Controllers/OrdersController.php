@@ -46,7 +46,20 @@ class OrdersController extends Controller
     {
         $all = DB::table("orders")->where('user_id', $Uid)->get();
         $count = count($all);
-        $orders = DB::table("orders")->where('user_id', $Uid)->orderBy('id', 'desc')->paginate(12, ['*'], 'page', $page);
+        $orders = DB::table("orders")->where('user_id', $Uid)->where('status', '<>', 'successfully')->orderBy('id', 'desc')->paginate(12, ['*'], 'page', $page);
+        $data = [
+            "status" => 200,
+            'count' => $count,
+            "message" => $orders,
+        ];
+        return response()->json($data, 200);
+    }
+    // all
+    public function listOfUserAll($Uid, $page)
+    {
+        $all = DB::table("orders")->where('user_id', $Uid)->get();
+        $count = count($all);
+        $orders = DB::table("orders")->where('user_id', $Uid)->where('status', '=', 'successfully')->orderBy('id', 'desc')->paginate(12, ['*'], 'page', $page);
         $data = [
             "status" => 200,
             'count' => $count,
