@@ -13,7 +13,7 @@ import {
 } from "../../helpers/FormatNumber";
 import * as OrdersService from "../../services/OrdersService";
 import Dropdown from "react-bootstrap/Dropdown";
-import { read, utils, writeFile } from "xlsx";
+import AdminOrdersModal from "../../components/modal/AdminOrdersModal";
 const OrderAdmin = () => {
   const [page, setPage] = useState(1);
   const [ListOrder, setListOrder] = useState([]);
@@ -95,9 +95,31 @@ const OrderAdmin = () => {
     // export
     ExportExcel(newArray, "shheet1", "WibuStoreOrderAll");
   };
+  const [listView, setlistView] = useState([]);
+  const [show, setShow] = useState(false);
+
+  const handleViewOrders = async (i) => {
+    const l = await OrdersService.listsOfOrder(i.id);
+    l.status == 200 && setlistView(l.message);
+    setShow(true);
+  };
+  useEffect(() => {
+    if (listView.length > 0) {
+      console.log(listView);
+    }
+  }, [listView]);
+  const handleHide = () => {
+    setShow(false);
+  };
+
   return (
     <>
       <div style={style}>
+        <AdminOrdersModal
+          show={show}
+          onHide={handleHide}
+          ListOfOrder={listView}
+        />
         <Form.Select
           aria-label="Default select"
           defaultValue={null}
@@ -143,11 +165,15 @@ const OrderAdmin = () => {
           <tbody>
             {ListOrder.map((item, index) => (
               <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{item.name}</td>
-                <td>{item.address}</td>
-                <td>{item.pay == 0 ? "Khi nhận hàng" : "VN PAY"}</td>
-                <td>{item.totail}</td>
+                <td onClick={() => handleViewOrders(item)}>{index + 1}</td>
+                <td onClick={() => handleViewOrders(item)}>{item.name}</td>
+                <td onClick={() => handleViewOrders(item)}>{item.address}</td>
+                <td onClick={() => handleViewOrders(item)}>
+                  {item.pay == 0 ? "Khi nhận hàng" : "VN PAY"}
+                </td>
+                <td onClick={() => handleViewOrders(item)}>
+                  {FormatNumber(item.totail)}
+                </td>
                 <td>
                   <Form.Select
                     aria-label="Default select"
