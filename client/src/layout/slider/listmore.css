@@ -41,22 +41,24 @@
   text-shadow: 0 0 10px var(--vip), 0 0 20px var(--vip), 0 0 30px var(--vip),
     0 0 40px #00f, 0 0 70px #00f, 0 0 80px #00f;
 }
-.listmore_slider_child span:hover button {
+.listmore_slider_child span:hover a {
   cursor: pointer;
   transition: all 0.5s;
   text-shadow: 0 0 10px #fff, 0 0 20px var(--vip), 0 0 30px var(--vip),
     0 0 40px #00f, 0 0 70px #00f, 0 0 80px #00f;
 }
-.listmore_slider_child span button {
+.listmore_slider_child span a {
   color: var(--vip);
   background: none;
   border: 0;
   font-size: 0.9rem;
   font-weight: 500;
   margin-left: 20px;
+  text-decoration: none;
 }
 .listmore_slider_child span i {
   margin-top: 3px;
+  margin-left: 4px;
 }
 .span1:hover span {
   bottom: 0;
