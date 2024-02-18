@@ -29,7 +29,7 @@ const ProductsDetail = () => {
     const run = async () => {
       if (paths && paths.idProduct) {
         const data = await ProductsService.productId(paths.idProduct);
-        // const ran = await ProductsService.ListRandom();
+
         setProduct(data.data[0]);
 
         const ran = await ProductsService.ListRandom(data.data[0].id);

@@ -1,23 +1,41 @@
 .profile {
   min-height: 80vh;
-  padding: 0 160px;
+  padding: 20px 160px;
+  background-color: aliceblue;
+  display: flex;
+  flex-direction: row;
+}
+.profile_title_av {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: top;
+  gap: 12px;
+}
+.profile_title_av img {
+  width: 120px;
+  height: 120px;
+}
+.profile_title_av i:hover {
+  cursor: pointer;
+  color: var(--vip);
 }
 
 @media screen and (max-width: 1280px) {
   .profile {
-    padding: 0 120px;
+    padding: 20px 120px;
   }
 }
 @media screen and (max-width: 1024px) {
   .profile {
-    padding: 0 60px;
+    padding: 20px 60px;
   }
 }
 @media screen and (max-width: 768px) {
 }
 @media screen and (max-width: 599px) {
   .profile {
-    padding: 0 20px;
+    padding: 20px 20px;
   }
 }
 @media screen and (max-width: 375px) {

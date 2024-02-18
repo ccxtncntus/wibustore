@@ -1,5 +1,4 @@
 import { createContext, useState } from "react";
-import * as AccountService from "../../services/AccountService";
 export const UContexts = createContext();
 
 function UserContext({ children }) {

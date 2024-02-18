@@ -3,8 +3,14 @@ import { FormatNumber } from "../../helpers/FormatNumber";
 import { HOST } from "../../configs/DataEnv";
 import { NavLink } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { UContexts } from "../../components/context/UserContext";
+import { Contexts } from "../../components/context/Contexts";
+import { message } from "antd";
+import * as ShoppingCartsService from "../../services/ShoppingCartsService";
 const Cart = ({ item }) => {
+  const { User } = useContext(UContexts);
+  const { addCard } = useContext(Contexts);
   const da = useParams();
   const [path, setpath] = useState("/shop/");
   const format = (price, sale) => {
@@ -37,7 +43,14 @@ const Cart = ({ item }) => {
   }, [da]);
   const handleAddCart = async (i) => {
     // add cart
-    console.log(i);
+    if (User) {
+      const img = i.all_images.split(",")[0];
+      addCard(i);
+      const chay = await ShoppingCartsService.add(User.id, i.id, img, 1);
+      chay.status === 200 && message.success(chay.message);
+      return;
+    }
+    message.warning("Đăng nhập để thêm vào giỏ hàng");
   };
   return (
     <>

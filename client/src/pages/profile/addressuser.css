@@ -1,0 +1,46 @@
+.addressuser_title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.addressuser_title button {
+  border: 1px solid var(--vip);
+  padding: 0 20px;
+  border-radius: 4px;
+  background-color: white;
+}
+.addressuser_title button:hover {
+  background-color: var(--vip);
+  color: white;
+  transition: all 0.5s;
+}
+.addressuser_once_title_default {
+  display: inline-block;
+  color: var(--vip);
+  text-decoration: overline;
+}
+.addressuser_once {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.5px solid gray;
+  padding: 12px 0;
+}
+.addressuser_once_change {
+  text-align: right;
+}
+.addressuser_once_change button {
+  border: 1px solid var(--vip);
+}
+.addressuser_once_change button:hover {
+  background-color: var(--vip);
+  color: white;
+  transition: all 0.5s;
+}
+.addressuser_once_change span:hover {
+  color: var(--vip);
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 0.5s;
+}

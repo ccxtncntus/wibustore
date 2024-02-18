@@ -13,6 +13,7 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\VnPayController;
 use App\Http\Controllers\SlidersController;
+use App\Http\Controllers\AddressController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -121,3 +122,10 @@ Route::post('sliders/add', [SlidersController::class, 'add']);
 Route::post('sliders/edit', [SlidersController::class, 'edit']);
 Route::put('sliders/editNoImg', [SlidersController::class, 'editNoImg']);
 Route::delete('sliders/delSlider/{id}', [SlidersController::class, 'delSlider']);
+// address
+Route::get('address/{id}', [AddressController::class, 'index']);
+Route::post('address/{id}/add', [AddressController::class, 'create']);
+Route::delete('address/delete/{id}', [AddressController::class, 'delete']);
+Route::patch('address/updatePatch/{id}', [AddressController::class, 'updatePatch']);
+Route::put('address/updatePut/{id}', [AddressController::class, 'updatePut']);
+Route::patch('address/updateDefault/{id}/{idUser}', [AddressController::class, 'updateDefault']);
