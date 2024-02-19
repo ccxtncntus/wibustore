@@ -379,7 +379,36 @@ class UserCotroller extends Controller
             }
         }
     }
-
+    public function changeName(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            "name" =>  ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $user = DB::table('users')->where('id', $id)->update([
+                'name' => $request->name,
+            ]);
+            if ($user) {
+                $data = [
+                    "status" => 200,
+                    "message" => "Cập nhật tài khoản thành công",
+                ];
+                return response()->json($data, 200);
+            } else {
+                $data = [
+                    "status" => 400,
+                    "message" => "Lỗi khi cập nhật tài khoản",
+                ];
+                return response()->json($data, 200);
+            }
+        }
+    }
     public function destroy(string $id)
     {
     }

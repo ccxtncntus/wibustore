@@ -39,7 +39,7 @@
   transition: all 0.5s;
 }
 .addressuser_once_change span:hover {
-  color: var(--vip);
+  /* color: var(--vip); */
   cursor: pointer;
   text-decoration: underline;
   transition: all 0.5s;

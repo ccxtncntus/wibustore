@@ -50,6 +50,9 @@
   background-color: rgba(240, 248, 255, 0.7);
   border-radius: 50%;
 }
+.checkout_information_user_change:hover {
+  cursor: pointer;
+}
 
 @media screen and (max-width: 1280px) {
   .checkout {

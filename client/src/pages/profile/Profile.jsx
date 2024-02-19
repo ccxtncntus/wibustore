@@ -1,18 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import "./profile.css";
 import AddressUser from "./AddressUser";
+import { UContexts } from "../../components/context/UserContext";
+import * as AddressService from "../../services/AddressService";
 const Profile = () => {
+  const { User, addUser } = useContext(UContexts);
   const [EditName, setEditName] = useState(false);
-
+  const [u, setu] = useState(null);
+  useEffect(() => {
+    if (User) {
+      setu(User);
+    }
+  }, [User]);
   const handleEditName = () => {
-    console.log("edit name");
     setEditName(true);
   };
-  const handleEditNameSuccess = () => {
-    console.log("edit name done");
+  const handleEditNameSuccess = async () => {
+    const cName = await AddressService.changeName(u.id, u.name);
+    console.log(cName);
+    addUser(u);
     setEditName(false);
   };
   const handleEditNameCancel = () => {
+    setu(User);
     setEditName(false);
   };
   return (
@@ -30,7 +40,7 @@ const Profile = () => {
               <p className="mb-2" style={{ fontWeight: 500 }}>
                 {!EditName ? (
                   <>
-                    <span>pk03455</span>{" "}
+                    <span>{u && u.name}</span>{" "}
                     <i
                       onClick={() => handleEditName()}
                       className="fa-regular fa-pen-to-square"
@@ -38,7 +48,12 @@ const Profile = () => {
                   </>
                 ) : (
                   <>
-                    <input className="form-control" type="text" />{" "}
+                    <input
+                      className="form-control"
+                      type="text"
+                      value={u && u.name}
+                      onChange={(e) => setu({ ...u, name: e.target.value })}
+                    />{" "}
                     <i
                       onClick={() => handleEditNameCancel()}
                       className="fa-solid fa-xmark m-2"

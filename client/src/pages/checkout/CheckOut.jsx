@@ -20,7 +20,6 @@ const CheckOut = () => {
       }
       if (state) {
         const { listCart } = state;
-        console.log(listCart);
         setCarts(listCart);
       }
     };

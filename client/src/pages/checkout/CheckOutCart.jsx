@@ -92,7 +92,7 @@ const CheckOutCart = (props) => {
                 {FormatNumber(Totail)}
               </td>
             </tr>
-            <tr>
+            {/* <tr>
               <td>Phí vận chuyển:</td>
               <td className="checkout_temporary_money">30.000 đ</td>
             </tr>
@@ -101,7 +101,7 @@ const CheckOutCart = (props) => {
               <td className="checkout_temporary_money">
                 {FormatNumber(Totail + 30000)}
               </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>

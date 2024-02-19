@@ -17,6 +17,12 @@ class AddressController extends Controller
         $address = DB::table('address_modals')->where('user_id', '=', $id)->orderBy('status', 'DESC')->get();
         return response()->json($address, 200);
     }
+
+    public function getDefault($id)
+    {
+        $address = DB::table('address_modals')->where('user_id', '=', $id)->where('status', '=', 1)->orderBy('status', 'DESC')->get();
+        return response()->json($address, 200);
+    }
     /**
      * Show the form for creating a new resource.
      */

@@ -72,6 +72,7 @@ Route::post('forgotPass', [UserCotroller::class, 'forgotPass']);
 Route::post('checkTokenConfirm', [UserCotroller::class, 'checkTokenConfirm']);
 Route::delete('delTokenConfirm', [UserCotroller::class, 'delTokenConfirm']);
 Route::post('changePassWithToken', [UserCotroller::class, 'changePassWithToken']);
+Route::post('changeName/{id}', [UserCotroller::class, 'changeName']);
 // uAdmin
 Route::get('account/{page}', [UserCotroller::class, 'index']);
 Route::get('account/listUserStatus/{role}/{page}', [UserCotroller::class, 'listUserStatus']);
@@ -124,6 +125,7 @@ Route::put('sliders/editNoImg', [SlidersController::class, 'editNoImg']);
 Route::delete('sliders/delSlider/{id}', [SlidersController::class, 'delSlider']);
 // address
 Route::get('address/{id}', [AddressController::class, 'index']);
+Route::get('address/getDefault/{id}', [AddressController::class, 'getDefault']);
 Route::post('address/{id}/add', [AddressController::class, 'create']);
 Route::delete('address/delete/{id}', [AddressController::class, 'delete']);
 Route::patch('address/updatePatch/{id}', [AddressController::class, 'updatePatch']);

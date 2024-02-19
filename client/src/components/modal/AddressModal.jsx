@@ -2,10 +2,12 @@ import { useEffect, useRef, useState, useContext } from "react";
 import Modal from "react-bootstrap/Modal";
 import Select from "react-select";
 import * as GHNService from "../../services/GHN";
+import * as AddressService from "../../services/AddressService";
 import { UContexts } from "../../components/context/UserContext";
+import { message } from "antd";
 const AddressModal = (props) => {
   const { User } = useContext(UContexts);
-  const { onHide, show, editAddress } = props;
+  const { onHide, show, editAddress, loadAgain, editData } = props;
   const f = useRef();
   const [Name, setName] = useState("");
   const [Phone, setPhone] = useState("");
@@ -28,8 +30,13 @@ const AddressModal = (props) => {
   useEffect(() => {
     const run = async () => {
       if (show) {
-        f.current.focus();
         start();
+        if (editData) {
+          setName(editData.name);
+          setPhone(editData.phone);
+          setAddress(editData.address);
+        }
+        f.current.focus();
         const data = await GHNService.getTinh();
         if (data.data.code == 200) {
           const dataTinh = data.data.data;
@@ -86,15 +93,72 @@ const AddressModal = (props) => {
     run();
   }, [HuyenSelect]);
 
-  const handleAdd = () => {
-    console.log(User);
-    console.log(Name);
-    console.log(Phone);
-    console.log(TinhSelect);
-    console.log(HuyenSelect);
-    console.log(XaSelect);
-    console.log(Address);
-    // onHide();
+  const handleAdd = async () => {
+    if (editAddress) {
+      if (!TinhSelect || !HuyenSelect || !XaSelect) {
+        const editPatch = await AddressService.editPatch(
+          editData.id,
+          Name,
+          Phone,
+          Address
+        );
+        if (editPatch.status == 200) {
+          message.success(editPatch.message);
+          onHide();
+          loadAgain();
+        }
+        return;
+      }
+      const ePut = await AddressService.editPut(
+        editData.id,
+        Name,
+        Phone,
+        TinhSelect.label,
+        HuyenSelect.label,
+        XaSelect.label,
+        HuyenSelect.value,
+        XaSelect.value,
+        Address
+      );
+      if (ePut.status === 200) {
+        message.success(ePut.message);
+        onHide();
+        loadAgain();
+      } else {
+        message.warning(ePut.message);
+      }
+      // console.log(User.id);
+      // console.log(Name);
+      // console.log(Phone);
+      // console.log(TinhSelect);
+      // console.log(HuyenSelect);
+      // console.log(XaSelect);
+      // console.log(TinhSelect.label);
+      // console.log(HuyenSelect.label);
+      // console.log(XaSelect.label);
+      // console.log(HuyenSelect.value);
+      // console.log(XaSelect.value);
+      // console.log(Address);
+    } else {
+      const addA = await AddressService.add(
+        User.id,
+        Name,
+        Phone,
+        TinhSelect.label,
+        HuyenSelect.label,
+        XaSelect.label,
+        HuyenSelect.value,
+        XaSelect.value,
+        Address
+      );
+      if (addA.status === 200) {
+        message.success(addA.message);
+        onHide();
+        loadAgain();
+      } else {
+        message.warning(addA.message);
+      }
+    }
   };
   return (
     <div>
@@ -129,7 +193,7 @@ const AddressModal = (props) => {
               <label>
                 Tỉnh{" "}
                 {editAddress == true && (
-                  <span style={{ fontWeight: 500 }}>Đăk Nông</span>
+                  <span style={{ fontWeight: 500 }}>{editData.tinh}</span>
                 )}
               </label>
               <Select
@@ -148,7 +212,7 @@ const AddressModal = (props) => {
               <label>
                 Huyện{" "}
                 {editAddress == true && (
-                  <span style={{ fontWeight: 500 }}>epo</span>
+                  <span style={{ fontWeight: 500 }}>{editData.huyen}</span>
                 )}
               </label>
               <Select
@@ -167,7 +231,7 @@ const AddressModal = (props) => {
               <label>
                 Xã{" "}
                 {editAddress == true && (
-                  <span style={{ fontWeight: 500 }}>namdong</span>
+                  <span style={{ fontWeight: 500 }}>{editData.xa}</span>
                 )}
               </label>
               <Select
@@ -199,7 +263,7 @@ const AddressModal = (props) => {
             Cancel
           </button>
           <button className="btn btn-primary" onClick={() => handleAdd()}>
-            Add
+            {editAddress ? "Edit" : "Add"}
           </button>
         </Modal.Footer>
       </Modal>
