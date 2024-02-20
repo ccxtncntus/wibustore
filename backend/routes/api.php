@@ -14,6 +14,7 @@ use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\VnPayController;
 use App\Http\Controllers\SlidersController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -131,3 +132,7 @@ Route::delete('address/delete/{id}', [AddressController::class, 'delete']);
 Route::patch('address/updatePatch/{id}', [AddressController::class, 'updatePatch']);
 Route::put('address/updatePut/{id}', [AddressController::class, 'updatePut']);
 Route::patch('address/updateDefault/{id}/{idUser}', [AddressController::class, 'updateDefault']);
+// dashboard
+Route::get('dashboard', [DashboardController::class, 'index']);
+Route::get('dashboard/getBest', [DashboardController::class, 'getBest']);
+Route::get('dashboard/getData', [DashboardController::class, 'getData']);

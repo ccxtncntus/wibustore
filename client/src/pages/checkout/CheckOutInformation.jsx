@@ -60,10 +60,51 @@ const CheckOutInformation = (props) => {
     if (value == 1) {
       console.log("Thanh toán bằng VN Pay");
     } else {
-      console.log(Totail + feeShip);
+      // console.log(Totail + feeShip);
       if (!se) {
-        console.log("mặc định");
-        console.log(addressDefault[0]);
+        const ad = addressDefault[0];
+        setLoading(true);
+        const address =
+          ad.address + ", " + data.xa + ", " + data.huyen + ", " + ad.tinh;
+        const Totails = Totail + feeShip;
+        const addOrders = await CheckOutService.create(
+          User.id,
+          address,
+          value,
+          ad.phone,
+          Totails
+        );
+        if (addOrders && addOrders.status === 200) {
+          Carts.map(async (item) => {
+            try {
+              const da = await CheckOutService.createDetail(
+                addOrders.lastID,
+                item.idProduct,
+                item.name,
+                item.price - item.saleoff,
+                Number(item.quantity),
+                item.img
+              );
+              if (da.status === 200) {
+                if (item.id != 0) {
+                  // bớt số lượng trong product
+                  delCard(item);
+                  await ShoppingCartsService.productBuyed(
+                    item.idProduct,
+                    Number(item.quantity)
+                  );
+                  // xóa trong giỏ hàng
+                  await ShoppingCartsService.delCart(item.id);
+                }
+              }
+            } catch (error) {
+              console.error("Error creating detail:", error);
+              return;
+            }
+          });
+          setLoading(false);
+          natigate("/check-out/success");
+        }
       } else {
         console.log("mới");
       }

@@ -1,12 +1,15 @@
 import Table from "react-bootstrap/Table";
-import * as React from "react";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-const Dashboarđetail = () => {
-  const [page, setPage] = React.useState(1);
-  const handleChange = (event, value) => {
-    setPage(value);
-  };
+import { useEffect, useState } from "react";
+import { FormatNumber } from "../../../helpers/FormatNumber";
+const Dashboarđetail = ({ best }) => {
+  const [u, setu] = useState(null);
+  const [pro, setpro] = useState(null);
+  useEffect(() => {
+    if (best) {
+      setu(best.bestUser[0]);
+      setpro(best.productsBest);
+    }
+  }, [best]);
   return (
     <div className="overview_all mt-2">
       Top
@@ -27,10 +30,10 @@ const Dashboarđetail = () => {
                 alt=""
               />
             </td>
-            <td>Vip</td>
+            <td>{u && u.name}</td>
             <td>
               Tiêu nhiều nhất <br />
-              180.000.000đ
+              {u && FormatNumber(Number(u.totail))}
             </td>
           </tr>
           <tr>
@@ -48,24 +51,14 @@ const Dashboarđetail = () => {
                 alt=""
               />
             </td>
-            <td>natsu</td>
+            <td>{pro && pro.name}</td>
             <td>
               Bán chạy nhất <br />
-              120sp
+              {pro && pro.bought} sp
             </td>
           </tr>
         </tbody>
       </Table>
-      <Stack>
-        <Pagination
-          count={10}
-          page={page}
-          variant="outlined"
-          color="primary"
-          onChange={handleChange}
-        />
-      </Stack>
-      {/* <Typography>Page: {page}</Typography> */}
     </div>
   );
 };
