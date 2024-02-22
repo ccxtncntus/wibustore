@@ -14,12 +14,12 @@ class DashboardController extends Controller
     {
         $user = DB::table('users')->where('role', '<>', 'admin')->get();
         $products = DB::table('products')->get();
-        $moneyToday = DB::table('order_details')
-            ->select(DB::raw('SUM(order_details.price) as total'))
+        $moneyToday = DB::table('orders')
+            ->select(DB::raw('SUM(orders.totail) as total'))
             ->whereDate('created_at', '=', date('Y-m-d'))
             ->get();
-        $moneyAll = DB::table('order_details')
-            ->select(DB::raw('SUM(order_details.price) as total'))
+        $moneyAll = DB::table('orders')
+            ->select(DB::raw('SUM(orders.totail) as total'))
             ->get();
         if ($user) {
             $data = [

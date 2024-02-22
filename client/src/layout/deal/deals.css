@@ -4,7 +4,8 @@
   margin-bottom: 40px;
   background-color: aliceblue;
 }
-.deals_button button {
+.deals_button a {
+  text-decoration: none;
   background: none;
   padding: 8px 40px;
   border-radius: 80px;
@@ -12,7 +13,7 @@
   font-weight: 500;
   border: 2px solid gray;
 }
-.deals_button button:hover {
+.deals_button a:hover {
   color: white;
   border: 2px solid white;
   transition: all 0.5s;

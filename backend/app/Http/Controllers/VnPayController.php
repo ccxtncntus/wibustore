@@ -6,18 +6,18 @@ use Illuminate\Http\Request;
 
 class VnPayController extends Controller
 {
-    public function pay()
+    public function pay(Request $request)
     {
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         // $vnp_Returnurl = "https://localhost/vnpay_php/vnpay_return.php";
-        $vnp_Returnurl = "http://localhost:5173/check-out";
+        $vnp_Returnurl = "http://localhost:5173/check-out/success";
         $vnp_TmnCode = "QSY6QCVM"; //Mã website tại VNPAY 
         $vnp_HashSecret = "LHQREIUFBFTFWJIHMAMBEVSMDFHMSPZT"; //Chuỗi bí mật
 
-        $vnp_TxnRef = 'Mt-2dllssddssds'; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
+        $vnp_TxnRef = $request->ma; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = 'Thanh toán hóa đơn';
         $vnp_OrderType = 'WibuStore';
-        $vnp_Amount = 350000 * 100;
+        $vnp_Amount = $request->money * 100;
         $vnp_Locale = 'VN';
         // $vnp_BankCode = 'NCB';
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
