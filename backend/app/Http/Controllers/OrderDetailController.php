@@ -24,6 +24,8 @@ class OrderDetailController extends Controller
         $validator = Validator::make($request->all(), [
             "order_id" => "required",
             "product_id" => "required",
+            "name" => "required",
+            "price" => "required",
             "img" => "required",
             "quantitybuy" => "required|integer|min:1",
         ]);
@@ -37,6 +39,8 @@ class OrderDetailController extends Controller
             DB::table('order_details')->insert([
                 'order_id' => $request->order_id,
                 'product_id' => $request->product_id,
+                'name' => $request->name,
+                'price' => $request->price,
                 'quantitybuy' => $request->quantitybuy,
                 'img' => $request->img,
             ]);
@@ -62,15 +66,24 @@ class OrderDetailController extends Controller
     public function listsOfOrder($idOrder)
     {
         $users = DB::table('order_details')
-            ->join('products', 'order_details.product_id', '=', 'products.id')
-            ->select('products.name', DB::raw('(products.price - products.saleoff) as price'), 'order_details.img', 'order_details.quantitybuy')
-            ->where('order_details.order_id', $idOrder)
+            ->select('product_id', 'name', 'price', 'quantitybuy', 'img', 'created_at')
+            ->where('order_id', $idOrder)
             ->get();
         $data = [
             "status" => 200,
             "message" => $users,
         ];
         return response()->json($data, 200);
+        // $users = DB::table('order_details')
+        //     ->join('products', 'order_details.product_id', '=', 'products.id')
+        //     ->select('products.name', DB::raw('(products.price - products.saleoff) as price'), 'order_details.img', 'order_details.quantitybuy')
+        //     ->where('order_details.order_id', $idOrder)
+        //     ->get();
+        // $data = [
+        //     "status" => 200,
+        //     "message" => $users,
+        // ];
+        // return response()->json($data, 200);
     }
 
     /**

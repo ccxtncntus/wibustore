@@ -1,7 +1,26 @@
 import * as request from "../configs/Axios";
 
-const List = async (page) => {
-  const res = await request.GET(`/api/products?pageNumber=${page}`);
+const List = async (page, sort) => {
+  const res = await request.GET(
+    `/api/products?pageNumber=${page}&sort=${sort}`
+  );
+  return res;
+};
+const ListSale = async (page, sort) => {
+  const res = await request.GET(
+    `/api/products/sale?pageNumber=${page}&sort=${sort}`
+  );
+  return res;
+};
+const ListHot = async (page, sort) => {
+  const res = await request.GET(
+    `/api/products/hot?pageNumber=${page}&sort=${sort}`
+  );
+  return res;
+};
+
+const ListRandom = async (id) => {
+  const res = await request.GET(`/api/products/random/${id}`);
   return res;
 };
 
@@ -24,9 +43,9 @@ const update = async (formData) => {
   return res;
 };
 
-const listProCategory = async (id, page) => {
+const listProCategory = async (id, page, sort) => {
   const res = await request.GET(
-    `/api/products/listPro/${id}?pageNumber=${page}`
+    `/api/products/listPro/${id}?pageNumber=${page}&sort=${sort}`
   );
   return res;
 };
@@ -59,4 +78,7 @@ export {
   crawl,
   crawlDetail,
   productId,
+  ListSale,
+  ListHot,
+  ListRandom,
 };

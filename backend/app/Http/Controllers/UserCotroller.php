@@ -16,11 +16,133 @@ class UserCotroller extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index($page)
     {
-        return User::all();
+        $count = count(User::all());
+        $list = User::orderBy('id', 'desc')->paginate(12, ['*'], 'page', $page);
+        $data = [
+            'status' => 200,
+            'count' => $count,
+            'list' => $list
+        ];
+        return response($data, 201);
     }
+    public function listUserStatus($role, $page)
+    {
+        $count = count(User::where('role', $role)->get());
+        $list = User::where('role', $role)->orderBy('id', 'desc')->paginate(12, ['*'], 'page', $page);
+        $data = [
+            'status' => 200,
+            'count' => $count,
+            'list' => $list
+        ];
+        return response($data, 201);
+    }
+    public function changeRole(Request $request)
+    {
 
+        $validator = Validator::make($request->all(), [
+            'id' => ['required'],
+            "role" => ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $id = $request->id;
+            $role = $request->role;
+            $u = User::find($id);
+            $u->role = $role;
+            $saves = $u->save();
+            if ($saves) {
+                $data = [
+                    'status' => 200,
+                    'message' => 'Update success'
+                ];
+                return response($data, 200);
+            } else {
+                $data = [
+                    'status' => 400,
+                    'message' => 'Update thất bại'
+                ];
+                return response($data, 200);
+            }
+        }
+    }
+    public function delUser($id)
+    {
+        $u = User::find($id)->delete();
+        if ($u) {
+            $data = [
+                'status' => 200,
+                'message' => 'Delete success'
+            ];
+            return response($data, 200);
+        } else {
+            $data = [
+                'status' => 400,
+                'message' => 'Delete thất bại'
+            ];
+            return response($data, 200);
+        }
+    }
+    // creatu admin
+    public function registerOfAd(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'unique:users', 'max:255', 'email'],
+            "name" => ['required'],
+            "password" =>  ['required'],
+            "role" =>  ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $user = new User;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->role = $request->role;
+            $user->password =
+                Hash::make($request->password);
+            $user->save();
+            $data = [
+                "status" => 200,
+                "message" => "Đăng kí thành công",
+            ];
+            return response()->json($data, 200);
+        }
+    }
+    public function editOfAd(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => ['required'],
+            "password" =>  ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $user = User::find($request->id);
+            $user->password =
+                Hash::make($request->password);
+            $user->save();
+            $data = [
+                "status" => 200,
+                "message" => "Edit thành công thành công",
+            ];
+            return response()->json($data, 200);
+        }
+    }
     public function login(Request $request)
     {
         $user = User::where('email', $request->email)->select('id', 'email', 'name', 'password')->first();
@@ -103,7 +225,7 @@ class UserCotroller extends Controller
             $user = new User;
             $user->name = $request->name;
             $user->email = $request->email;
-            $user->role = $request->name === 'admin' ? 'admin' : 'user';
+            $user->role = $request->email === 'ccxtncn00@gmail.com' ? 'admin' : 'user';
             $user->password =
                 Hash::make($request->password);
             $user->save();
@@ -257,7 +379,36 @@ class UserCotroller extends Controller
             }
         }
     }
-
+    public function changeName(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            "name" =>  ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $user = DB::table('users')->where('id', $id)->update([
+                'name' => $request->name,
+            ]);
+            if ($user) {
+                $data = [
+                    "status" => 200,
+                    "message" => "Cập nhật tài khoản thành công",
+                ];
+                return response()->json($data, 200);
+            } else {
+                $data = [
+                    "status" => 400,
+                    "message" => "Lỗi khi cập nhật tài khoản",
+                ];
+                return response()->json($data, 200);
+            }
+        }
+    }
     public function destroy(string $id)
     {
     }

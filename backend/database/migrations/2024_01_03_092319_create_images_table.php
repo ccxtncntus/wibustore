@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -16,8 +17,10 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id')->nullable(false);
             $table->string('url')->nullable(false);
             $table->boolean('main')->default(false);
-            $table->timestamps();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            // $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 

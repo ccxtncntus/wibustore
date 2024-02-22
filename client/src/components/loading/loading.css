@@ -1,6 +1,6 @@
 .loading {
   width: 100%;
-  min-height: 80vh;
+  min-height: 95vh;
   display: grid;
   place-content: center;
 }

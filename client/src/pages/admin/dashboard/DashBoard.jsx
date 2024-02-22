@@ -6,42 +6,57 @@ import { useEffect, useState } from "react";
 import AnimatedNumber from "animated-number-react";
 import Dashboardetail from "./Dashboardetail";
 import DashboardBest from "./DashboardBest";
+import * as DashboardService from "../../../services/DashboardService";
 const DashBoard = () => {
   const [Data, setData] = useState({
-    labels: ["thứ 2", "thứ 3", "thứ 4", "thứ 5", "thứ 6", "thứ 7", "Chủ nhật"],
-    data: [32000, 48000, 162000, 0, 18000, 36000, 44000],
+    labels: [],
+    data: [],
   });
-  const d1 = {
-    labels: ["thứ 2", "thứ 3", "thứ 4", "thứ 5", "thứ 6", "thứ 7", "Chủ nhật"],
-    data: [32000, 48000, 162000, 0, 18000, 36000, 44000],
-  };
-  const d2 = {
-    labels: [
-      "Tháng 1",
-      "Tháng 2",
-      "Tháng 3",
-      "Tháng 4",
-      "Tháng 5",
-      "Tháng 6",
-      "Tháng 7",
-      "Tháng 8",
-      "Tháng 9",
-      "Tháng 10",
-      "Tháng 11",
-      "Tháng 12",
-    ],
-    data: [
-      32000, 48000, 162000, 0, 18000, 36000, 44000, 44000, 44000, 44000, 44000,
-      44000,
-    ],
-  };
+
   const handeSelect = (e) => {
     if (e.target.value == "Tháng") {
-      setData(d2);
+      const newArr = {
+        labels: Datas.dataLast12Months.map(
+          (item) => item.month + " " + item.year
+        ),
+        data: Datas.dataLast12Months.map((item) => item.total[0].total || 0),
+      };
+      setData(newArr);
     } else {
-      setData(d1);
+      const newArr = {
+        labels: Datas.dataLast7Days.map((item) => item.date),
+        data: Datas.dataLast7Days.map((item) => item.total[0].total || 0),
+      };
+      setData(newArr);
     }
   };
+  const [Best, setBest] = useState(null);
+  const [Datas, setDatas] = useState(null);
+  const [Order, setOrder] = useState(null);
+  useEffect(() => {
+    const run = async () => {
+      const dataBest = await DashboardService.getBest();
+      const dataData = await DashboardService.getData();
+      const dataOrder = await DashboardService.getOrder();
+      setBest(dataBest);
+      setDatas(dataData);
+      setOrder(dataOrder);
+    };
+    run();
+  }, []);
+  useEffect(() => {
+    const run = async () => {
+      if (Datas) {
+        const newArr = {
+          labels: Datas.dataLast7Days.map((item) => item.date),
+          data: Datas.dataLast7Days.map((item) => item.total[0].total || 0),
+        };
+        setData(newArr);
+      }
+    };
+    run();
+  }, [Datas]);
+
   return (
     <div className="dashboard">
       <h5 style={{ color: " rgb(67, 93, 118)" }}>Tổng quan</h5>
@@ -51,13 +66,13 @@ const DashBoard = () => {
           <div>Thống kê doanh thu</div>
           <Form.Select
             aria-label="Default select example"
-            style={{ width: 100 }}
+            style={{ width: 200 }}
             onChange={(e) => handeSelect(e)}
             defaultValue={"Ngày"}
             className="mt-2"
           >
-            <option value="Tuần">Tuần</option>
-            <option value="Tháng">Tháng</option>
+            <option value="Tuần">7 ngày gần nhất</option>
+            <option value="Tháng">12 Tháng gần nhất</option>
           </Form.Select>
           <Bar
             data={{
@@ -74,8 +89,8 @@ const DashBoard = () => {
           />
         </div>
         <div className="col-md-4">
-          <Dashboardetail />
-          <DashboardBest />
+          <Dashboardetail order={Order} />
+          <DashboardBest best={Best} />
         </div>
       </div>
     </div>

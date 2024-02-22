@@ -1,11 +1,33 @@
 .carts {
+  padding: 8px 160px;
+  min-height: 80vh;
 }
+@media screen and (max-width: 1280px) {
+  .carts {
+    padding: 8px 120px;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .carts {
+    padding: 8px 60px;
+  }
+}
+@media screen and (max-width: 768px) {
+}
+@media screen and (max-width: 599px) {
+  .carts {
+    padding: 8px 20px;
+    justify-content: flex-end;
+  }
+}
+@media screen and (max-width: 375px) {
+}
+
 .carts_footer {
-  /* width: 100%; */
-  position: fixed;
-  bottom: 0;
+  position: absolute;
+  bottom: 12px;
   z-index: 1;
-  right: 100px;
+  right: 160px;
 }
 .carts .fa-trash-can:hover {
   cursor: pointer;

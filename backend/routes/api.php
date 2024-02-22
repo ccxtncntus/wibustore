@@ -12,6 +12,9 @@ use App\Http\Controllers\ShoppingCardController;;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\VnPayController;
+use App\Http\Controllers\SlidersController;
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,6 +25,8 @@ use App\Http\Controllers\VnPayController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('orders/test', [OrdersController::class, 'testham']);
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
@@ -38,6 +43,9 @@ Route::put('categorys/edit/{id}', [CategoryController::class, 'edit']);
 Route::delete('categorys/delete/{id}', [CategoryController::class, 'delete']);
 // products
 Route::get('products', [ProductsController::class, 'index']);
+Route::get('products/sale', [ProductsController::class, 'indexSale']);
+Route::get('products/hot', [ProductsController::class, 'indexHot']);
+Route::get('products/random/{id}', [ProductsController::class, 'indexRandom']);
 Route::get('products/once/{value}', [ProductsController::class, 'onceProduct']);
 Route::get('products/listPro/{id}', [ProductsController::class, 'listProductOfCategory']);
 Route::get('products/{id}', [ProductsController::class, 'show']);
@@ -51,12 +59,12 @@ Route::delete('im/del/{imgs}', [ImagesController::class, 'destroy']);
 // crawl
 Route::get('crawl/detail/products/{path}', [ProductsController::class, 'crawlDetail']);
 Route::get('crawl/{p}', [ProductsController::class, 'crawl']);
+
 // users
 // Route::apiResource('login', UserCotroller::class);
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [UserCotroller::class, 'logout']);
 });
-Route::get('account', [UserCotroller::class, 'index']);
 Route::post('login', [UserCotroller::class, 'login']);
 Route::post('authentication', [UserCotroller::class, 'authentication']);
 Route::post('register', [UserCotroller::class, 'register']);
@@ -65,6 +73,14 @@ Route::post('forgotPass', [UserCotroller::class, 'forgotPass']);
 Route::post('checkTokenConfirm', [UserCotroller::class, 'checkTokenConfirm']);
 Route::delete('delTokenConfirm', [UserCotroller::class, 'delTokenConfirm']);
 Route::post('changePassWithToken', [UserCotroller::class, 'changePassWithToken']);
+Route::post('changeName/{id}', [UserCotroller::class, 'changeName']);
+// uAdmin
+Route::get('account/{page}', [UserCotroller::class, 'index']);
+Route::get('account/listUserStatus/{role}/{page}', [UserCotroller::class, 'listUserStatus']);
+Route::patch('account/changeRole', [UserCotroller::class, 'changeRole']);
+Route::delete('account/delUser/{id}', [UserCotroller::class, 'delUser']);
+Route::post('account/registerOfAd', [UserCotroller::class, 'registerOfAd']);
+Route::post('account/editOfAd', [UserCotroller::class, 'editOfAd']);
 
 // upload
 
@@ -77,16 +93,21 @@ Route::post(
 // shoppingcart
 Route::get('shoppingcard', [ShoppingCardController::class, 'index']);
 Route::post('shoppingcard/adOneProduct', [ShoppingCardController::class, 'addOneProduct']);
-Route::get('shoppingcard/listOfUser/{idUser}', [ShoppingCardController::class, 'listOfUser']);
+Route::get('shoppingcard/listOfUser/{id}', [ShoppingCardController::class, 'listOfUser']);
 Route::post('shoppingcard/delCart', [ShoppingCardController::class, 'delCart']);
 Route::post('shoppingcard/changeQuatityProduct', [ShoppingCardController::class, 'changeQuatityProduct']);
 Route::get('shoppingcard/product', [ShoppingCardController::class, 'product']);
 Route::post('shoppingcard/productBuyed', [ShoppingCardController::class, 'productBuyed']);
 Route::post('shoppingcard/productCancelBuy', [ShoppingCardController::class, 'productCancelBuy']);
 Route::post('shoppingcard/updateQuantity', [ShoppingCardController::class, 'updateQuantity']);
+
 // orders
+Route::get('orders/all', [OrdersController::class, 'indexAll']);
+Route::get('orders/{page}', [OrdersController::class, 'index']);
 Route::post('orders/create', [OrdersController::class, 'create']);
-Route::get('orders/listOfUser/{Uid}', [OrdersController::class, 'listOfUser']);
+Route::get('orders/listOfUser/{Uid}/{page}', [OrdersController::class, 'listOfUser']);
+Route::get('orders/listOfUserAll/{Uid}/{page}', [OrdersController::class, 'listOfUserAll']);
+Route::get('orders/listOfStatus/{status}/{page}', [OrdersController::class, 'listOfStatus']);
 Route::post('orders/updateAddress', [OrdersController::class, 'updateAddress']);
 Route::patch('orders/updateStatusOrder', [OrdersController::class, 'updateStatusOrder']);
 Route::delete('orders/delOrder/{id}', [OrdersController::class, 'delOrder']);
@@ -97,3 +118,21 @@ Route::post('ordersDetails/create', [OrderDetailController::class, 'create']);
 Route::get('ordersDetails/listsOfOrder/{idOrder}', [OrderDetailController::class, 'listsOfOrder']);
 // vnpay
 Route::post('vnpay', [VnPayController::class, 'pay']);
+// slider
+Route::get('sliders', [SlidersController::class, 'index']);
+Route::post('sliders/add', [SlidersController::class, 'add']);
+Route::post('sliders/edit', [SlidersController::class, 'edit']);
+Route::put('sliders/editNoImg', [SlidersController::class, 'editNoImg']);
+Route::delete('sliders/delSlider/{id}', [SlidersController::class, 'delSlider']);
+// address
+Route::get('address/{id}', [AddressController::class, 'index']);
+Route::get('address/getDefault/{id}', [AddressController::class, 'getDefault']);
+Route::post('address/{id}/add', [AddressController::class, 'create']);
+Route::delete('address/delete/{id}', [AddressController::class, 'delete']);
+Route::patch('address/updatePatch/{id}', [AddressController::class, 'updatePatch']);
+Route::put('address/updatePut/{id}', [AddressController::class, 'updatePut']);
+Route::patch('address/updateDefault/{id}/{idUser}', [AddressController::class, 'updateDefault']);
+// dashboard
+Route::get('dashboard', [DashboardController::class, 'index']);
+Route::get('dashboard/getBest', [DashboardController::class, 'getBest']);
+Route::get('dashboard/getData', [DashboardController::class, 'getData']);

@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import img from "../../../public/hayate.png";
-import "./adminnav.css";
+// import "./adminnav.css";
 const AdminNav = () => {
   const navigate = useNavigate();
   const handleOut = () => {
@@ -25,11 +25,14 @@ const AdminNav = () => {
         <NavLink to={"categories"} className="list-group-item">
           Categories
         </NavLink>
-        <NavLink to={"/45"} className="list-group-item">
+        <NavLink to={"account"} className="list-group-item">
           Tài khoản
         </NavLink>
-        <NavLink to={"/"} className="list-group-item">
+        <NavLink to={"orders"} className="list-group-item">
           Orders
+        </NavLink>
+        <NavLink to={"sliders"} className="list-group-item">
+          Sliders
         </NavLink>
         <div className="admin_nav_out">
           <img src={img} alt="" />

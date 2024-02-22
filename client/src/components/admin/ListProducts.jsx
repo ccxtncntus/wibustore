@@ -6,38 +6,54 @@ import { useEffect, useState } from "react";
 import * as CategoryService from "../../services/CategoryService";
 import * as ProductService from "../../services/ProductService";
 import EditProductAdmin from "../modal/EditProductAdmin";
-
+import Pagination from "@mui/material/Pagination";
+import { CountPage } from "../../helpers/FormatNumber";
 const ListProducts = () => {
   const { register, watch } = useForm();
-
-  const [err, seterr] = useState(false);
   const [listCate, setlistCate] = useState([]);
   const [listProductCate, setlistProductCate] = useState([]);
   const [delSuccess, setdelSuccess] = useState(false);
   const [loading, setloading] = useState(false);
+  const [Cate, setCate] = useState(0);
+  const [CountAll, setCountAll] = useState(1);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     const listC = async () => {
+      // console.log(watch("category"));
       try {
         const data = await CategoryService.List(1);
-        setlistCate(data.data.data);
-        const idCategory = watch("category");
-        const dataProCategory = await ProductService.listProCategory(
-          idCategory,
-          1
-        );
-        if (dataProCategory.data.data.length === 0) {
-          seterr(true);
+        data.status == 200 && setlistCate(data.data.data);
+        if (Cate == 0) {
+          const dataProCategory = await ProductService.List(page, "desc");
+          console.log(dataProCategory);
+          if (dataProCategory.status === 200) {
+            setlistProductCate(dataProCategory.data.data);
+            setCountAll(dataProCategory.count);
+          } else {
+            setlistProductCate([]);
+          }
         } else {
-          setlistProductCate(dataProCategory.data.data);
-          seterr(false);
+          const dataProCategory = await ProductService.listProCategory(
+            Cate,
+            page,
+            "desc"
+          );
+          console.log(dataProCategory);
+          if (dataProCategory.status === 200) {
+            setlistProductCate(dataProCategory.data.data);
+            setCountAll(dataProCategory.count);
+          } else {
+            setlistProductCate([]);
+          }
         }
       } catch (error) {
-        console.log(error.response.data.message);
+        console.log(error);
       }
     };
     listC();
     return () => {};
-  }, [watch("category"), delSuccess, loading]);
+  }, [delSuccess, loading, Cate, page]);
+
   const confirm = async (item) => {
     const del = await ProductService.delProduct(item.id);
     console.log(del);
@@ -59,7 +75,12 @@ const ListProducts = () => {
   const handleLoad = () => {
     setloading((pre) => !pre);
   };
-
+  const handleChaneAll = (e) => {
+    setCate(e.target.value);
+  };
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
   return (
     <>
       <EditProductAdmin
@@ -72,11 +93,12 @@ const ListProducts = () => {
         <div className="col-md-6">
           <Form.Select
             aria-label="Default select example"
-            {...register("category", {
-              required: "Category is required",
-            })}
+            // {...register("category", {
+            //   required: "Category is required",
+            // })}
+            onChange={(e) => handleChaneAll(e)}
           >
-            <option value={"0"}>--- Select ---</option>
+            <option value={"0"}>All</option>
             {listCate.length > 0 &&
               listCate.map((item, index) => (
                 <option key={index} value={item.id}>
@@ -86,7 +108,8 @@ const ListProducts = () => {
           </Form.Select>
         </div>
       </div>
-      {!err ? (
+      {/* list data */}
+      {listProductCate.length > 0 ? (
         <div style={{ padding: 12 }} className="row">
           <Table bordered hover>
             <thead>
@@ -139,6 +162,15 @@ const ListProducts = () => {
         <span>
           <br /> There are not products ...
         </span>
+      )}
+      {CountPage(CountAll) > 1 && (
+        <Pagination
+          count={CountAll}
+          page={page}
+          onChange={handleChange}
+          color="primary"
+          style={{ float: "right" }}
+        />
       )}
     </>
   );

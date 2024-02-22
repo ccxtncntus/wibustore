@@ -8,10 +8,15 @@ const CheckOutCart = (props) => {
   const { state } = useLocation();
   const [Buy, setBuy] = useState([]);
   const [Totail, setTotail] = useState(0);
+  const FormatImg = (imgs) => {
+    const img = imgs.split(",")[0];
+    return img;
+  };
   useEffect(() => {
     if (state) {
       const { listCart } = state;
       setBuy(listCart);
+      console.log(listCart);
     }
     return () => {};
   }, []);
@@ -44,7 +49,14 @@ const CheckOutCart = (props) => {
               Buy.map((item, index) => (
                 <tr key={index}>
                   <td className="checkout_cart_child">
-                    <img src={HOST + "/uploads/" + item.img} alt="" />
+                    <img
+                      src={
+                        HOST +
+                        "/uploads/" +
+                        (item.img || FormatImg(item.all_images))
+                      }
+                      alt=""
+                    />
                     <span>{item.name}</span>
                   </td>
                   <td>{FormatNumber(item.price - item.saleoff)}</td>
@@ -80,7 +92,7 @@ const CheckOutCart = (props) => {
                 {FormatNumber(Totail)}
               </td>
             </tr>
-            <tr>
+            {/* <tr>
               <td>Phí vận chuyển:</td>
               <td className="checkout_temporary_money">30.000 đ</td>
             </tr>
@@ -89,7 +101,7 @@ const CheckOutCart = (props) => {
               <td className="checkout_temporary_money">
                 {FormatNumber(Totail + 30000)}
               </td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>

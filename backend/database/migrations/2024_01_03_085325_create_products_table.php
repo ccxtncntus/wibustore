@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -16,9 +17,12 @@ return new class extends Migration
             $table->integer('quantity')->nullable(false);
             $table->integer('price')->nullable(false);
             $table->integer('saleoff')->nullable();
-            $table->string('status')->nullable(false)->default("Đang bán");
+            $table->string('status')->nullable(false)->default("1");
+            $table->integer('bought')->nullable(true)->default("0");
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->timestamps();
+            // $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 

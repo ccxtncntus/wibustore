@@ -7,6 +7,9 @@ import Loading from "./components/loading/Loading";
 const HomeLazy = lazy(() => import("./pages/Home"));
 const AdminLazy = lazy(() => import("./pages/Admin"));
 const ProductAdminLazy = lazy(() => import("./components/admin/ProductAdmin"));
+const OrderAdminLazy = lazy(() => import("./components/admin/OrderAdmin"));
+const AccountAdminLazy = lazy(() => import("./components/admin/AccountAdmin"));
+const SlidersAdminLazy = lazy(() => import("./components/admin/SlidersAdmin"));
 const DashBoardAdminLazy = lazy(() =>
   import("./pages/admin/dashboard/DashBoard")
 );
@@ -33,6 +36,9 @@ const ChangePassllLazy = lazy(() =>
   import("./pages/changepassword/ChangePass")
 );
 const MyCartsllLazy = lazy(() => import("./pages/orders/MyOders"));
+// profile
+const ProfilellLazy = lazy(() => import("./pages/profile/Profile"));
+
 function App() {
   return (
     <>
@@ -161,6 +167,14 @@ function App() {
             }
           />
           <Route
+            path="/my-profile"
+            element={
+              <Suspense fallback={<Loading />}>
+                <ProfilellLazy />
+              </Suspense>
+            }
+          />
+          <Route
             path="/posts"
             element={
               <Suspense fallback={<Loading />}>
@@ -217,7 +231,30 @@ function App() {
               </Suspense>
             }
           />
-
+          <Route
+            path="orders"
+            element={
+              <Suspense fallback={<Loading />}>
+                <OrderAdminLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="account"
+            element={
+              <Suspense fallback={<Loading />}>
+                <AccountAdminLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="sliders"
+            element={
+              <Suspense fallback={<Loading />}>
+                <SlidersAdminLazy />
+              </Suspense>
+            }
+          />
           <Route
             path="categories"
             element={

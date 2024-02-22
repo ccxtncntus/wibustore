@@ -35,11 +35,12 @@ const Login = () => {
         message.error(login.message);
         setLoading(false);
       } else {
-        // console.log(login.token);
         let d = new Date();
         d.setTime(d.getTime() + 1200 * 60 * 1000);
         message.success("Đăng nhập thành công");
-        cookies.path_end ? natigate(cookies.path_end) : natigate("/");
+        cookies.path_end && cookies.path_end != "/login"
+          ? natigate(cookies.path_end)
+          : natigate("/");
         await removeCookie("path_end");
         setCookie("token", login.token, { path: "/", expires: d });
         setLoading(false);

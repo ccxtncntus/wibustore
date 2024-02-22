@@ -1,0 +1,24 @@
+.shop {
+  padding: 8px 160px;
+  min-height: 72vh;
+}
+@media screen and (max-width: 1280px) {
+  .shop {
+    padding: 8px 120px;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .shop {
+    padding: 8px 60px;
+  }
+}
+@media screen and (max-width: 768px) {
+}
+@media screen and (max-width: 599px) {
+  .shop {
+    padding: 8px 20px;
+    justify-content: flex-end;
+  }
+}
+@media screen and (max-width: 375px) {
+}

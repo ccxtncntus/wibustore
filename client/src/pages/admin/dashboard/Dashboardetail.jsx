@@ -1,7 +1,8 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import AnimatedNumber from "animated-number-react";
+import { FormatNumber } from "../../../helpers/FormatNumber";
 
-const Dashboarđetail = () => {
+const Dashboarđetail = ({ order }) => {
   return (
     <div className="overview_all">
       Khác
@@ -11,11 +12,14 @@ const Dashboarđetail = () => {
             <span>
               <span>Doanh thu ngày</span>
               <div>
-                <AnimatedNumber
-                  value={150}
+                {/* <AnimatedNumber
+                  value={
+                    orders && FormatNumber(Number(order.moneyToday[0].total))
+                  }
                   formatValue={(value) => value.toFixed(0)}
-                  duration={2000}
-                />
+                  duration={1500}
+                /> */}
+                {order && FormatNumber(Number(order.moneyToday[0].total))}
               </div>
             </span>
             <i
@@ -27,11 +31,12 @@ const Dashboarđetail = () => {
             <span>
               <span>Tổng doanh thu</span>
               <div>
-                <AnimatedNumber
+                {/* <AnimatedNumber
                   value={150}
                   duration={2000}
                   formatValue={(value) => value.toFixed(0)}
-                />
+                /> */}
+                {order && FormatNumber(Number(order.moneyAll[0].total))}
               </div>
             </span>
             <i
@@ -46,7 +51,7 @@ const Dashboarđetail = () => {
               <span>Số người dùng</span>
               <div>
                 <AnimatedNumber
-                  value={150}
+                  value={order && order.countUser}
                   duration={5000}
                   formatValue={(value) => value.toFixed(0)}
                 />
@@ -60,7 +65,7 @@ const Dashboarđetail = () => {
 
               <div>
                 <AnimatedNumber
-                  value={150}
+                  value={order && order.countProducts}
                   duration={2000}
                   formatValue={(value) => value.toFixed(0)}
                 />

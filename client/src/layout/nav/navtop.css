@@ -1,0 +1,39 @@
+.navtop {
+  padding: 8px 160px;
+  border-bottom: 0.5px solid rgba(128, 128, 128, 0.5);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.navtop i {
+  font-size: 1.1rem;
+}
+.navtop span:hover {
+  cursor: pointer;
+  color: var(--vip);
+  transition: all 0.5s;
+}
+@media screen and (max-width: 1280px) {
+  .navtop {
+    padding: 8px 120px;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .navtop {
+    padding: 8px 60px;
+  }
+}
+@media screen and (max-width: 768px) {
+}
+@media screen and (max-width: 599px) {
+  .navtop {
+    padding: 8px 20px;
+    justify-content: flex-end;
+  }
+  .navtop_none {
+    display: none;
+  }
+}
+@media screen and (max-width: 375px) {
+}

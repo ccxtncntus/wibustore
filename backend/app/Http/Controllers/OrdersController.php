@@ -9,27 +9,67 @@ use Illuminate\Support\Facades\Validator;
 
 class OrdersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // get
+    public function indexAll()
     {
-        $orders = DB::table("orders")->get();
-        return $orders;
+        $orders = DB::table('orders')
+            ->join('users', 'users.id', '=', 'orders.user_id')
+            ->select('orders.*', 'users.name', 'users.email')
+            ->orderBy('id', 'desc')
+            ->get();
+        return response()->json($orders, 200);
     }
-
-    public function listOfUser($Uid)
+    public function index($page)
     {
-        $orders = DB::table("orders")->where('user_id', $Uid)->orderBy('id', 'desc')->get();
+        $c = DB::table("orders")->get();
+        $count = count($c);
+        $orders = DB::table('orders')
+            ->join('users', 'users.id', '=', 'orders.user_id')
+            ->select('orders.*', 'users.name', 'users.email')
+            ->orderBy('id', 'desc')
+            ->paginate(12, ['*'], 'page', $page);
+        return response()->json([$orders, 'count' => $count], 200);
+    }
+    public function listOfStatus($status, $page)
+    {
+        $c = DB::table("orders")->get();
+        $count = count($c);
+        $orders = DB::table('orders')
+            ->join('users', 'users.id', '=', 'orders.user_id')
+            ->select('orders.*', 'users.name')
+            ->where('orders.status', $status)
+            ->orderBy('id', 'desc')
+            ->paginate(12, ['*'], 'page', $page);
+        return response()->json([$orders, 'count' => $count], 200);
+    }
+    public function listOfUser($Uid, $page)
+    {
+        $all = DB::table("orders")->where('user_id', $Uid)->get();
+        $count = count($all);
+        $orders = DB::table("orders")->where('user_id', $Uid)->where('status', '<>', 'successfully')->orderBy('id', 'desc')->paginate(12, ['*'], 'page', $page);
         $data = [
             "status" => 200,
+            'count' => $count,
             "message" => $orders,
         ];
         return response()->json($data, 200);
     }
+    // all
+    public function listOfUserAll($Uid, $page)
+    {
+        $all = DB::table("orders")->where('user_id', $Uid)->get();
+        $count = count($all);
+        $orders = DB::table("orders")->where('user_id', $Uid)->where('status', '=', 'successfully')->orderBy('id', 'desc')->paginate(12, ['*'], 'page', $page);
+        $data = [
+            "status" => 200,
+            'count' => $count,
+            "message" => $orders,
+        ];
+        return response()->json($data, 200);
+    }
+    // create
     public function create(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'user_id' => ['required'],
             "address" => ['required'],
@@ -50,7 +90,7 @@ class OrdersController extends Controller
                 'pay' => $request->pay,
                 'phoneNumbers' => $request->phoneNumbers,
                 'totail' => $request->totail,
-                'status' => 'Chờ xử lí',
+                'status' => 'pending',
             ]);
             $orderId = DB::getPdo()->lastInsertId();
             $data = [
@@ -61,10 +101,7 @@ class OrdersController extends Controller
             return response()->json($data, 200);
         }
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    // edit
     public function updateAddress(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -115,6 +152,7 @@ class OrdersController extends Controller
             return response()->json($data, 200);
         }
     }
+    // del
     public function delOrder($id)
     {
         $orderId = DB::table('orders')->where('id', $id)->delete();
@@ -124,37 +162,5 @@ class OrdersController extends Controller
             "message" => $s,
         ];
         return response()->json($data, 200);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
