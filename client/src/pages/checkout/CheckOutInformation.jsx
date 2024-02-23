@@ -9,6 +9,7 @@ import { UContexts } from "../../components/context/UserContext";
 import * as GHN from "../../services/GHN";
 import * as AddressService from "../../services/AddressService";
 import { FormatNumber } from "../../helpers/FormatNumber";
+import BuyAddressModal from "../../components/modal/BuyAddressModal";
 const CheckOutInformation = (props) => {
   const { User } = useContext(UContexts);
   const unavigate = useNavigate();
@@ -51,12 +52,8 @@ const CheckOutInformation = (props) => {
   const handleChange = (e) => {
     setValue(e.target.value);
   };
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = async (data) => {
+  const { handleSubmit } = useForm();
+  const onSubmit = async () => {
     if (value == 1) {
       console.log("Thanh toán bằng VN Pay");
       const Totails = Totail + feeShip;
@@ -156,49 +153,7 @@ const CheckOutInformation = (props) => {
       } else {
         console.log("mới");
       }
-      // setLoading(true);
-      // const address = data.address + ", " + data.huyen + ", " + data.tinh;
-      // const Totails = Totail + 30000;
-      // const addOrders = await CheckOutService.create(
-      //   User.id,
-      //   address,
-      //   value,
-      //   data.phoneNumber,
-      //   Totails
-      // );
-      // if (addOrders && addOrders.status === 200) {
-      //   Carts.map(async (item) => {
-      //     try {
-      //       const da = await CheckOutService.createDetail(
-      //         addOrders.lastID,
-      //         item.idProduct,
-      //         item.name,
-      //         item.price - item.saleoff,
-      //         Number(item.quantity),
-      //         item.img
-      //       );
-      //       if (da.status === 200) {
-      //         if (item.id != 0) {
-      //           // bớt số lượng trong product
-      //           delCard(item);
-      //           await ShoppingCartsService.productBuyed(
-      //             item.idProduct,
-      //             Number(item.quantity)
-      //           );
-      //           // xóa trong giỏ hàng
-      //           await ShoppingCartsService.delCart(item.id);
-      //         }
-      //       }
-      //     } catch (error) {
-      //       console.error("Error creating detail:", error);
-      //       return;
-      //     }
-      //   });
-      //   setLoading(false);
-      //   natigate("/check-out/success");
-      // }
     }
-    Ư;
   };
   const [addressDefault, setaddressDefault] = useState(null);
   useEffect(() => {
@@ -207,11 +162,11 @@ const CheckOutInformation = (props) => {
         if (!se) {
           const de = await AddressService.getDefault(User.id);
           setaddressDefault(de);
-          const data = await GHN.fee(de[0].district_id, de[0].ward_code);
-          if (data) {
-            const end = data.data;
-            end.code == 200 && setfeeShip(end.data.total);
-          }
+          // const data = await GHN.fee(de[0].district_id, de[0].ward_code);
+          // if (data) {
+          //   const end = data.data;
+          //   end.code == 200 && setfeeShip(end.data.total);
+          // }
         } else {
           setfeeShip(0);
         }
@@ -219,9 +174,33 @@ const CheckOutInformation = (props) => {
     };
     run();
   }, [User, se]);
-
+  useEffect(() => {
+    const run = async () => {
+      if (addressDefault) {
+        const data = await GHN.fee(
+          addressDefault[0].district_id,
+          addressDefault[0].ward_code
+        );
+        if (data) {
+          const end = data.data;
+          end.code == 200 && setfeeShip(end.data.total);
+        }
+      }
+    };
+    run();
+  }, [addressDefault]);
+  const [modalShow, setModalShow] = useState(false);
+  // console.log(addressDefault);
+  const setAddress = (data) => {
+    setaddressDefault(data);
+  };
   return (
     <div className="checkout_information_user col-md-6">
+      <BuyAddressModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        setad={setAddress}
+      />
       <h3>Thông tin khách hàng</h3>
       <span>
         <span
@@ -234,7 +213,8 @@ const CheckOutInformation = (props) => {
         -{" "}
         <span
           className="checkout_information_user_change"
-          onClick={() => setse(true)}
+          // onClick={() => setse(true)}
+          onClick={() => setModalShow(true)}
           style={{ color: se && "rgb(0, 139, 232)" }}
         >
           Mới
@@ -244,73 +224,26 @@ const CheckOutInformation = (props) => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* họ tên */}
-        {!se ? (
-          <div className="addressuser_once">
-            <hr />
-            {addressDefault && (
-              <div className="addressuser_once_title">
-                <p className="mb-2">
-                  <span style={{ fontWeight: 500 }}>
-                    {addressDefault[0].name}
-                  </span>{" "}
-                  - {addressDefault[0].phone}
-                </p>
-                <p className="mb-2">{addressDefault[0].address}</p>
-                <p className="mb-2">
-                  {addressDefault[0].xa} - {addressDefault[0].huyen} -{" "}
-                  {addressDefault[0].tinh}
-                </p>
-              </div>
-            )}
-            <hr />
-          </div>
-        ) : (
-          <>
-            <div>Họ tên</div>
-            <input
-              placeholder="Họ và tên"
-              className="form-control"
-              defaultValue={User.name}
-              {...register("name", { required: true })}
-            />
-            {errors.name && <span className="text-danger">Không bỏ trống</span>}
-            {/* Số điện thọai */}
-            <div>Số điện thoại</div>
-            <input
-              placeholder="Nhập số điện thoại"
-              className="form-control"
-              {...register("phoneNumber", { required: true })}
-            />
-            {errors.phoneNumber && (
-              <span className="text-danger">Không bỏ trống</span>
-            )}
-            {/* Tỉnh thành */}
-            <div>Tỉnh thành</div>
-            <input
-              className="form-control"
-              {...register("tinh", { required: true })}
-            />
-            {errors.tinh && <span className="text-danger">Không bỏ trống</span>}
-            {/* quận huyện */}
-            <div>Quận huyện</div>
-            <input
-              className="form-control"
-              {...register("huyen", { required: true })}
-            />
-            {errors.huyen && (
-              <span className="text-danger">Không bỏ trống</span>
-            )}
-            {/* địa chỉ */}
-            <div>Địa chỉ</div>
-            <input
-              className="form-control"
-              {...register("address", { required: true })}
-            />
-            {errors.address && (
-              <span className="text-danger">Không bỏ trống</span>
-            )}
-          </>
-        )}
+        <div className="addressuser_once">
+          <hr />
+          {addressDefault && (
+            <div className="addressuser_once_title">
+              <p className="mb-2">
+                <span style={{ fontWeight: 500 }}>
+                  {addressDefault[0].name}
+                </span>{" "}
+                - {addressDefault[0].phone}
+              </p>
+              <p className="mb-2">{addressDefault[0].address}</p>
+              <p className="mb-2">
+                {addressDefault[0].xa} - {addressDefault[0].huyen} -{" "}
+                {addressDefault[0].tinh}
+              </p>
+            </div>
+          )}
+          <hr />
+        </div>
+
         <div>Phí vận chuyển : {FormatNumber(feeShip)}</div>
         <div>
           <span style={{ fontWeight: 500 }}>Tổng tiền</span> :{" "}

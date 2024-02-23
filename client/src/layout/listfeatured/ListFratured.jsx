@@ -18,17 +18,24 @@ const ListFratured = () => {
     }
     return () => {};
   }, [ListCategories]);
-  const [Selects, setSelects] = useState(0);
+  const [Selects, setSelects] = useState("");
   // product
+  useEffect(() => {
+    const run = async () => {
+      const list = await ProductService.List(1, "desc");
+      list.status === 200 && setListProducts(list.data.data);
+    };
+    run();
+  }, []);
   useEffect(() => {
     const run = async () => {
       if (Selects == 0) {
         const list = await ProductService.List(1, "desc");
         list.status === 200 && setListProducts(list.data.data);
-        return;
+      } else if (Selects != 0 && Selects != "") {
+        const lists = await ProductService.listProCategory(Selects, 1, "desc");
+        lists.status === 200 && setListProducts(lists.data.data);
       }
-      const lists = await ProductService.listProCategory(Selects, 1, "desc");
-      lists.status === 200 && setListProducts(lists.data.data);
     };
     run();
   }, [Selects]);
@@ -57,7 +64,9 @@ const ListFratured = () => {
         <h5>ListFratured</h5>
         <ul>
           <li
-            className={Selects === 0 && "listfrature_title_active"}
+            className={
+              (Selects === 0 || Selects == "") && "listfrature_title_active"
+            }
             onClick={() => setSelects(0)}
           >
             All

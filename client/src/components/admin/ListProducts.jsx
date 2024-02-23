@@ -165,7 +165,7 @@ const ListProducts = () => {
       )}
       {CountPage(CountAll) > 1 && (
         <Pagination
-          count={CountAll}
+          count={CountPage(CountAll)}
           page={page}
           onChange={handleChange}
           color="primary"

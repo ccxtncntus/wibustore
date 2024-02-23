@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import "./sreachmodal.css";
-import { Link } from "react-router-dom";
 import { useDebounce } from "@uidotdev/usehooks";
 import * as ProductService from "../../services/ProductService";
 import { HOST } from "../../configs/DataEnv";
 import { FormatNumber } from "../../helpers/FormatNumber";
+import { Link } from "react-router-dom";
 
 const SreachModal = (props) => {
   const { placement, show, onClose } = props;
@@ -13,20 +13,33 @@ const SreachModal = (props) => {
   const [ListSreach, setListSreach] = useState([]);
   const [IsSreach, setIsSreach] = useState(false);
   const debouncedSearch = useDebounce(Sreach, 300);
+  const nameRef = useRef();
+  const [Load, setLoad] = useState(false);
   useEffect(() => {
     const chay = async () => {
-      setListSreach([]);
-      setSreach("");
+      if (show) {
+        setLoad((pre) => !pre);
+        setListSreach([]);
+        setSreach("");
+      }
     };
     chay();
-  }, []);
+  }, [show]);
+  useEffect(() => {
+    const chay = async () => {
+      if (nameRef.current) {
+        nameRef.current.focus();
+      }
+    };
+    chay();
+  }, [Load]);
+
   useEffect(() => {
     const chay = async () => {
       if (Sreach != "") {
         setIsSreach(true);
         const data = await ProductService.onceProduct(Sreach.trim());
         data.status === 200 ? setListSreach(data.data) : setListSreach([]);
-        console.log(data.data);
         setIsSreach(false);
       }
     };
@@ -45,18 +58,18 @@ const SreachModal = (props) => {
         <Offcanvas.Body>
           <div className="form-group">
             <input
+              autoFocus={true}
+              ref={nameRef}
               type="text"
               className="form-control"
-              aria-describedby="emailHelp"
               placeholder="Tìm kiếm"
               value={Sreach}
               onChange={(e) => setSreach(e.target.value)}
             />
             <hr className="mt-4" />
             {/* child */}
-            {IsSreach
-              ? "đang tìm kiếm..."
-              : ListSreach.length > 0
+            {IsSreach && "Đang tìm kiếm"}
+            {!IsSreach && ListSreach.length > 0
               ? ListSreach.map((item, index) => {
                   return (
                     <div className="sreachModal" key={index}>

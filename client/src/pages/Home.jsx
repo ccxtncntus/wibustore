@@ -27,11 +27,16 @@ const Home = () => {
       } else {
         delUser();
       }
-      const data = await CategoriesService.List(1);
-      addCate(data);
     };
     cate();
   }, [cookies]);
+  useEffect(() => {
+    const run = async () => {
+      const data = await CategoriesService.List(1);
+      addCate(data);
+    };
+    run();
+  }, []);
 
   return (
     <>

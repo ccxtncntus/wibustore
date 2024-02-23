@@ -4,7 +4,6 @@ import { useEffect, useState, useContext } from "react";
 import * as AddressService from "../../services/AddressService";
 import { UContexts } from "../../components/context/UserContext";
 import { Button, message, Popconfirm } from "antd";
-import Item from "antd/es/list/Item";
 const AddressUser = () => {
   const { User } = useContext(UContexts);
   const [modalShow, setModalShow] = useState(false);
