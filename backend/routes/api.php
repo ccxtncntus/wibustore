@@ -52,6 +52,8 @@ Route::get('products/{id}', [ProductsController::class, 'show']);
 Route::post('products', [ProductsController::class, 'upload']);
 Route::post('products/edit/{id}', [ProductsController::class, 'edit']);
 Route::delete('products/delete/{id}', [ProductsController::class, 'delete']);
+Route::patch('products/updateQuantity/{id}', [ProductsController::class, 'updateQuantity']);
+Route::patch('products/updateBought/{id}', [ProductsController::class, 'updateBought']);
 // images
 Route::get('imagesProduct/{id}', [ImagesController::class, 'index']);
 Route::get('imagesProduct/delonce/{id}', [ImagesController::class, 'deleteOnce']);

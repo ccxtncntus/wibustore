@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { orbit } from "ldrs";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import loginImg from "../../../public/login.jpg";
 orbit.register();
 const Login = () => {
   useEffect(() => {
@@ -50,9 +51,15 @@ const Login = () => {
       setLoading(false);
     }
   };
+  const style = {
+    backgroundImage: `url("${loginImg}")`,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+  };
   return (
     <>
-      <div className="login">
+      <div className="login" style={style}>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mx-auto login_form"

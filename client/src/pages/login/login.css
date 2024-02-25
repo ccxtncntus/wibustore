@@ -1,7 +1,7 @@
 .login {
   /* background-color: rgb(198, 203, 201); */
-  background: url("https://i.pinimg.com/originals/53/04/92/530492db472a655cb5595857fbf2aa1c.jpg")
-    center/cover no-repeat;
+  /* background: url("https://i.pinimg.com/originals/53/04/92/530492db472a655cb5595857fbf2aa1c.jpg")
+    center/cover no-repeat; */
   height: 80vh;
   display: grid;
   place-items: center;

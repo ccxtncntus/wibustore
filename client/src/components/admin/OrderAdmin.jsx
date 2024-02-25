@@ -12,6 +12,7 @@ import {
   ExportExcel,
 } from "../../helpers/FormatNumber";
 import * as OrdersService from "../../services/OrdersService";
+import * as ProductService from "../../services/ProductService";
 import Dropdown from "react-bootstrap/Dropdown";
 import AdminOrdersModal from "../../components/modal/AdminOrdersModal";
 const OrderAdmin = () => {
@@ -19,13 +20,31 @@ const OrderAdmin = () => {
   const [ListOrder, setListOrder] = useState([]);
   const [CountAll, setCountAll] = useState(1);
   const [SelectAll, setSelectAll] = useState(Status[0]);
+  const [isOk, setisOk] = useState(false);
   const [Load, setLoad] = useState(false);
   // change status
   const handleSelect = async (data) => {
     const { e, item } = data;
     const status = e.target.value;
-    const upStatus = await OrdersService.updateStatusOrder(item.id, status);
-    upStatus.status === 200 && message.success(upStatus.message);
+    if (status == "successfully") {
+      // const upBought = await ProductService.updateBought()
+      console.log(listView);
+      const promises = listView.map((item) => {
+        return ProductService.updateBought(item.product_id, item.quantitybuy);
+      });
+      const upStatus = OrdersService.updateStatusOrder(item.id, status);
+      Promise.all([promises, upStatus])
+        .then(() => {
+          message.success("Cập nhật thông tin thành công");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          message.danger("Có lỗi xảy ra xin thử lại sau");
+        });
+    } else {
+      const upStatus = await OrdersService.updateStatusOrder(item.id, status);
+      upStatus.status === 200 && message.success(upStatus.message);
+    }
   };
   // change List
   const handleSelectAll = (e) => {

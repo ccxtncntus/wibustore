@@ -5,11 +5,11 @@ import { HOST } from "../../configs/DataEnv";
 import { FormatNumber } from "../../helpers/FormatNumber";
 const MyOrdersModal = (props) => {
   const { show, onHide, ListOfOrder, select } = props;
-  useEffect(() => {
-    if (show) {
-      console.log(ListOfOrder);
-    }
-  }, [show]);
+  // useEffect(() => {
+  //   if (show) {
+  //     console.log(ListOfOrder);
+  //   }
+  // }, [show]);
   return (
     <>
       <Modal

@@ -6,6 +6,7 @@ import MyOrdersModal from "../../components/modal/MyOrdersModal";
 import MyOrdersEditModal from "../../components/modal/MyOrdersEditModal";
 import { UContexts } from "../../components/context/UserContext";
 import * as OrdersService from "../../services/OrdersService";
+import * as ProductService from "../../services/ProductService";
 import Pagination from "@mui/material/Pagination";
 
 import {
@@ -74,9 +75,17 @@ const MyOders = () => {
   };
   // xóa- khôi phục
   const confirmDel = async (i) => {
-    const del = await OrdersService.delOrder(i.id);
-    console.log(del);
-    setLoad((pre) => !pre);
+    const promises = ListOfOrder.map((item) => {
+      return ProductService.updateQuantity(item.product_id, item.quantitybuy);
+    });
+    const update = OrdersService.delOrder(i.id);
+    Promise.all([promises, update])
+      .then(() => {
+        setLoad((pre) => !pre);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
   const handleRestoreOrder = async (i) => {
     const status = "pending";

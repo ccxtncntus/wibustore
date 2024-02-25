@@ -42,6 +42,18 @@ const update = async (formData) => {
   });
   return res;
 };
+const updateQuantity = async (id, quantity) => {
+  const res = await request.PATCH(`/api/products/updateQuantity/${id}`, {
+    quantity: quantity,
+  });
+  return res;
+};
+const updateBought = async (id, quantity) => {
+  const res = await request.PATCH(`/api/products/updateBought/${id}`, {
+    quantity: quantity,
+  });
+  return res;
+};
 
 const listProCategory = async (id, page, sort) => {
   const res = await request.GET(
@@ -81,4 +93,6 @@ export {
   ListSale,
   ListHot,
   ListRandom,
+  updateQuantity,
+  updateBought,
 };
