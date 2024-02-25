@@ -4,9 +4,11 @@ import "react-multi-carousel/lib/styles.css";
 import Cart from "../../components/product/Cart";
 import { useState, useContext, useEffect } from "react";
 import { CategoriesContexts } from "../../components/context/CategoriesContexts";
+import { ProHomeContexts } from "../../components/context/ProductHomeContex";
 import * as ProductService from "../../services/ProductService";
 const ListFratured = () => {
   const { ListCategories } = useContext(CategoriesContexts);
+  const { ProductsHome } = useContext(ProHomeContexts);
   const [ListCategoriess, setListCategories] = useState([]);
   const [ListProducts, setListProducts] = useState([]);
   // categories
@@ -18,21 +20,28 @@ const ListFratured = () => {
     }
     return () => {};
   }, [ListCategories]);
-  const [Selects, setSelects] = useState("");
+  const [Selects, setSelects] = useState(null);
   // product
   useEffect(() => {
     const run = async () => {
-      const list = await ProductService.List(1, "desc");
-      list.status === 200 && setListProducts(list.data.data);
+      if (ProductsHome) {
+        setListProducts(ProductsHome.data.data);
+        return;
+      }
     };
     run();
-  }, []);
+  }, [ProductsHome]);
+
   useEffect(() => {
     const run = async () => {
       if (Selects == 0) {
+        if (ProductsHome) {
+          setListProducts(ProductsHome.data.data);
+          return;
+        }
         const list = await ProductService.List(1, "desc");
         list.status === 200 && setListProducts(list.data.data);
-      } else if (Selects != 0 && Selects != "") {
+      } else if (Selects != 0 && Selects != null) {
         const lists = await ProductService.listProCategory(Selects, 1, "desc");
         lists.status === 200 && setListProducts(lists.data.data);
       }
@@ -65,7 +74,9 @@ const ListFratured = () => {
         <ul>
           <li
             className={
-              (Selects === 0 || Selects == "") && "listfrature_title_active"
+              Selects === 0 || Selects == null
+                ? "listfrature_title_active"
+                : undefined
             }
             onClick={() => setSelects(0)}
           >
@@ -75,7 +86,9 @@ const ListFratured = () => {
             ? ListCategoriess.map((item, index) => (
                 <li
                   key={index}
-                  className={Selects === item.id && "listfrature_title_active"}
+                  className={
+                    Selects === item.id ? "listfrature_title_active" : undefined
+                  }
                   onClick={() => setSelects(item.id)}
                 >
                   {item.name}
