@@ -6,17 +6,9 @@ import "react-multi-carousel/lib/styles.css";
 import Cart from "../../components/product/Cart";
 import ProductLoading from "../../components/loadingProduct/ProductLoading";
 import * as ProductService from "../../services/ProductService";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import { ProHomeContexts } from "../../components/context/ProductHomeContex";
 const Featured = () => {
   const { ProductsHome } = useContext(ProHomeContexts);
-  useEffect(() => {
-    AOS.init({
-      duration: 1000,
-    });
-    AOS.refresh();
-  }, []);
   const [Data, setData] = useState(null);
   const test = [1, 2, 3, 4];
   const [ListFeatured, setListFeatured] = useState([]);
@@ -89,7 +81,7 @@ const Featured = () => {
           Sale
         </span>
       </div>
-      <div className="featured_listSp mt-4" data-aos="fade-up">
+      <div className="featured_listSp mt-4">
         <Carousel responsive={responsive} showDots={ListFeatured.length > 4}>
           {ListFeatured.length > 0
             ? ListFeatured.map((item, index) => (

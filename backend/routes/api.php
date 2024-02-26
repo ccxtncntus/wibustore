@@ -91,6 +91,11 @@ Route::post(
     'sendPass',
     [MailController::class, 'mailPass']
 );
+Route::post(
+    'sendOrders',
+    [MailController::class, 'dataOrders']
+);
+
 
 // shoppingcart
 Route::get('shoppingcard', [ShoppingCardController::class, 'index']);

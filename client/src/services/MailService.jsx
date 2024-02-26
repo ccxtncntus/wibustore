@@ -6,4 +6,14 @@ const sendPass = async (email) => {
   });
   return res;
 };
-export { sendPass };
+
+const senOrders = async (email, orders, orderDetail) => {
+  const res = await request.POST(`/api/sendOrders`, {
+    email: email,
+    orders: orders,
+    orderDetail: orderDetail,
+  });
+  return res;
+};
+
+export { sendPass, senOrders };
