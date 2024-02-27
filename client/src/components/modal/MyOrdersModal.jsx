@@ -7,11 +7,11 @@ import { useNavigate } from "react-router-dom";
 const MyOrdersModal = (props) => {
   const { show, onHide, ListOfOrder, select } = props;
   const navigate = useNavigate();
-  useEffect(() => {
-    if (show) {
-      console.log(ListOfOrder);
-    }
-  }, [show]);
+  // useEffect(() => {
+  //   if (show) {
+  //     console.log(ListOfOrder);
+  //   }
+  // }, [show]);
   const handleBuyAgain = (i) => {
     console.log({ id_product: i.product_id });
     navigate("/carts", { state: { id_product: i.product_id } });

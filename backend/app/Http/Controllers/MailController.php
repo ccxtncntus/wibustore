@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Mail\OrdersUserMail;
 
 class MailController extends Controller
 {
@@ -53,6 +54,29 @@ class MailController extends Controller
                 ];
                 return response()->json($data, 200);
             }
+        }
+    }
+    public function dataOrders(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'max:255', 'email'],
+            'orders' => ['required'],
+            'orderDetail' => ['required'],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $email = $request->email;
+            $dataOrders = [
+                "orders" => $request->orders,
+                "orderDetail" => $request->orderDetail,
+            ];
+            $data = Mail::to($email)->send(new OrdersUserMail($dataOrders));
+            return response()->json($data, 200);
         }
     }
 }

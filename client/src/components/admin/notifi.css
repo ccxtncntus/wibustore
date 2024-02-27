@@ -1,0 +1,29 @@
+.notification_content {
+  display: block;
+  z-index: 100;
+  width: 220px;
+  right: 0;
+  background-color: var(--vip);
+  padding: 8px;
+  color: white;
+  border-radius: 8px;
+  margin-top: 12px;
+  opacity: 1;
+  transition: all 0.5s;
+}
+.notification_content::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  transform: rotate(45deg);
+  background-color: var(--vip);
+  position: absolute;
+  top: -4px;
+  right: 4px;
+}
+.notification_content_hide {
+  margin-top: 20px;
+  opacity: 0;
+  transition: all 0.5s;
+  visibility: hidden;
+}

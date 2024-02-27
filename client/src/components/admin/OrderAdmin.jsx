@@ -12,6 +12,8 @@ import {
   ExportExcel,
 } from "../../helpers/FormatNumber";
 import * as OrdersService from "../../services/OrdersService";
+import * as ProductService from "../../services/ProductService";
+import * as MailService from "../../services/MailService";
 import Dropdown from "react-bootstrap/Dropdown";
 import AdminOrdersModal from "../../components/modal/AdminOrdersModal";
 const OrderAdmin = () => {
@@ -19,11 +21,62 @@ const OrderAdmin = () => {
   const [ListOrder, setListOrder] = useState([]);
   const [CountAll, setCountAll] = useState(1);
   const [SelectAll, setSelectAll] = useState(Status[0]);
+  const [isOk, setisOk] = useState(false);
   const [Load, setLoad] = useState(false);
+  const [listView, setlistView] = useState([]);
+  const [show, setShow] = useState(false);
   // change status
   const handleSelect = async (data) => {
     const { e, item } = data;
     const status = e.target.value;
+    if (status == "confirm") {
+      const newOj = {
+        name: item.name,
+        address: item.address,
+        phoneNumbers: item.phoneNumbers,
+        totail: FormatNumber(item.totail),
+      };
+      OrdersService.listsOfOrder(item.id)
+        .then((result) => {
+          const dataDetail = result.message;
+          const newdataDetail = dataDetail.map((i) => {
+            return {
+              name: i.name,
+              quantitybuy: i.quantitybuy,
+              price: FormatNumber(i.price),
+              totail: FormatNumber(i.price * i.quantitybuy),
+            };
+          });
+          return MailService.senOrders(item.email, newOj, newdataDetail);
+        })
+        .then((i) => {
+          message.success("Thông tin đơn hàng đã được gửi tới người mua");
+          return OrdersService.updateStatusOrder(item.id, status);
+        })
+        .then((i) => {
+          console.log(i);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+      return;
+    }
+    if (status == "successfully") {
+      const promises = listView.map((item) => {
+        return ProductService.updateBought(item.product_id, item.quantitybuy);
+      });
+      const upStatus = OrdersService.updateStatusOrder(item.id, status);
+      Promise.all([promises, upStatus])
+        .then(() => {
+          message.success("Cập nhật thông tin thành công");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          message.danger("Có lỗi xảy ra xin thử lại sau");
+        });
+      return;
+    }
+
     const upStatus = await OrdersService.updateStatusOrder(item.id, status);
     upStatus.status === 200 && message.success(upStatus.message);
   };
@@ -95,8 +148,6 @@ const OrderAdmin = () => {
     // export
     ExportExcel(newArray, "shheet1", "WibuStoreOrderAll");
   };
-  const [listView, setlistView] = useState([]);
-  const [show, setShow] = useState(false);
 
   const handleViewOrders = async (i) => {
     const l = await OrdersService.listsOfOrder(i.id);
@@ -111,7 +162,6 @@ const OrderAdmin = () => {
   const handleHide = () => {
     setShow(false);
   };
-
   return (
     <>
       <div style={style}>

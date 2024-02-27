@@ -1,21 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+
 import "./featured.css";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Cart from "../../components/product/Cart";
 import ProductLoading from "../../components/loadingProduct/ProductLoading";
 import * as ProductService from "../../services/ProductService";
-import AOS from "aos";
-import "aos/dist/aos.css";
-
+import { ProHomeContexts } from "../../components/context/ProductHomeContex";
 const Featured = () => {
-  useEffect(() => {
-    AOS.init({
-      duration: 1000,
-    });
-    AOS.refresh();
-  }, []);
-  const [Data, setData] = useState(0);
+  const { ProductsHome } = useContext(ProHomeContexts);
+  const [Data, setData] = useState(null);
   const test = [1, 2, 3, 4];
   const [ListFeatured, setListFeatured] = useState([]);
   const responsive = {
@@ -36,19 +30,36 @@ const Featured = () => {
       items: 2,
     },
   };
+
+  useEffect(() => {
+    const run = async () => {
+      if (ProductsHome) {
+        setListFeatured(ProductsHome.data.data);
+        return;
+      }
+    };
+    run();
+  }, [ProductsHome]);
+
   useEffect(() => {
     const run = async () => {
       if (Data == 0) {
-        const listFeatured = await ProductService.List(1, "desc");
+        if (ProductsHome) {
+          setListFeatured(ProductsHome.data.data);
+        } else {
+          const listFeatured = await ProductService.List(1, "desc");
+          setListFeatured(
+            listFeatured.status === 200 ? listFeatured.data.data : []
+          );
+        }
+        return;
+      }
+      if (Data && Data != 0) {
+        const listFeatured = await ProductService.ListSale(1, "desc");
         setListFeatured(
           listFeatured.status === 200 ? listFeatured.data.data : []
         );
-        return;
       }
-      const listFeatured = await ProductService.ListSale(1, "desc");
-      setListFeatured(
-        listFeatured.status === 200 ? listFeatured.data.data : []
-      );
     };
     run();
   }, [Data]);
@@ -56,19 +67,21 @@ const Featured = () => {
     <div className="featured">
       <div className="featured_title">
         <span
-          className={Data === 0 && "featured_title_active"}
+          className={
+            Data === 0 || Data == null ? "featured_title_active" : undefined
+          }
           onClick={() => setData(0)}
         >
           Featured
         </span>
         <span
-          className={Data === 1 && "featured_title_active"}
+          className={Data === 1 ? "featured_title_active" : undefined}
           onClick={() => setData(1)}
         >
           Sale
         </span>
       </div>
-      <div className="featured_listSp mt-4" data-aos="fade-up">
+      <div className="featured_listSp mt-4">
         <Carousel responsive={responsive} showDots={ListFeatured.length > 4}>
           {ListFeatured.length > 0
             ? ListFeatured.map((item, index) => (

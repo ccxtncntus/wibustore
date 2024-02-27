@@ -76,7 +76,7 @@ const ShopProducts = () => {
         }
       }
       // shop k page
-      const listAll = await ProductsServices.List(1, Sort);
+      const listAll = await ProductsServices.List(page, Sort);
       if (listAll.status === 200) {
         setPageAll(countPage(listAll.count));
         setListProducts(listAll.data.data);
@@ -84,7 +84,7 @@ const ShopProducts = () => {
       setLoading(false);
     };
     run();
-  }, [pathParams, Sort]);
+  }, [pathParams, Sort, page]);
   const handleChange = (event, value) => {
     setPage(value);
   };

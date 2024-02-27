@@ -409,6 +409,57 @@ class ProductsController extends Controller
         }
     }
 
+    public function updateQuantity(Request $request, $id)
+    {
+        $quantity = $request->quantity;
+        $products = Products::find($id);
+        if ($quantity) {
+            $newQuan = $products->quantity + $quantity;
+            $pro = DB::table('products')
+                ->where('id', $id)
+                ->update(['quantity' => $newQuan]);
+            // $mes = 
+            $data = [
+                "status" =>
+                $pro ? 200 : 400,
+                "message" => $pro ? 'Update thành công' : 'Lỗi xảy ra',
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                "status" => 400,
+                "message" => 'Số lượng bỏ trống rồi',
+            ];
+            return response()->json($data, 200);
+        }
+    }
+    public function updateBought(Request $request, $id)
+    {
+        $quantity = $request->quantity;
+        $products = Products::find($id);
+        if ($quantity) {
+            $newQuan = $products->bought + $quantity;
+            $pro = DB::table('products')
+                ->where('id', $id)
+                ->update(['bought' => $newQuan]);
+            // $mes = 
+            $data = [
+                "status" =>
+                $pro ? 200 : 400,
+                "message" => $pro ? 'Update đã bán thành công' : 'Lỗi xảy ra',
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                "status" => 400,
+                "message" => 'Số lượng bỏ trống rồi',
+            ];
+            return response()->json($data, 200);
+        }
+    }
+
+
+
     public function delete($id)
     {
         if (Products::where('id', $id)->exists()) {

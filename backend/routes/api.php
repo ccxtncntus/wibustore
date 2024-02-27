@@ -15,6 +15,7 @@ use App\Http\Controllers\VnPayController;
 use App\Http\Controllers\SlidersController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotificationController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -52,6 +53,8 @@ Route::get('products/{id}', [ProductsController::class, 'show']);
 Route::post('products', [ProductsController::class, 'upload']);
 Route::post('products/edit/{id}', [ProductsController::class, 'edit']);
 Route::delete('products/delete/{id}', [ProductsController::class, 'delete']);
+Route::patch('products/updateQuantity/{id}', [ProductsController::class, 'updateQuantity']);
+Route::patch('products/updateBought/{id}', [ProductsController::class, 'updateBought']);
 // images
 Route::get('imagesProduct/{id}', [ImagesController::class, 'index']);
 Route::get('imagesProduct/delonce/{id}', [ImagesController::class, 'deleteOnce']);
@@ -89,6 +92,11 @@ Route::post(
     'sendPass',
     [MailController::class, 'mailPass']
 );
+Route::post(
+    'sendOrders',
+    [MailController::class, 'dataOrders']
+);
+
 
 // shoppingcart
 Route::get('shoppingcard', [ShoppingCardController::class, 'index']);
@@ -103,7 +111,9 @@ Route::post('shoppingcard/updateQuantity', [ShoppingCardController::class, 'upda
 
 // orders
 Route::get('orders/all', [OrdersController::class, 'indexAll']);
+Route::get('orders/getPending', [OrdersController::class, 'getPending']);
 Route::get('orders/{page}', [OrdersController::class, 'index']);
+Route::get('orders/last/{idUser}', [OrdersController::class, 'indexID']);
 Route::post('orders/create', [OrdersController::class, 'create']);
 Route::get('orders/listOfUser/{Uid}/{page}', [OrdersController::class, 'listOfUser']);
 Route::get('orders/listOfUserAll/{Uid}/{page}', [OrdersController::class, 'listOfUserAll']);
@@ -136,3 +146,5 @@ Route::patch('address/updateDefault/{id}/{idUser}', [AddressController::class, '
 Route::get('dashboard', [DashboardController::class, 'index']);
 Route::get('dashboard/getBest', [DashboardController::class, 'getBest']);
 Route::get('dashboard/getData', [DashboardController::class, 'getData']);
+// notification
+Route::post('sendNotifi', [NotificationController::class, 'sendNoti']);
