@@ -52,7 +52,7 @@ class OrdersController extends Controller
         $count = count($c);
         $orders = DB::table('orders')
             ->join('users', 'users.id', '=', 'orders.user_id')
-            ->select('orders.*', 'users.name')
+            ->select('orders.*', 'users.name', 'users.email')
             ->where('orders.status', $status)
             ->orderBy('id', 'desc')
             ->paginate(12, ['*'], 'page', $page);

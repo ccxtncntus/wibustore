@@ -29,7 +29,6 @@ const OrderAdmin = () => {
   const handleSelect = async (data) => {
     const { e, item } = data;
     const status = e.target.value;
-    // console.log(l.message);
     if (status == "confirm") {
       const newOj = {
         name: item.name,
@@ -163,7 +162,6 @@ const OrderAdmin = () => {
   const handleHide = () => {
     setShow(false);
   };
-
   return (
     <>
       <div style={style}>
