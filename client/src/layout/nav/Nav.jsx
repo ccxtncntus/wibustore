@@ -5,13 +5,16 @@ import { Link, useNavigate } from "react-router-dom";
 import CardModal from "../../components/modal/CardModal";
 import Menu from "./Menu";
 import { Contexts } from "../../components/context/Contexts";
-import { useContext, useState } from "react";
+import { UContexts } from "../../components/context/UserContext";
+import { useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import * as AccountService from "../../services/AccountService";
 import SreachModal from "../../components/modal/SreachModal";
+import Notification from "../../components/admin/Notification";
 const Nav = () => {
   const navigate = useNavigate();
   const { cardNumber } = useContext(Contexts);
+  const { User } = useContext(UContexts);
   const [showCard, setShowCard] = useState(false);
   const [showSreach, setshowSreach] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["token", "path_end"]);
@@ -38,6 +41,13 @@ const Nav = () => {
   };
   const handleCloseSreach = () => setshowSreach(false);
   const handleClose = () => setShowCard(false);
+  const [isAdmin, setisAdmin] = useState(false);
+  useEffect(() => {
+    if (User) {
+      User.role == "admin" ? setisAdmin(true) : setisAdmin(false);
+    }
+  }, [User]);
+
   return (
     <div className="nav">
       <SreachModal
@@ -63,6 +73,7 @@ const Nav = () => {
         >
           <LocalMallIcon color="rgb(0, 139, 232)" className="icon" />
         </Badge>
+        {isAdmin && <Notification />}
       </div>
     </div>
   );

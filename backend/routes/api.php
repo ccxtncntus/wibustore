@@ -15,6 +15,7 @@ use App\Http\Controllers\VnPayController;
 use App\Http\Controllers\SlidersController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotificationController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -110,7 +111,9 @@ Route::post('shoppingcard/updateQuantity', [ShoppingCardController::class, 'upda
 
 // orders
 Route::get('orders/all', [OrdersController::class, 'indexAll']);
+Route::get('orders/getPending', [OrdersController::class, 'getPending']);
 Route::get('orders/{page}', [OrdersController::class, 'index']);
+Route::get('orders/last/{idUser}', [OrdersController::class, 'indexID']);
 Route::post('orders/create', [OrdersController::class, 'create']);
 Route::get('orders/listOfUser/{Uid}/{page}', [OrdersController::class, 'listOfUser']);
 Route::get('orders/listOfUserAll/{Uid}/{page}', [OrdersController::class, 'listOfUserAll']);
@@ -143,3 +146,5 @@ Route::patch('address/updateDefault/{id}/{idUser}', [AddressController::class, '
 Route::get('dashboard', [DashboardController::class, 'index']);
 Route::get('dashboard/getBest', [DashboardController::class, 'getBest']);
 Route::get('dashboard/getData', [DashboardController::class, 'getData']);
+// notification
+Route::post('sendNotifi', [NotificationController::class, 'sendNoti']);

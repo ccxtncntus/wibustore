@@ -28,6 +28,7 @@
     "fs-extra": "^11.2.0",
     "html-react-parser": "^5.0.11",
     "ldrs": "^1.0.1",
+    "pusher-js": "^8.4.0-rc2",
     "react": "^18.2.0",
     "react-animated-numbers": "^0.17.1",
     "react-bootstrap": "^2.9.2",

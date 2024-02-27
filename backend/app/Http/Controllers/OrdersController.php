@@ -30,6 +30,22 @@ class OrdersController extends Controller
             ->paginate(12, ['*'], 'page', $page);
         return response()->json([$orders, 'count' => $count], 200);
     }
+    public function indexID($idUser)
+    {
+        $c = DB::table("orders")->where('user_id', $idUser)->orderByDesc('id')->first();
+        if ($c) {
+            $id = $c->id;
+            $del = DB::table("orders")->where('id', $id)->delete();
+            $mes = $del ? 'Xóa thành công' : 'Thất bại';
+            $data = [
+                "status" => 200,
+                "message" => $mes,
+            ];
+            return response()->json($data, 200);
+        } else {
+            return response()->json($c, 200);
+        }
+    }
     public function listOfStatus($status, $page)
     {
         $c = DB::table("orders")->get();
@@ -54,6 +70,14 @@ class OrdersController extends Controller
         ];
         return response()->json($data, 200);
     }
+
+    public function getPending()
+    {
+        $c = DB::table("orders")->where('status', 'pending')->get();
+        $count = count($c);
+        return response()->json(['count' => $count], 200);
+    }
+
     // all
     public function listOfUserAll($Uid, $page)
     {
