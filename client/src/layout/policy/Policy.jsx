@@ -1,25 +1,28 @@
-import "./policy.css";
+import './policy.css';
 const Policy = () => {
   return (
     <div className="policy">
-      <div className="row policy_border">
-        <div className="col-md-3">
-          <span>Miễn phí vận chuyển</span>
-          <p>Cho các đơn hàng trên 5tr</p>
-        </div>
-        <div className="col-md-3">
-          <span> Hỗ trợ 24/7</span>
-          <p>Liên hệ hỗ trợ 24h/ngày</p>
-        </div>
-        <div className="col-md-3">
-          <span>Hoàn tiền 100%</span>
-          <p>Nếu sản phẩm bị lỗi, hư hỏng</p>
-        </div>
-        <div className="col-md-3">
-          <span>Chất lượng cao</span>
-          <p>Đảm bảo hàng chính hãng 100%</p>
+      <div className="container">
+        <div className="row ">
+          <div className="col-md-3 policy_child">
+            <p className="m-0 policy_child_boder">Miễn phí vận chuyển</p>
+            <p className="m-0">Cho các đơn hàng trên 5 triệu</p>
+          </div>
+          <div className="col-md-3 policy_child">
+            <p className="m-0 policy_child_boder"> Hỗ trợ 24/7</p>
+            <p className="m-0">Liên hệ hỗ trợ 24h/ngày</p>
+          </div>
+          <div className="col-md-3 policy_child">
+            <p className="m-0 policy_child_boder">Hoàn tiền 100%</p>
+            <p className="m-0">Nếu sản phẩm bị lỗi, hư hỏng</p>
+          </div>
+          <div className="col-md-3 policy_child">
+            <p className="m-0 policy_child_boder">Chất lượng cao</p>
+            <p className="m-0">Đảm bảo hàng chính hãng 100%</p>
+          </div>
         </div>
       </div>
+      <hr className="m-0" />
     </div>
   );
 };

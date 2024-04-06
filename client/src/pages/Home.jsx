@@ -1,19 +1,19 @@
-import { useEffect, useContext } from "react";
-import { Outlet } from "react-router-dom";
-import { CategoriesContexts } from "../components/context/CategoriesContexts";
-import { ProHomeContexts } from "../components/context/ProductHomeContex";
-import { UContexts } from "../components/context/UserContext";
-import { Contexts } from "../components/context/Contexts";
-import { useCookies } from "react-cookie";
-import Nav from "../layout/nav/Nav";
-import NavTop from "../layout/nav/NavTop";
-import * as CategoriesService from "../services/CategoryService";
-import * as ShoppingCartsService from "../services/ShoppingCartsService";
-import * as ProductService from "../services/ProductService";
-import * as AccountService from "../services/AccountService";
-import Footer from "../layout/footer/Footer";
+import { useEffect, useContext } from 'react';
+import { Outlet } from 'react-router-dom';
+import { CategoriesContexts } from '../components/context/CategoriesContexts';
+import { ProHomeContexts } from '../components/context/ProductHomeContex';
+import { UContexts } from '../components/context/UserContext';
+import { Contexts } from '../components/context/Contexts';
+import { useCookies } from 'react-cookie';
+import Nav from '../layout/nav/Nav';
+import NavTop from '../layout/nav/NavTop';
+import * as CategoriesService from '../services/CategoryService';
+import * as ShoppingCartsService from '../services/ShoppingCartsService';
+import * as ProductService from '../services/ProductService';
+import * as AccountService from '../services/AccountService';
+import Footer from '../layout/footer/Footer';
 const Home = () => {
-  const [cookies, setCookie] = useCookies(["token"]);
+  const [cookies, setCookie] = useCookies(['token']);
   const { addCate } = useContext(CategoriesContexts);
   const { addUser, delUser } = useContext(UContexts);
   const { list } = useContext(Contexts);
@@ -48,7 +48,7 @@ const Home = () => {
   useEffect(() => {
     const run = async () => {
       const data = await CategoriesService.List(1);
-      const listProductHome = await ProductService.List(1, "desc");
+      const listProductHome = await ProductService.List(1, 'desc');
       addList(listProductHome);
       addCate(data);
     };
@@ -57,18 +57,10 @@ const Home = () => {
 
   return (
     <>
-      <div>
-        <NavTop />
-      </div>
-      <div>
-        <Nav />
-      </div>
-      <div>
-        <Outlet />
-      </div>
-      <div>
-        <Footer />
-      </div>
+      <NavTop />
+      <Nav />
+      <Outlet />
+      <Footer />
     </>
   );
 };

@@ -1,11 +1,11 @@
-import "./listfrature.css";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import Cart from "../../components/product/Cart";
-import { useState, useContext, useEffect } from "react";
-import { CategoriesContexts } from "../../components/context/CategoriesContexts";
-import { ProHomeContexts } from "../../components/context/ProductHomeContex";
-import * as ProductService from "../../services/ProductService";
+import './listfrature.css';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import Cart from '../../components/product/Cart';
+import { useState, useContext, useEffect } from 'react';
+import { CategoriesContexts } from '../../components/context/CategoriesContexts';
+import { ProHomeContexts } from '../../components/context/ProductHomeContex';
+import * as ProductService from '../../services/ProductService';
 const ListFratured = () => {
   const { ListCategories } = useContext(CategoriesContexts);
   const { ProductsHome } = useContext(ProHomeContexts);
@@ -39,10 +39,10 @@ const ListFratured = () => {
           setListProducts(ProductsHome.data.data);
           return;
         }
-        const list = await ProductService.List(1, "desc");
+        const list = await ProductService.List(1, 'desc');
         list.status === 200 && setListProducts(list.data.data);
       } else if (Selects != 0 && Selects != null) {
-        const lists = await ProductService.listProCategory(Selects, 1, "desc");
+        const lists = await ProductService.listProCategory(Selects, 1, 'desc');
         lists.status === 200 && setListProducts(lists.data.data);
       }
     };
@@ -75,7 +75,7 @@ const ListFratured = () => {
           <li
             className={
               Selects === 0 || Selects == null
-                ? "listfrature_title_active"
+                ? 'listfrature_title_active'
                 : undefined
             }
             onClick={() => setSelects(0)}
@@ -87,14 +87,14 @@ const ListFratured = () => {
                 <li
                   key={index}
                   className={
-                    Selects === item.id ? "listfrature_title_active" : undefined
+                    Selects === item.id ? 'listfrature_title_active' : undefined
                   }
                   onClick={() => setSelects(item.id)}
                 >
                   {item.name}
                 </li>
               ))
-            : "Loading..."}
+            : 'Loading...'}
         </ul>
       </div>
       <div className="listfrature_products">

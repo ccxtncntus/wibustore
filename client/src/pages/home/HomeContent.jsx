@@ -1,9 +1,8 @@
-import Deal from "../../layout/deal/Deals";
-import Featured from "../../layout/featured/Featured";
-import ListFratured from "../../layout/listfeatured/ListFratured";
-import Policy from "../../layout/policy/Policy";
-import Slider from "../../layout/slider/Slider";
-import Social from "../../layout/social/Social";
+import Deal from '../../layout/deal/Deals';
+import Featured from '../../layout/featured/Featured';
+import ListFratured from '../../layout/listfeatured/ListFratured';
+import Policy from '../../layout/policy/Policy';
+import Slider from '../../layout/slider/Slider';
 const HomeContent = () => {
   return (
     <>
@@ -11,13 +10,12 @@ const HomeContent = () => {
         <div>
           <Slider />
         </div>
+        <Policy />
         <Featured />
         <Deal />
-        <Policy />
         <div>
           <ListFratured />
         </div>
-        <Social />
       </div>
     </>
   );

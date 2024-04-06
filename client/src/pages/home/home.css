@@ -2,7 +2,6 @@
   --color-red: hsl(0deg 80% 50%);
   --color-blue: hsl(270, 81%, 11%);
 }
-
 .home_product {
   display: flex;
   flex-direction: row;

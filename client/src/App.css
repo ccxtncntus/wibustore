@@ -3,3 +3,6 @@
   --bg: rgb(255, 255, 255);
   --vip: rgb(0, 139, 232);
 }
+.vip {
+  color: var(--vip);
+}

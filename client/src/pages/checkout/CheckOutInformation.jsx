@@ -36,55 +36,61 @@ const CheckOutInformation = (props) => {
       return;
     }
     if (value == 1) {
-      console.log("Thanh toán bằng VN Pay");
-      // const Totails = Totail + feeShip;
-      // const ma = Math.floor(Math.random() * 99999);
-      // const da = await pay.pay(ma, Totails);
-      // const ad = addressDefault[0];
-      // setLoading(true);
-      // const address =
-      //   ad.address + ", " + ad.xa + ", " + ad.huyen + ", " + ad.tinh;
-      // const addOrders = await CheckOutService.create(
-      //   User.id,
-      //   address,
-      //   value,
-      //   ad.phone,
-      //   Totails
-      // );
-      // if (addOrders && addOrders.status === 200) {
-      //   Carts.map(async (item) => {
-      //     try {
-      //       const da = await CheckOutService.createDetail(
-      //         addOrders.lastID,
-      //         item.idProduct,
-      //         item.name,
-      //         item.price - item.saleoff,
-      //         Number(item.quantity),
-      //         item.img
-      //       );
-      //       if (da.status === 200) {
-      //         if (item.id != 0) {
-      //           // bớt số lượng trong product
-      //           delCard(item);
-      //           await ShoppingCartsService.productBuyed(
-      //             item.idProduct,
-      //             Number(item.quantity)
-      //           );
-      //           // xóa trong giỏ hàng
-      //           await ShoppingCartsService.delCart(item.id);
-      //         }
-      //       }
-      //     } catch (error) {
-      //       console.error("Error creating detail:", error);
-      //       return;
-      //     }
-      //   });
-      //   setLoading(false);
-      //   natigate("/check-out/success");
-      // }
-      // if (da && da.code == "00") {
-      //   window.open(da.data, "_blank");
-      // }
+      const Totails = Totail + feeShip;
+      const ma = Math.floor(Math.random() * 99999);
+      const da = await pay.pay(ma, Totails);
+      const ad = addressDefault[0];
+      setLoading(true);
+      const address =
+        ad.address + ", " + ad.xa + ", " + ad.huyen + ", " + ad.tinh;
+      const addOrders = await CheckOutService.create(
+        User.id,
+        address,
+        value,
+        ad.phone,
+        Totails
+      );
+      if (addOrders && addOrders.status === 200) {
+        Carts.map(async (item) => {
+          try {
+            const da = await CheckOutService.createDetail(
+              addOrders.lastID,
+              item.idProduct,
+              item.name,
+              item.price - item.saleoff,
+              Number(item.quantity),
+              item.img
+            );
+            if (da.status === 200) {
+              if (item.id != 0) {
+                // bớt số lượng trong product
+                delCard(item);
+                await ShoppingCartsService.productBuyed(
+                  item.idProduct,
+                  Number(item.quantity)
+                );
+                // xóa trong giỏ hàng
+                await ShoppingCartsService.delCart(item.id);
+              }
+            }
+          } catch (error) {
+            console.error("Error creating detail:", error);
+            return;
+          }
+        });
+        NotificationService.sendMess("notification")
+          .then((i) => {
+            setLoading(false);
+          })
+          .catch((e) => {
+            setLoading(false);
+            console.log(e);
+          });
+        // natigate("/check-out/success");
+      }
+      if (da && da.code == "00") {
+        window.open(da.data, "_blank");
+      }
     } else {
       // console.log(Totail + feeShip);
       if (!se) {

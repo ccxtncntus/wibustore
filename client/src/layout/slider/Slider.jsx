@@ -1,9 +1,9 @@
-import "./slider.css";
-import SliderImgs from "./SliderImgs";
-import ListMore from "./ListMore";
-import { useEffect, useState, useContext } from "react";
-import * as SliderService from "../../services/SliderService";
-import { SliContexts } from "../../components/context/SliderContex";
+import './slider.css';
+import SliderImgs from './SliderImgs';
+import ListMore from './ListMore';
+import { useEffect, useState, useContext } from 'react';
+import * as SliderService from '../../services/SliderService';
+import { SliContexts } from '../../components/context/SliderContex';
 const Slider = () => {
   const { slidersC, list } = useContext(SliContexts);
   const [List, setList] = useState([]);
@@ -23,7 +23,7 @@ const Slider = () => {
     run();
   }, []);
   return (
-    <div className="silder">
+    <div className="silder container p-0">
       <div className="col-md-8">
         <SliderImgs List={List} />
       </div>

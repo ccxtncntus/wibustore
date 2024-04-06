@@ -1,14 +1,14 @@
-import "./loading.css";
-import Box from "@mui/material/Box";
-import LinearProgress from "@mui/material/LinearProgress";
+import './loading.css';
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
 
-import { tailChase } from "ldrs";
+import { tailChase } from 'ldrs';
 tailChase.register(); // Default values
 
 const Loading = () => {
   return (
     <>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: '100%' }}>
         <LinearProgress />
       </Box>
       <div className="loading">

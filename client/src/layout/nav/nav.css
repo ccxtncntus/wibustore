@@ -3,8 +3,6 @@
   flex-direction: row;
   justify-content: space-between;
   background-color: var(--bg);
-  padding: 0 160px;
-  border-bottom: 0.5px solid rgba(128, 128, 128, 0.5);
   align-items: center;
 }
 .nav_fixed {

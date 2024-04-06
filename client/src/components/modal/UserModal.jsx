@@ -1,14 +1,14 @@
-import { useEffect, useState, useContext } from "react";
-import Offcanvas from "react-bootstrap/Offcanvas";
-import "./cardmodal.css";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import * as AccountService from "../../services/AccountService";
-import { UContexts } from "../../components/context/UserContext";
+import { useEffect, useState, useContext } from 'react';
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import './cardmodal.css';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import * as AccountService from '../../services/AccountService';
+import { UContexts } from '../../components/context/UserContext';
 const UserModal = ({ placement, show, onClose }) => {
   const { User } = useContext(UContexts);
   const [Loading, setLoading] = useState(false);
-  const [cookies, setCookie, removeToken] = useCookies(["token"]);
+  const [cookies, setCookie, removeToken] = useCookies(['token']);
   const [IsLogin, setIsLogin] = useState(false);
   const [IsAdmin, setIsAdmin] = useState(false);
   const natigate = useNavigate();
@@ -17,7 +17,7 @@ const UserModal = ({ placement, show, onClose }) => {
       if (show) {
         if (User) {
           setIsLogin(true);
-          setIsAdmin(User.role == "user" ? false : true);
+          setIsAdmin(User.role == 'user' ? false : true);
         } else {
           setIsLogin(false);
         }
@@ -27,10 +27,10 @@ const UserModal = ({ placement, show, onClose }) => {
   }, [show]);
 
   const logOut = async () => {
-    await removeToken(["token"]);
-    await removeToken(["path_end"]);
+    await removeToken(['token']);
+    await removeToken(['path_end']);
+    await natigate('/login');
     onClose();
-    // await natigate("/login");
   };
   const handleClose = () => {
     onClose();
@@ -48,7 +48,7 @@ const UserModal = ({ placement, show, onClose }) => {
                 <>
                   {IsAdmin && (
                     <NavLink
-                      to={"/admin/dashboard"}
+                      to={'/admin/dashboard'}
                       className="list-group-item list-group-item-action"
                     >
                       Admin
@@ -57,7 +57,7 @@ const UserModal = ({ placement, show, onClose }) => {
 
                   <NavLink
                     onClick={handleClose}
-                    to={"/my-profile"}
+                    to={'/my-profile'}
                     className="list-group-item list-group-item-action"
                   >
                     Trang cá nhân
@@ -65,7 +65,7 @@ const UserModal = ({ placement, show, onClose }) => {
                   {!IsAdmin && (
                     <NavLink
                       onClick={handleClose}
-                      to={"/my-orders"}
+                      to={'/my-orders'}
                       className="list-group-item list-group-item-action"
                     >
                       Đơn hàng của bạn
@@ -73,7 +73,7 @@ const UserModal = ({ placement, show, onClose }) => {
                   )}
 
                   <NavLink
-                    to={"/changepass"}
+                    to={'/changepass'}
                     className="list-group-item list-group-item-action"
                   >
                     Đổi mật khẩu
@@ -87,7 +87,7 @@ const UserModal = ({ placement, show, onClose }) => {
                 </>
               ) : (
                 <NavLink
-                  to={"/login"}
+                  to={'/login'}
                   className="list-group-item list-group-item-action"
                   onClick={() => onClose()}
                 >

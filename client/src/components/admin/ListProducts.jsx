@@ -25,7 +25,6 @@ const ListProducts = () => {
         data.status == 200 && setlistCate(data.data.data);
         if (Cate == 0) {
           const dataProCategory = await ProductService.List(page, "desc");
-          console.log(dataProCategory);
           if (dataProCategory.status === 200) {
             setlistProductCate(dataProCategory.data.data);
             setCountAll(dataProCategory.count);
@@ -38,7 +37,6 @@ const ListProducts = () => {
             page,
             "desc"
           );
-          console.log(dataProCategory);
           if (dataProCategory.status === 200) {
             setlistProductCate(dataProCategory.data.data);
             setCountAll(dataProCategory.count);
@@ -56,7 +54,6 @@ const ListProducts = () => {
 
   const confirm = async (item) => {
     const del = await ProductService.delProduct(item.id);
-    console.log(del);
     setdelSuccess((pre) => !pre);
     message.success("Delete success");
   };
