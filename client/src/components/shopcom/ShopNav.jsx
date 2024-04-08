@@ -1,11 +1,13 @@
-import { useEffect } from "react";
-import ListGroup from "react-bootstrap/ListGroup";
-import { NavLink } from "react-router-dom";
-import "./shopnav.css";
+import ListGroup from 'react-bootstrap/ListGroup';
+import { NavLink } from 'react-router-dom';
+import './shopnav.css';
+import { useState } from 'react';
+
 const ShopNav = ({ cate }) => {
   const chanPath = (name) => {
-    return name.replace(/ /g, "-").toLowerCase();
+    return name.replace(/ /g, '-').toLowerCase();
   };
+
   return (
     <div className="shopNav">
       <ListGroup>
@@ -14,24 +16,25 @@ const ShopNav = ({ cate }) => {
         {cate &&
           cate.map((item, index) => (
             <ListGroup.Item
-              style={{ border: "none" }}
+              style={{ border: 'none' }}
               action
               key={index}
               className="shopNav_item"
             >
               <NavLink
                 style={{
-                  color: "black",
-                  textDecoration: "none",
+                  color: 'black',
+                  textDecoration: 'none',
                 }}
                 to={`/shop/${chanPath(item.name)}/${item.id}`}
               >
-                {" "}
+                {' '}
                 {item.name}
               </NavLink>
             </ListGroup.Item>
           ))}
       </ListGroup>
+      <hr />
     </div>
   );
 };

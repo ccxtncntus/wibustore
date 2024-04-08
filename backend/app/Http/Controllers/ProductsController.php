@@ -138,7 +138,6 @@ class ProductsController extends Controller
             ];
             return response()->json($upData, 200);
         } else {
-
             $data = [
                 "status" => 200,
                 "data" => $products,
@@ -146,6 +145,60 @@ class ProductsController extends Controller
             return response()->json($data, 200);
         }
     }
+
+    public function indeNumber(Request $request)
+    {
+        $first = $request->first;
+        $second = $request->second;
+        if (!$first || !$second) {
+            $upData = [
+                "status" => 400,
+                "message" => "Vui lòng nhập giá",
+            ];
+            return response()->json($upData, 200);
+        }
+        $products = Products::select(
+            'products.id',
+            'products.name',
+            'products.status',
+            'products.description',
+            'products.quantity',
+            'products.price',
+            'products.saleoff',
+            'products.bought',
+            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+        )
+            ->join('images', 'images.product_id', '=', 'products.id')
+            ->groupBy(
+                'products.id',
+                'products.status',
+                'products.saleoff',
+                'products.bought',
+                'products.price',
+                'products.quantity',
+                'products.description',
+                'products.name',
+            )->where('products.price', '>', $first)
+            ->whereRaw('(products.price - products.saleoff) BETWEEN ? AND ?', [$first, $second])
+            ->orderBy('products.id', "desc")
+            ->paginate(12, ['*'], 'page', 1);
+        if ($products->count() === 0) {
+            $upData = [
+                "status" => 400,
+                "message" => "There aren't any products",
+            ];
+            return response()->json($upData, 200);
+        } else {
+            $data = [
+                "status" => 200,
+                "data" => $products,
+            ];
+            return response()->json($data, 200);
+        }
+    }
+
+
+
     public function indexRandom(Request $request)
     {
         $id = $request->id;

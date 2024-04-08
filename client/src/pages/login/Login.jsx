@@ -91,16 +91,16 @@ const Login = () => {
         message.error('Có lỗi xảy ra xin thử lại sau');
       });
   };
-  const handleOutGG = async () => {
-    signOut(auth)
-      .then(() => {
-        message.success('Đăng nhập thành công');
-      })
-      .catch((error) => {
-        console.log(error);
-        message.error('Có lỗi xảy ra xin thử lại sau');
-      });
-  };
+  // const handleOutGG = async () => {
+  //   signOut(auth)
+  //     .then(() => {
+  //       message.success('Đăng nhập thành công');
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       message.error('Có lỗi xảy ra xin thử lại sau');
+  //     });
+  // };
   return (
     <>
       <div className="login" style={style}>
@@ -176,9 +176,9 @@ const Login = () => {
           <button className="loginGoogle_btn mt-2" onClick={handleLoginGG}>
             <i className="fa-brands fa-google"></i> Đăng nhập với google{' '}
           </button>
-          <button className="loginGoogle_btn mt-2" onClick={handleOutGG}>
+          {/* <button className="loginGoogle_btn mt-2" onClick={handleOutGG}>
             <i className="fa-brands fa-google"></i> Logout{' '}
-          </button>
+          </button> */}
           <div className="mt-2">
             <span>
               Chưa có tài khoản?{' '}

@@ -46,6 +46,8 @@ Route::delete('categorys/delete/{id}', [CategoryController::class, 'delete']);
 Route::get('products', [ProductsController::class, 'index']);
 Route::get('products/sale', [ProductsController::class, 'indexSale']);
 Route::get('products/hot', [ProductsController::class, 'indexHot']);
+Route::get('products/number', [ProductsController::class, 'indeNumber']);
+
 Route::get('products/random/{id}', [ProductsController::class, 'indexRandom']);
 Route::get('products/once/{value}', [ProductsController::class, 'onceProduct']);
 Route::get('products/listPro/{id}', [ProductsController::class, 'listProductOfCategory']);

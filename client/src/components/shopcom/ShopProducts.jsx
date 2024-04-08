@@ -6,6 +6,7 @@ import Card from '../../components/product/Cart';
 import Pagination from '@mui/material/Pagination';
 import { useParams } from 'react-router-dom';
 import ProductLoading from '../loadingProduct/ProductLoading';
+import { message } from 'antd';
 
 const ShopProducts = () => {
   const pathParams = useParams();
@@ -15,6 +16,7 @@ const ShopProducts = () => {
   const [Sort, setSort] = useState('desc');
   const [Loading, setLoading] = useState(false);
   const test = [1, 2, 3, 4];
+  const [filterNumber, setfilterNumber] = useState(false);
   const setDefault = () => {
     setPageAll(1);
     setListProducts([]);
@@ -22,12 +24,16 @@ const ShopProducts = () => {
   const countPage = (count) => {
     return Math.ceil(count / 12);
   };
-  // useEffect(() => {
-  //   window.scroll(0, 0);
-  // }, [page]);
   useEffect(() => {
     const run = async () => {
-      setLoading(true);
+      if (checkFilter) {
+        console.log(filters);
+        setfilters({
+          first: 0,
+          second: 0,
+        });
+        // const ListBetween = await ProductsServices.ListBetween();
+      }
       if (Object.values(pathParams) != '') {
         if (pathParams.page) {
           // shop có page
@@ -86,18 +92,51 @@ const ShopProducts = () => {
       setLoading(false);
     };
     run();
-  }, [pathParams, Sort, page]);
+  }, [pathParams, Sort, page, filterNumber]);
   const handleChange = (event, value) => {
     setPage(value);
   };
   const handleChangeSort = (e) => {
     setSort(e.target.value);
   };
+  const [filters, setfilters] = useState({
+    first: 0,
+    second: 0,
+  });
+  const [checkFilter, setcheckFilter] = useState(false);
+  const validate = (a, b) => {
+    if (a < 0 || b < 0) {
+      setcheckFilter(false);
+      return false;
+    }
+    if (a == b) {
+      setcheckFilter(false);
 
+      return false;
+    }
+    if (a > b) {
+      setcheckFilter(false);
+
+      return false;
+    }
+    setcheckFilter(true);
+
+    return true;
+  };
+  const handleFilter = () => {
+    setfilterNumber((pre) => !pre);
+    if (validate(filters.first, filters.second)) {
+      message.success('Lọc thành công');
+
+      return;
+    }
+    message.warning('Giá không hợp lệ');
+  };
   return (
     <>
-      <div className="w-25">
+      <div className="w-100 d-flex justify-content-between">
         <Form.Select
+          className="w-25"
           aria-label="Default select example"
           onChange={(e) => handleChangeSort(e)}
         >
@@ -105,6 +144,29 @@ const ShopProducts = () => {
           <option value="asc">Price: low to high</option>
           <option value="desc">Price: high to low</option>
         </Form.Select>
+        <div className="d-flex gap-1">
+          <input
+            type="number"
+            className="form-control mt-2"
+            placeholder="Giá thấp nhất"
+            value={filters.first}
+            onChange={(e) =>
+              setfilters({ ...filters, first: Number(e.target.value) })
+            }
+          />
+          <input
+            type="number"
+            className="form-control mt-2"
+            placeholder="Giá cao nhất"
+            value={filters.second}
+            onChange={(e) =>
+              setfilters({ ...filters, second: Number(e.target.value) })
+            }
+          />
+          <button onClick={handleFilter} className="btn btn-secondary mt-2">
+            Lọc
+          </button>
+        </div>
       </div>
       <div className="ShopProducts_list row mt-2">
         {!Loading ? (

@@ -1,4 +1,4 @@
-import * as request from "../configs/Axios";
+import * as request from '../configs/Axios';
 
 const List = async (page, sort) => {
   const res = await request.GET(
@@ -16,6 +16,13 @@ const ListHot = async (page, sort) => {
   const res = await request.GET(
     `/api/products/hot?pageNumber=${page}&sort=${sort}`
   );
+  return res;
+};
+const ListBetween = async (first, second) => {
+  const res = await request.GET(`/api/products/number`, {
+    first: first,
+    second: second,
+  });
   return res;
 };
 
@@ -37,7 +44,7 @@ const onceProduct = async (value) => {
 const update = async (formData) => {
   const res = await request.POST(`/api/products`, formData, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      'Content-Type': 'multipart/form-data',
     },
   });
   return res;
@@ -95,4 +102,5 @@ export {
   ListRandom,
   updateQuantity,
   updateBought,
+  ListBetween,
 };
