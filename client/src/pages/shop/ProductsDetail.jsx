@@ -1,28 +1,28 @@
-import "./productdetail.css";
-import { useEffect, useState, useContext } from "react";
-import { HOST } from "../../configs/DataEnv";
-import { Contexts } from "../../components/context/Contexts";
-import { useParams } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import { UContexts } from "../../components/context/UserContext";
-import { message } from "antd";
-import { FormatNumber } from "../../helpers/FormatNumber";
-import * as ShoppingCartsService from "../../services/ShoppingCartsService";
-import * as ProductsService from "../../services/ProductService";
-import LoadingConponent from "../../components/loading/Loading";
-import LoginModal from "../../components/modal/LoginModal";
-import Cart from "../../components/product/Cart";
-import ProductLoading from "../../components/loadingProduct/ProductLoading";
+import './productdetail.css';
+import { useEffect, useState, useContext } from 'react';
+import { HOST } from '../../configs/DataEnv';
+import { Contexts } from '../../components/context/Contexts';
+import { useParams } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import { UContexts } from '../../components/context/UserContext';
+import { message } from 'antd';
+import { FormatNumber } from '../../helpers/FormatNumber';
+import * as ShoppingCartsService from '../../services/ShoppingCartsService';
+import * as ProductsService from '../../services/ProductService';
+import LoadingConponent from '../../components/loading/Loading';
+import LoginModal from '../../components/modal/LoginModal';
+import Cart from '../../components/product/Cart';
+import ProductLoading from '../../components/loadingProduct/ProductLoading';
 const ProductsDetail = () => {
   const paths = useParams();
-  const [cookies, setCookie, removeCookie] = useCookies(["token", "path_end"]);
+  const [cookies, setCookie, removeCookie] = useCookies(['token', 'path_end']);
   const { addCard, delCard, cardNumber } = useContext(Contexts);
   const { User } = useContext(UContexts);
-  const [Product, setProduct] = useState("");
+  const [Product, setProduct] = useState('');
   const [ListImg, setListImg] = useState([]);
   const [ViewImg, setViewImg] = useState(0);
   const [IsLogin, setIsLogin] = useState(false);
-  const [IdUser, setIdUser] = useState("");
+  const [IdUser, setIdUser] = useState('');
   const [ListRandom, setListRandom] = useState([]);
   const test = [1, 2, 3, 4];
   useEffect(() => {
@@ -34,10 +34,10 @@ const ProductsDetail = () => {
 
         const ran = await ProductsService.ListRandom(data.data[0].id);
         ran.status === 200 ? setListRandom(ran.data) : setListRandom([]);
-        const imgs = data.data[0].all_images.split(",");
+        const imgs = data.data[0].all_images.split(',');
         setListImg(imgs);
       }
-      if (Object.values(User) == "") {
+      if (Object.values(User) == '') {
         // kiểm tra đăng nhập chưa
         setIsLogin(false);
       } else {
@@ -59,7 +59,7 @@ const ProductsDetail = () => {
   const [modalShow, setModalShow] = useState(false);
   const handleAddcard = async () => {
     if (IsLogin) {
-      const img = Product.all_images.split(",")[0];
+      const img = Product.all_images.split(',')[0];
       addCard(Product);
       const chay = await ShoppingCartsService.add(
         IdUser,
@@ -75,7 +75,7 @@ const ProductsDetail = () => {
   return (
     <div className="productDetail">
       <LoginModal show={modalShow} onHide={() => setModalShow(false)} />
-      {Product !== "" ? (
+      {Product !== '' ? (
         <>
           <div className="row mt-4 productDetail_img">
             <div className="product_detail col-md-6">
@@ -86,12 +86,12 @@ const ProductsDetail = () => {
                       return (
                         <img
                           key={index}
-                          src={HOST + "/uploads/" + item}
+                          src={HOST + '/uploads/' + item}
                           alt=""
                           onClick={() => handleView(index)}
                           className={
                             index === ViewImg
-                              ? "product_detail_listimg_boder"
+                              ? 'product_detail_listimg_boder'
                               : null
                           }
                         />
@@ -99,7 +99,7 @@ const ProductsDetail = () => {
                     })}
                   </div>
                   <div className="col-md-10 product_detail_imgPro">
-                    <img src={HOST + "/uploads/" + ListImg[ViewImg]} alt="" />
+                    <img src={HOST + '/uploads/' + ListImg[ViewImg]} alt="" />
                   </div>
                 </div>
               )}
@@ -108,9 +108,9 @@ const ProductsDetail = () => {
             <div className="col-md-6 product_detail_titles">
               <div className="product_detail_title">{Product.name}</div>
               <div className="product_detail_price">
-                {FormatNumber(Product.price - Product.saleoff)}{" "}
+                {FormatNumber(Product.price - Product.saleoff)}{' '}
                 {Product.saleoff > 0 && (
-                  <span style={{ fontSize: "1.2rem", color: "gray" }}>
+                  <span style={{ fontSize: '1.2rem', color: 'gray' }}>
                     <del>{FormatNumber(Product.price)}</del>
                   </span>
                 )}
@@ -137,7 +137,7 @@ const ProductsDetail = () => {
                   }
                 >
                   Thêm vào giỏ hàng
-                </button>{" "}
+                </button>{' '}
               </div>
             </div>
           </div>

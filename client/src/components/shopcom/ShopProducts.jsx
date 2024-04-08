@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-import Form from "react-bootstrap/Form";
-import "./shopproductschild.css";
-import * as ProductsServices from "../../services/ProductService";
-import Card from "../../components/product/Cart";
-import Pagination from "@mui/material/Pagination";
-import { useParams } from "react-router-dom";
-import ProductLoading from "../loadingProduct/ProductLoading";
+import { useEffect, useState } from 'react';
+import Form from 'react-bootstrap/Form';
+import './shopproductschild.css';
+import * as ProductsServices from '../../services/ProductService';
+import Card from '../../components/product/Cart';
+import Pagination from '@mui/material/Pagination';
+import { useParams } from 'react-router-dom';
+import ProductLoading from '../loadingProduct/ProductLoading';
 
 const ShopProducts = () => {
   const pathParams = useParams();
   const [ListProducts, setListProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [PageAll, setPageAll] = useState(1);
-  const [Sort, setSort] = useState("desc");
+  const [Sort, setSort] = useState('desc');
   const [Loading, setLoading] = useState(false);
   const test = [1, 2, 3, 4];
   const setDefault = () => {
@@ -22,11 +22,13 @@ const ShopProducts = () => {
   const countPage = (count) => {
     return Math.ceil(count / 12);
   };
-
+  // useEffect(() => {
+  //   window.scroll(0, 0);
+  // }, [page]);
   useEffect(() => {
     const run = async () => {
       setLoading(true);
-      if (Object.values(pathParams) != "") {
+      if (Object.values(pathParams) != '') {
         if (pathParams.page) {
           // shop có page
           const listAll = await ProductsServices.List(pathParams.page, Sort);
@@ -113,7 +115,7 @@ const ShopProducts = () => {
               </div>
             ))
           ) : (
-            "Tạm thời hết sản phẩm"
+            'Tạm thời hết sản phẩm'
           )
         ) : (
           <>

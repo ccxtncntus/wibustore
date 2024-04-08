@@ -7,6 +7,7 @@ import Cart from '../../components/product/Cart';
 import ProductLoading from '../../components/loadingProduct/ProductLoading';
 import * as ProductService from '../../services/ProductService';
 import { ProHomeContexts } from '../../components/context/ProductHomeContex';
+import { Link } from 'react-router-dom';
 const Featured = () => {
   const { ProductsHome } = useContext(ProHomeContexts);
   const test = [1, 2, 3, 4];
@@ -33,7 +34,7 @@ const Featured = () => {
   useEffect(() => {
     const run = async () => {
       if (ProductsHome) {
-        console.log(ProductsHome);
+        // console.log(ProductsHome);
         setListFeatured(ProductsHome.data.data);
       } else {
         const listFeatured = await ProductService.List(1, 'desc');
@@ -53,6 +54,9 @@ const Featured = () => {
         </h5>
         <span>Sản phẩm được cập nhật liên tục mỗi ngày</span>
       </div>
+      <Link to={'/shop'} className="views_all vip">
+        Xem tất cả <i className="fa-solid fa-angles-right"></i>
+      </Link>
       <div className="featured_listSp mt-2">
         <Carousel responsive={responsive} showDots={ListFeatured.length > 4}>
           {ListFeatured.length > 0

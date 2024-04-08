@@ -29,8 +29,11 @@ const UserModal = ({ placement, show, onClose }) => {
   const logOut = async () => {
     await removeToken(['token']);
     await removeToken(['path_end']);
-    await natigate('/login');
+
     onClose();
+    // setTimeout(async () => {
+    //   await natigate('/login');
+    // }, 1000);
   };
   const handleClose = () => {
     onClose();

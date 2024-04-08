@@ -21,15 +21,9 @@ const Home = () => {
   useEffect(() => {
     const cate = async () => {
       if (cookies && cookies.token) {
-        // const user = await AccountService.authen(cookies.token);
-        // if (user.status === 200) {
-        //   console.log(user);
-        //   addUser(user.data);
-        //   const sss = await ShoppingCartsService.listOfUser(user.data.id);
-        //   list(sss);
-        // }
         AccountService.authen(cookies.token)
           .then((i) => {
+            console.log({ data: i });
             addUser(i.data);
             return ShoppingCartsService.listOfUser(i.data.id);
           })

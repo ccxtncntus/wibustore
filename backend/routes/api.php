@@ -69,6 +69,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [UserCotroller::class, 'logout']);
 });
 Route::post('login', [UserCotroller::class, 'login']);
+Route::post('loginGG', [UserCotroller::class, 'loginGG']);
 Route::post('authentication', [UserCotroller::class, 'authentication']);
 Route::post('register', [UserCotroller::class, 'register']);
 Route::patch('changePass', [UserCotroller::class, 'changePass']);

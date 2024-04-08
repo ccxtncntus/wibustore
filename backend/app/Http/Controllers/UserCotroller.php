@@ -161,6 +161,42 @@ class UserCotroller extends Controller
         return response($response, 201);
     }
 
+
+    public function loginGG(Request $request)
+    {
+
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $passWord = '';
+        for ($i = 0; $i < 30; $i++) {
+            $passWord .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        $user = User::where('email', $request->email)->select('id', 'email', 'name', 'password')->first();
+        if (!$user) {
+            $user = new User;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->role = 'user';
+            $user->password =
+                Hash::make($passWord);
+            $user->save();
+            $token = $user->createToken('wibu_token')->plainTextToken;
+            $data = [
+                "status" => 200,
+                'mgs' => "Tài khoản đăng ký mới",
+                "token" => $token,
+            ];
+            return response()->json($data, 200);
+        }
+        $token = $user->createToken('wibu_token')->plainTextToken;
+        $response = [
+            'status' => 200,
+            'mgs' => "Tài khoản đã đăng ký",
+            'token' => $token
+        ];
+        return response($response, 201);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

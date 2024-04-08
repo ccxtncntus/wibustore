@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import './menu.css';
 const Menu = () => {
   return (
@@ -6,8 +6,10 @@ const Menu = () => {
       <ul className="nav_menu">
         <NavLink to={'/'}>Trang chủ</NavLink>
         <NavLink to={'/shop'}>Sản phẩm</NavLink>
-        <NavLink to={'/posts'}>Bài viết</NavLink>
-        <NavLink to={'/contact'}>Liên hệ</NavLink>
+        {/* <NavLink to={'/posts'}>Bài viết</NavLink> */}
+        <Link to={'/'}>Bài viết</Link>
+        {/* <NavLink to={'/contact'}>Liên hệ</NavLink> */}
+        <Link to={'/'}>Liên hệ</Link>
       </ul>
     </div>
   );

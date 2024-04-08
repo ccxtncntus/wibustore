@@ -22,7 +22,7 @@ const Footer = () => {
             </div>
             <div className="col-12 col-md-4 col-lg-3 col-xl-2">
               <div className="widget">
-                <h4 className="widget-title mb-4">Liện hệ</h4>
+                <h5 className="widget-title mb-4">Liện hệ</h5>
                 <address className="mb-4">
                   Thôn 13, Nam dong, Epo, Đăkwill
                 </address>
@@ -46,7 +46,7 @@ const Footer = () => {
             </div>
             <div className="col-12 col-md-4 col-lg-3 col-xl-2">
               <div className="widget">
-                <h4 className="widget-title mb-4">Tìm hiểu thêm</h4>
+                <h5 className="widget-title mb-4">Tìm hiểu thêm</h5>
                 <ul className="list-unstyled">
                   <li className="mb-2">
                     <a href="#" className="link-secondary text-decoration-none">
@@ -73,7 +73,7 @@ const Footer = () => {
             </div>
             <div className="col-12 col-lg-3 col-xl-4">
               <div className="widget">
-                <h4 className="widget-title mb-4">Bản tin của chúng tôi</h4>
+                <h5 className="widget-title mb-4">Bản tin của chúng tôi</h5>
                 <p className="mb-4">
                   Đăng kí để có thể nhận mã giảm giá sớm nhất
                 </p>
