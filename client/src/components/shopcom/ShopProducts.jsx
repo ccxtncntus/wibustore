@@ -4,11 +4,12 @@ import './shopproductschild.css';
 import * as ProductsServices from '../../services/ProductService';
 import Card from '../../components/product/Cart';
 import Pagination from '@mui/material/Pagination';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import ProductLoading from '../loadingProduct/ProductLoading';
 import { message } from 'antd';
 
 const ShopProducts = () => {
+  const navigator = useNavigate();
   const pathParams = useParams();
   const [ListProducts, setListProducts] = useState([]);
   const [page, setPage] = useState(1);
@@ -25,14 +26,38 @@ const ShopProducts = () => {
     return Math.ceil(count / 12);
   };
   useEffect(() => {
+    console.log(100);
+    setcheckFilter(false);
+  }, [pathParams]);
+  useEffect(() => {
     const run = async () => {
+      if (pathParams?.idcategory == 0) {
+        console.log('sale');
+        setLoading(true);
+        const ListSale = await ProductsServices.ListSale(page, Sort);
+        console.log(ListSale);
+        if (ListSale.status == 200) {
+          setPageAll(1);
+          setListProducts(ListSale.data.data);
+          console.log(ListSale.data.data);
+          setLoading(false);
+          return;
+        }
+        setLoading(false);
+      }
       if (checkFilter) {
-        console.log(filters);
-        setfilters({
-          first: 0,
-          second: 0,
-        });
-        // const ListBetween = await ProductsServices.ListBetween();
+        setLoading(true);
+        const ListBetween = await ProductsServices.ListBetween(
+          filters.first,
+          filters.second
+        );
+        if (ListBetween.status == 400) {
+          setPageAll(1);
+        }
+
+        setListProducts(ListBetween);
+        setLoading(false);
+        return;
       }
       if (Object.values(pathParams) != '') {
         if (pathParams.page) {
@@ -45,11 +70,11 @@ const ShopProducts = () => {
             setDefault();
           }
           setLoading(false);
-
           return;
         }
         if (pathParams.idcategory && pathParams.pageCate) {
           // có danh mục và page
+          setLoading(true);
           const listOfCategoties = await ProductsServices.listProCategory(
             pathParams.idcategory,
             pathParams.pageCate,
@@ -66,6 +91,7 @@ const ShopProducts = () => {
           return;
         }
         if (pathParams.idcategory) {
+          setLoading(true);
           // có danh mục
           const listOfCategoties = await ProductsServices.listProCategory(
             pathParams.idcategory,
@@ -94,10 +120,14 @@ const ShopProducts = () => {
     run();
   }, [pathParams, Sort, page, filterNumber]);
   const handleChange = (event, value) => {
+    console.log(value);
+    navigator('/shop/page/' + value);
     setPage(value);
+    setcheckFilter(false);
   };
   const handleChangeSort = (e) => {
     setSort(e.target.value);
+    setcheckFilter(false);
   };
   const [filters, setfilters] = useState({
     first: 0,
@@ -105,13 +135,12 @@ const ShopProducts = () => {
   });
   const [checkFilter, setcheckFilter] = useState(false);
   const validate = (a, b) => {
-    if (a < 0 || b < 0) {
+    if (a < 1 || b < 1) {
       setcheckFilter(false);
       return false;
     }
     if (a == b) {
       setcheckFilter(false);
-
       return false;
     }
     if (a > b) {
@@ -120,14 +149,11 @@ const ShopProducts = () => {
       return false;
     }
     setcheckFilter(true);
-
     return true;
   };
   const handleFilter = () => {
     setfilterNumber((pre) => !pre);
     if (validate(filters.first, filters.second)) {
-      message.success('Lọc thành công');
-
       return;
     }
     message.warning('Giá không hợp lệ');
@@ -144,7 +170,7 @@ const ShopProducts = () => {
           <option value="asc">Price: low to high</option>
           <option value="desc">Price: high to low</option>
         </Form.Select>
-        <div className="d-flex gap-1">
+        <div className="d-flex gap-1 w-50">
           <input
             type="number"
             className="form-control mt-2"

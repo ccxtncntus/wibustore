@@ -19,10 +19,12 @@ const ListHot = async (page, sort) => {
   return res;
 };
 const ListBetween = async (first, second) => {
-  const res = await request.GET(`/api/products/number`, {
-    first: first,
-    second: second,
-  });
+  const res = await request.GET(
+    `/api/products/number?first=${first}&second=${second}`
+  );
+  if (res.status == 200) {
+    return res.data.data;
+  }
   return res;
 };
 

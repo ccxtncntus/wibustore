@@ -10,7 +10,7 @@ class VnPayController extends Controller
     {
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         // $vnp_Returnurl = "https://localhost/vnpay_php/vnpay_return.php";
-        $vnp_Returnurl = "http://localhost:5173/check-out/success";
+        $vnp_Returnurl = "http://localhost:5173/check-out/loading";
         $vnp_TmnCode = "QSY6QCVM"; //Mã website tại VNPAY 
         $vnp_HashSecret = "LHQREIUFBFTFWJIHMAMBEVSMDFHMSPZT"; //Chuỗi bí mật
 

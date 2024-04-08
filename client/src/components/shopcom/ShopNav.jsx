@@ -13,6 +13,21 @@ const ShopNav = ({ cate }) => {
       <ListGroup>
         <h5>Categories</h5>
         <hr />
+        <ListGroup.Item
+          style={{ border: 'none' }}
+          action
+          className="shopNav_item"
+        >
+          <NavLink
+            style={{
+              color: 'black',
+              textDecoration: 'none',
+            }}
+            to={`/shop/page/1`}
+          >
+            Tất cả
+          </NavLink>
+        </ListGroup.Item>
         {cate &&
           cate.map((item, index) => (
             <ListGroup.Item
@@ -33,6 +48,21 @@ const ShopNav = ({ cate }) => {
               </NavLink>
             </ListGroup.Item>
           ))}
+        <ListGroup.Item
+          style={{ border: 'none' }}
+          action
+          className="shopNav_item"
+        >
+          <NavLink
+            style={{
+              color: 'black',
+              textDecoration: 'none',
+            }}
+            to={`/shop/sale/0`}
+          >
+            Sale
+          </NavLink>
+        </ListGroup.Item>
       </ListGroup>
       <hr />
     </div>

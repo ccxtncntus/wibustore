@@ -154,6 +154,7 @@ class ProductsController extends Controller
             $upData = [
                 "status" => 400,
                 "message" => "Vui lòng nhập giá",
+                "messages" =>  $first,
             ];
             return response()->json($upData, 200);
         }

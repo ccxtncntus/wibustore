@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import CheckOutSuccess from './pages/checkout/CheckOutSuccess';
 import Loading from './components/loading/Loading';
+import CheckOutLoading from './pages/checkout/CheckOutLoading';
 
 const HomeLazy = lazy(() => import('./pages/Home'));
 const AdminLazy = lazy(() => import('./pages/Admin'));
@@ -150,6 +151,7 @@ function App() {
             }
           />
           <Route path="/check-out/success" element={<CheckOutSuccess />} />
+          <Route path="/check-out/loading" element={<CheckOutLoading />} />
           <Route
             path="/carts"
             element={

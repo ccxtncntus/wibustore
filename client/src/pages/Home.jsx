@@ -23,7 +23,7 @@ const Home = () => {
       if (cookies && cookies.token) {
         AccountService.authen(cookies.token)
           .then((i) => {
-            console.log({ data: i });
+            // console.log({ data: i });
             addUser(i.data);
             return ShoppingCartsService.listOfUser(i.data.id);
           })
