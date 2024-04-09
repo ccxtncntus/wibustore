@@ -1,31 +1,31 @@
-import { useEffect, useRef, useState, useContext } from "react";
-import Modal from "react-bootstrap/Modal";
-import Select from "react-select";
-import * as GHNService from "../../services/GHN";
-import * as AddressService from "../../services/AddressService";
-import { UContexts } from "../context/UserContext";
-import { message } from "antd";
+import { useEffect, useRef, useState, useContext } from 'react';
+import Modal from 'react-bootstrap/Modal';
+import Select from 'react-select';
+import * as GHNService from '../../services/GHN';
+import * as AddressService from '../../services/AddressService';
+import { UContexts } from '../context/UserContext';
+import { message } from 'antd';
 const BuyAddressModal = (props) => {
   const { User } = useContext(UContexts);
   const { onHide, show } = props;
   const f = useRef();
-  const [Name, setName] = useState("");
-  const [Phone, setPhone] = useState("");
+  const [Name, setName] = useState('');
+  const [Phone, setPhone] = useState('');
   const [Tinh, setTinh] = useState([]);
   const [TinhSelect, setTinhSelect] = useState(null);
   const [Huyen, setHuyen] = useState([]);
   const [HuyenSelect, setHuyenSelect] = useState(null);
   const [Xa, setXa] = useState([]);
   const [XaSelect, setXaSelect] = useState(null);
-  const [Address, setAddress] = useState("");
+  const [Address, setAddress] = useState('');
 
   const start = () => {
-    setName("");
-    setPhone("");
+    setName('');
+    setPhone('');
     setTinhSelect(null);
     setHuyenSelect(null);
     setXaSelect(null);
-    setAddress("");
+    setAddress('');
   };
   useEffect(() => {
     const run = async () => {
@@ -45,7 +45,7 @@ const BuyAddressModal = (props) => {
     };
     run();
   }, [show]);
-  const options = [{ value: "", label: "" }];
+  const options = [{ value: '', label: '' }];
   const handleTinh = (e) => {
     setTinhSelect(e);
   };
@@ -89,6 +89,17 @@ const BuyAddressModal = (props) => {
   }, [HuyenSelect]);
 
   const handleAdd = async () => {
+    if (
+      Name == '' ||
+      Phone == '' ||
+      !TinhSelect ||
+      !HuyenSelect ||
+      !XaSelect ||
+      Address == ''
+    ) {
+      message.warning('Không bỏ trống thông tin');
+      return;
+    }
     const { setad } = props;
     const newAd = {
       address: Address,
@@ -96,19 +107,13 @@ const BuyAddressModal = (props) => {
       huyen: HuyenSelect.label,
       name: Name,
       phone: Phone,
-      status: "1",
+      status: '1',
       tinh: TinhSelect.label,
       ward_code: XaSelect.value,
       xa: XaSelect.label,
     };
+
     setad([newAd]);
-    // console.log(User);
-    // console.log(Name);
-    // console.log(Phone);
-    // console.log(TinhSelect);
-    // console.log(HuyenSelect);
-    // console.log(XaSelect);
-    // console.log(Address);
 
     const addA = await AddressService.add(
       User.id,

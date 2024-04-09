@@ -5,7 +5,7 @@ const Footer = () => {
     window.scrollTo(0, 0);
   };
   return (
-    <footer className="footer footer_border">
+    <footer className="footer footer_border mt-4">
       <section className="bg-light py-4 py-md-5 py-xl-8 border-top border-light">
         <div className="container overflow-hidden">
           <div className="row gy-4 gy-lg-0 justify-content-xl-between">

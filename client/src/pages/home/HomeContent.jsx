@@ -16,6 +16,7 @@ const HomeContent = () => {
         <div>
           <ListFratured />
         </div>
+        <Featured />
       </div>
     </>
   );

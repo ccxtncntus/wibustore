@@ -1,31 +1,31 @@
-import { useEffect, useRef, useState, useContext } from "react";
-import Modal from "react-bootstrap/Modal";
-import Select from "react-select";
-import * as GHNService from "../../services/GHN";
-import * as AddressService from "../../services/AddressService";
-import { UContexts } from "../../components/context/UserContext";
-import { message } from "antd";
+import { useEffect, useRef, useState, useContext } from 'react';
+import Modal from 'react-bootstrap/Modal';
+import Select from 'react-select';
+import * as GHNService from '../../services/GHN';
+import * as AddressService from '../../services/AddressService';
+import { UContexts } from '../../components/context/UserContext';
+import { message } from 'antd';
 const AddressModal = (props) => {
   const { User } = useContext(UContexts);
   const { onHide, show, editAddress, loadAgain, editData } = props;
   const f = useRef();
-  const [Name, setName] = useState("");
-  const [Phone, setPhone] = useState("");
+  const [Name, setName] = useState('');
+  const [Phone, setPhone] = useState('');
   const [Tinh, setTinh] = useState([]);
   const [TinhSelect, setTinhSelect] = useState(null);
   const [Huyen, setHuyen] = useState([]);
   const [HuyenSelect, setHuyenSelect] = useState(null);
   const [Xa, setXa] = useState([]);
   const [XaSelect, setXaSelect] = useState(null);
-  const [Address, setAddress] = useState("");
+  const [Address, setAddress] = useState('');
 
   const start = () => {
-    setName("");
-    setPhone("");
+    setName('');
+    setPhone('');
     setTinhSelect(null);
     setHuyenSelect(null);
     setXaSelect(null);
-    setAddress("");
+    setAddress('');
   };
   useEffect(() => {
     const run = async () => {
@@ -50,7 +50,7 @@ const AddressModal = (props) => {
     };
     run();
   }, [show]);
-  const options = [{ value: "", label: "" }];
+  const options = [{ value: '', label: '' }];
   const handleTinh = (e) => {
     setTinhSelect(e);
   };
@@ -191,7 +191,7 @@ const AddressModal = (props) => {
           <div className="row mt-4">
             <div className="col md-4">
               <label>
-                Tỉnh{" "}
+                Tỉnh{' '}
                 {editAddress == true && (
                   <span style={{ fontWeight: 500 }}>{editData.tinh}</span>
                 )}
@@ -210,7 +210,7 @@ const AddressModal = (props) => {
             </div>
             <div className="col md-4">
               <label>
-                Huyện{" "}
+                Huyện{' '}
                 {editAddress == true && (
                   <span style={{ fontWeight: 500 }}>{editData.huyen}</span>
                 )}
@@ -229,7 +229,7 @@ const AddressModal = (props) => {
             </div>
             <div className="col md-4">
               <label>
-                Xã{" "}
+                Xã{' '}
                 {editAddress == true && (
                   <span style={{ fontWeight: 500 }}>{editData.xa}</span>
                 )}
@@ -263,7 +263,7 @@ const AddressModal = (props) => {
             Cancel
           </button>
           <button className="btn btn-primary" onClick={() => handleAdd()}>
-            {editAddress ? "Edit" : "Add"}
+            {editAddress ? 'Edit' : 'Add'}
           </button>
         </Modal.Footer>
       </Modal>

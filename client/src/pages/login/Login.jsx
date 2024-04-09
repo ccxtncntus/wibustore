@@ -173,8 +173,11 @@ const Login = () => {
               )}
             </div>
           </form>
-          <button className="loginGoogle_btn mt-2" onClick={handleLoginGG}>
-            <i className="fa-brands fa-google"></i> Đăng nhập với google{' '}
+          <button
+            className="login-with-google-btn mt-2"
+            onClick={handleLoginGG}
+          >
+            Đăng nhập với google{' '}
           </button>
           {/* <button className="loginGoogle_btn mt-2" onClick={handleOutGG}>
             <i className="fa-brands fa-google"></i> Logout{' '}
