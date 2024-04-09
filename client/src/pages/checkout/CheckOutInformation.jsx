@@ -44,6 +44,7 @@ const CheckOutInformation = (props) => {
       // vnpay
       // ---------------------------------------------------
       const Totails = Totail + feeShip;
+      localStorage.setItem('tong', Totails);
       const ma = Math.floor(Math.random() * 99999);
       const da = await pay.pay(ma, Totails);
       window.location.assign(da.data);

@@ -175,7 +175,7 @@ import { Contexts } from '../../components/context/Contexts';
 import * as NotificationService from '../../services/NotificationService';
 
 const CheckOutLoading = () => {
-  const { delCard } = useContext(Contexts);
+  const { delCard, setAll } = useContext(Contexts);
   const navigate = useNavigate();
   const [test1, settest1] = useState(false);
 
@@ -200,13 +200,14 @@ const CheckOutLoading = () => {
           setphones(localStorage.getItem('phone'));
           setaddresss(localStorage.getItem('address'));
           setuserids(localStorage.getItem('userid'));
-          settong(urlParams?.vnp_Amount[0]);
+          settong(localStorage.getItem('tong'));
 
           settest1(true);
           localStorage.removeItem('carts');
           localStorage.removeItem('phone');
           localStorage.removeItem('address');
           localStorage.removeItem('userid');
+          localStorage.removeItem('tong');
         }
       } else {
         console.log('Thanh toán thất bại');
@@ -237,7 +238,7 @@ const CheckOutLoading = () => {
                 item.img
               );
               if (da.status === 200 && item.id !== 0) {
-                delCard(item);
+                // delCard(item);
                 await ShoppingCartsService.productBuyed(
                   item.idProduct,
                   Number(item.quantity)
@@ -250,6 +251,7 @@ const CheckOutLoading = () => {
             }
           }
           await NotificationService.sendMess('notification');
+          setAll();
           navigate('/check-out/success');
         }
       }

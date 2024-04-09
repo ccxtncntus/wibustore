@@ -16,12 +16,15 @@ function CardContext({ children }) {
       setcardNumber([...cardNumber, data]);
     }
   };
+  const setAll = () => {
+    setcardNumber([]);
+  };
   const delCard = async (data) => {
     const index = cardNumber.findIndex((item) => item.name !== data.name);
     cardNumber.splice(index, 1);
   };
   return (
-    <Contexts.Provider value={{ cardNumber, addCard, delCard, list }}>
+    <Contexts.Provider value={{ cardNumber, addCard, delCard, list, setAll }}>
       {children}
     </Contexts.Provider>
   );
