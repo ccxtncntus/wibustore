@@ -1,3 +1,4 @@
+import Blog from '../../layout/blog/Blog';
 import Deal from '../../layout/deal/Deals';
 import Featured from '../../layout/featured/Featured';
 import ListFratured from '../../layout/listfeatured/ListFratured';
@@ -16,7 +17,7 @@ const HomeContent = () => {
         <div>
           <ListFratured />
         </div>
-        <Featured />
+        <Blog />
       </div>
     </>
   );

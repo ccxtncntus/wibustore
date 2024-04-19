@@ -1,0 +1,34 @@
+.featured {
+  margin-top: 28px;
+  position: relative;
+}
+.featured_title {
+  text-align: center;
+}
+.react-multi-carousel-track {
+  padding-bottom: 30px !important;
+}
+.views_all {
+  text-decoration: none;
+  display: inline-block;
+  right: 10px;
+  top: 44px;
+  position: absolute;
+}
+@media screen and (max-width: 1280px) {
+  .featured {
+  }
+}
+@media screen and (max-width: 1024px) {
+  .featured {
+  }
+}
+@media screen and (max-width: 768px) {
+}
+@media screen and (max-width: 599px) {
+  .featured {
+    justify-content: flex-end;
+  }
+}
+@media screen and (max-width: 375px) {
+}

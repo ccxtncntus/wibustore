@@ -26,20 +26,19 @@ const ShopProducts = () => {
     return Math.ceil(count / 12);
   };
   useEffect(() => {
-    console.log(100);
     setcheckFilter(false);
   }, [pathParams]);
   useEffect(() => {
     const run = async () => {
       if (pathParams?.idcategory == 0) {
-        console.log('sale');
+        // console.log('sale');
         setLoading(true);
         const ListSale = await ProductsServices.ListSale(page, Sort);
-        console.log(ListSale);
+        // console.log(ListSale);
         if (ListSale.status == 200) {
           setPageAll(1);
           setListProducts(ListSale.data.data);
-          console.log(ListSale.data.data);
+          // console.log(ListSale.data.data);
           setLoading(false);
           return;
         }
@@ -54,18 +53,24 @@ const ShopProducts = () => {
         if (ListBetween.status == 400) {
           setPageAll(1);
         }
-
         setListProducts(ListBetween);
+        setfilters({
+          first: 0,
+          second: 0,
+        });
+        setPageAll(1);
         setLoading(false);
         return;
       }
       if (Object.values(pathParams) != '') {
         if (pathParams.page) {
           // shop có page
+          // setLoading(true);
           const listAll = await ProductsServices.List(pathParams.page, Sort);
           if (listAll.status === 200) {
             setPageAll(countPage(listAll.count));
             setListProducts(listAll.data.data);
+            // setLoading(false);
           } else {
             setDefault();
           }
