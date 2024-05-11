@@ -15,13 +15,15 @@ const Shop = () => {
     }
   }, [ListCategories]);
   return (
-    <div className="mt-4 shop">
-      <div className="row">
-        <div className="col-md-2">
-          <ShopNav cate={cate} />
-        </div>
-        <div className="col-md-10">
-          <ShopProducts />
+    <div className="shop_vip">
+      <div className="container shop">
+        <div className="row">
+          <div className="col-md-3">
+            <ShopNav cate={cate} />
+          </div>
+          <div className="col-md-9">
+            <ShopProducts />
+          </div>
         </div>
       </div>
     </div>

@@ -2,6 +2,8 @@
   padding-top: 20px;
   /* background-color: aliceblue; */
   /* padding: 10px; */
+  background-color: var(--newbg);
+  color: var(--newtext);
 }
 .policy_child {
   display: flex;
@@ -12,4 +14,5 @@
 .policy_child_boder {
   border-top: 2px solid var(--vip);
   font-weight: 500;
+  padding-top: 10px;
 }

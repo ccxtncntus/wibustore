@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Form from 'react-bootstrap/Form';
 import './shopproductschild.css';
 import * as ProductsServices from '../../services/ProductService';
@@ -6,9 +6,10 @@ import Card from '../../components/product/Cart';
 import Pagination from '@mui/material/Pagination';
 import { useParams, useNavigate } from 'react-router-dom';
 import ProductLoading from '../loadingProduct/ProductLoading';
-import { message } from 'antd';
-
+import { FillterProducts } from '../context/FillterContext';
 const ShopProducts = () => {
+  const { ListFillter, setListFillter } = useContext(FillterProducts);
+
   const navigator = useNavigate();
   const pathParams = useParams();
   const [ListProducts, setListProducts] = useState([]);
@@ -17,7 +18,7 @@ const ShopProducts = () => {
   const [Sort, setSort] = useState('desc');
   const [Loading, setLoading] = useState(false);
   const test = [1, 2, 3, 4];
-  const [filterNumber, setfilterNumber] = useState(false);
+  // const [filterNumber, setfilterNumber] = useState(false);
   const setDefault = () => {
     setPageAll(1);
     setListProducts([]);
@@ -26,10 +27,8 @@ const ShopProducts = () => {
     return Math.ceil(count / 12);
   };
   useEffect(() => {
-    setcheckFilter(false);
-  }, [pathParams]);
-  useEffect(() => {
     const run = async () => {
+      setListFillter([]);
       if (pathParams?.idcategory == 0) {
         // console.log('sale');
         setLoading(true);
@@ -44,28 +43,10 @@ const ShopProducts = () => {
         }
         setLoading(false);
       }
-      if (checkFilter) {
-        setLoading(true);
-        const ListBetween = await ProductsServices.ListBetween(
-          filters.first,
-          filters.second
-        );
-        if (ListBetween.status == 400) {
-          setPageAll(1);
-        }
-        setListProducts(ListBetween);
-        setfilters({
-          first: 0,
-          second: 0,
-        });
-        setPageAll(1);
-        setLoading(false);
-        return;
-      }
       if (Object.values(pathParams) != '') {
         if (pathParams.page) {
           // shop có page
-          // setLoading(true);
+          setLoading(true);
           const listAll = await ProductsServices.List(pathParams.page, Sort);
           if (listAll.status === 200) {
             setPageAll(countPage(listAll.count));
@@ -123,45 +104,26 @@ const ShopProducts = () => {
       setLoading(false);
     };
     run();
-  }, [pathParams, Sort, page, filterNumber]);
+  }, [pathParams, Sort, page]);
+
+  useEffect(() => {
+    if (ListFillter.length > 0) {
+      setLoading(true);
+      setPageAll(countPage(ListFillter.count));
+      setListProducts(ListFillter);
+      setLoading(false);
+    }
+  }, [ListFillter]);
+
   const handleChange = (event, value) => {
     console.log(value);
     navigator('/shop/page/' + value);
     setPage(value);
-    setcheckFilter(false);
+    // setcheckFilter(false);
   };
   const handleChangeSort = (e) => {
     setSort(e.target.value);
-    setcheckFilter(false);
-  };
-  const [filters, setfilters] = useState({
-    first: 0,
-    second: 0,
-  });
-  const [checkFilter, setcheckFilter] = useState(false);
-  const validate = (a, b) => {
-    if (a < 1 || b < 1) {
-      setcheckFilter(false);
-      return false;
-    }
-    if (a == b) {
-      setcheckFilter(false);
-      return false;
-    }
-    if (a > b) {
-      setcheckFilter(false);
-
-      return false;
-    }
-    setcheckFilter(true);
-    return true;
-  };
-  const handleFilter = () => {
-    setfilterNumber((pre) => !pre);
-    if (validate(filters.first, filters.second)) {
-      return;
-    }
-    message.warning('Giá không hợp lệ');
+    // setcheckFilter(false);
   };
   return (
     <>
@@ -175,29 +137,6 @@ const ShopProducts = () => {
           <option value="asc">Price: low to high</option>
           <option value="desc">Price: high to low</option>
         </Form.Select>
-        <div className="d-flex gap-1 w-50">
-          <input
-            type="number"
-            className="form-control mt-2"
-            placeholder="Giá thấp nhất"
-            value={filters.first}
-            onChange={(e) =>
-              setfilters({ ...filters, first: Number(e.target.value) })
-            }
-          />
-          <input
-            type="number"
-            className="form-control mt-2"
-            placeholder="Giá cao nhất"
-            value={filters.second}
-            onChange={(e) =>
-              setfilters({ ...filters, second: Number(e.target.value) })
-            }
-          />
-          <button onClick={handleFilter} className="btn btn-secondary mt-2">
-            Lọc
-          </button>
-        </div>
       </div>
       <div className="ShopProducts_list row mt-2">
         {!Loading ? (

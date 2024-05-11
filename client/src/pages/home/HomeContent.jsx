@@ -12,11 +12,10 @@ const HomeContent = () => {
           <Slider />
         </div>
         <Policy />
+        <ListFratured />
         <Featured />
         <Deal />
-        <div>
-          <ListFratured />
-        </div>
+        <div></div>
         <Blog />
       </div>
     </>

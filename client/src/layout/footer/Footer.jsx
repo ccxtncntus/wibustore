@@ -5,8 +5,8 @@ const Footer = () => {
     window.scrollTo(0, 0);
   };
   return (
-    <footer className="footer footer_border mt-4">
-      <section className="bg-light py-4 py-md-5 py-xl-8 border-top border-light">
+    <footer className="footer footer_border">
+      <section className="py-4 py-xl-8 border-top border-light">
         <div className="container overflow-hidden">
           <div className="row gy-4 gy-lg-0 justify-content-xl-between">
             <div className="col-12 col-md-4 col-lg-3 col-xl-2">
@@ -125,7 +125,7 @@ const Footer = () => {
           </div>
         </div>
       </section>
-      <div className="p-4 text-center">&copy; 2024. Wibustore</div>
+      <div className="p-4 text-center bg-dark">&copy; 2024. Wibustore</div>
     </footer>
   );
 };

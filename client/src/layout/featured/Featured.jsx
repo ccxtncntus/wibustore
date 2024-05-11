@@ -47,24 +47,26 @@ const Featured = () => {
   }, [ProductsHome]);
 
   return (
-    <div className="featured container p-0">
-      <div className="featured_title">
-        <h5>
-          Sản phẩm <span className="vip">mới</span>
-        </h5>
-        <span>Sản phẩm được cập nhật liên tục mỗi ngày</span>
-      </div>
-      <Link to={'/shop'} className="views_all vip">
-        Xem tất cả <i className="fa-solid fa-angles-right"></i>
-      </Link>
-      <div className="featured_listSp mt-2">
-        <Carousel responsive={responsive} showDots={ListFeatured.length > 4}>
-          {ListFeatured.length > 0
-            ? ListFeatured.map((item, index) => (
-                <Cart key={index} item={item} />
-              ))
-            : test.map((item, index) => <ProductLoading key={index} />)}
-        </Carousel>
+    <div className="featured_vip">
+      <div className="featured container p-0">
+        <div className="featured_title">
+          <h5>
+            Sản phẩm <span className="vip">mới</span>
+          </h5>
+          <span>Sản phẩm được cập nhật liên tục mỗi ngày</span>
+        </div>
+        <Link to={'/shop'} className="views_all vip">
+          Xem tất cả <i className="fa-solid fa-angles-right"></i>
+        </Link>
+        <div className="featured_listSp mt-2">
+          <Carousel responsive={responsive} showDots={ListFeatured.length > 4}>
+            {ListFeatured.length > 0
+              ? ListFeatured.map((item, index) => (
+                  <Cart key={index} item={item} />
+                ))
+              : test.map((item, index) => <ProductLoading key={index} />)}
+          </Carousel>
+        </div>
       </div>
     </div>
   );

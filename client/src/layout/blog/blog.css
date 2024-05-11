@@ -1,5 +1,10 @@
+.blogLayout_vip {
+  background-color: var(--newbg);
+  color: var(--newtext);
+  padding: 28px 0 40px;
+}
 .featured {
-  margin-top: 28px;
+  /* margin-top: 28px; */
   position: relative;
 }
 .featured_title {

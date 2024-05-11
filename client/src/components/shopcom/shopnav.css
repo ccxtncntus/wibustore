@@ -1,5 +1,5 @@
 .shopNav {
-  border-right: 0.5px solid rgb(216, 216, 216);
+  /* border-right: 0.5px solid rgb(216, 216, 216); */
 }
 .shopNav_li {
   border: none;
@@ -13,7 +13,7 @@
   color: white !important;
   transition: all 0.5s;
 }
-.shopNav_item a.active {
+.shopNav .active {
   color: var(--vip) !important;
 }
 .shopNav_item:hover a.active {

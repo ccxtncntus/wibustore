@@ -49,7 +49,7 @@ const Nav = () => {
   }, [User]);
 
   return (
-    <>
+    <div style={{ background: 'rgb(24, 24, 24)' }}>
       <div className="nav container p-0">
         <SreachModal
           placement={'end'}
@@ -78,7 +78,7 @@ const Nav = () => {
         </div>
       </div>
       <hr className="m-0" />
-    </>
+    </div>
   );
 };
 

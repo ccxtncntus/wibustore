@@ -1,3 +1,7 @@
+.listfrature_vip {
+  background-color: var(--newbg);
+  color: var(--newtext);
+}
 .listfrature {
   padding: 30px 0;
 }

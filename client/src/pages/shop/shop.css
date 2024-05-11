@@ -1,10 +1,16 @@
+.shop_vip {
+  background-color: var(--newbg);
+  color: var(--newtext);
+  padding: 20px 0;
+  border-top: 1px solid gray;
+}
 .shop {
-  padding: 8px 160px;
+  /* padding: 8px 160px; */
   min-height: 72vh;
 }
 @media screen and (max-width: 1280px) {
   .shop {
-    padding: 8px 120px;
+    /* padding: 8px 120px; */
   }
 }
 @media screen and (max-width: 1024px) {

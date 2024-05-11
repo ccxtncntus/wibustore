@@ -5,7 +5,10 @@ const Menu = () => {
     <div>
       <ul className="nav_menu">
         <NavLink to={'/'}>Trang chủ</NavLink>
-        <NavLink to={'/shop'}>Sản phẩm</NavLink>
+        <NavLink to={'/shop'}>
+          Sản phẩm <i className="fa-solid fa-angle-down"></i>
+        </NavLink>
+        {/* <NavLink to={'/shop'}>Sale</NavLink> */}
         {/* <NavLink to={'/posts'}>Bài viết</NavLink> */}
         <Link to={'/'}>Bài viết</Link>
         {/* <NavLink to={'/contact'}>Liên hệ</NavLink> */}

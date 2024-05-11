@@ -1,9 +1,9 @@
-import Carousel from "react-bootstrap/Carousel";
-import Image from "react-bootstrap/Image";
-import "./sliderimg.css";
-import { NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { HOST } from "../../configs/DataEnv";
+import Carousel from 'react-bootstrap/Carousel';
+import Image from 'react-bootstrap/Image';
+import './sliderimg.css';
+import { NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { HOST } from '../../configs/DataEnv';
 const SliderImgs = (props) => {
   const { List } = props;
   const [Lists, setLists] = useState([]);
@@ -19,7 +19,7 @@ const SliderImgs = (props) => {
           Lists.map((item, index) => {
             return (
               <Carousel.Item key={index}>
-                <Image src={HOST + "/uploads/" + item.img} thumbnail />
+                <Image src={HOST + '/uploads/' + item.img} thumbnail />
                 <Carousel.Caption>
                   <div className="sliderImgs_title">
                     <NavLink to={item.path}>{item.title}</NavLink>

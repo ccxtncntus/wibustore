@@ -1,6 +1,7 @@
 .shop_products {
   display: flex;
   gap: 20px;
+  background-color: var(--newbg);
   flex-wrap: wrap;
 }
 .ShopProducts_list {
