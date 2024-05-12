@@ -74,6 +74,7 @@ const ProductsDetail = () => {
   };
   return (
     <div className="productDetail">
+      1
       <LoginModal show={modalShow} onHide={() => setModalShow(false)} />
       {Product !== '' ? (
         <>

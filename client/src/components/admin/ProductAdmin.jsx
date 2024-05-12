@@ -1,10 +1,11 @@
-import { useForm } from "react-hook-form";
-import Form from "react-bootstrap/Form";
-import "./productadmin.css";
-import * as ProductService from "../../services/ProductService";
-import * as CategoryService from "../../services/CategoryService";
-import { useEffect, useState } from "react";
-import { message } from "antd";
+import { useForm } from 'react-hook-form';
+import Form from 'react-bootstrap/Form';
+import './productadmin.css';
+import * as ProductService from '../../services/ProductService';
+import * as CategoryService from '../../services/CategoryService';
+import { useEffect, useState } from 'react';
+import { message } from 'antd';
+import TTesst from './tesst';
 
 const ProductAdmin = () => {
   const {
@@ -20,28 +21,29 @@ const ProductAdmin = () => {
 
   const onSubmit = async (data) => {
     try {
-      const formData = new FormData();
-      const arr = Object.values(data.imgs);
-      arr.map((item) => {
-        formData.append("images[]", item);
-      });
-      formData.append("name", data.name.trim());
-      formData.append("category_id", data.category.trim());
-      formData.append("description", data.description.trim());
-      formData.append("price", data.price.trim());
-      formData.append("quantity", data.quantity.trim());
-      formData.append("saleoff", data.sale.trim());
-      formData.append("status", data.status.trim());
-      const addProduct = await ProductService.update(formData);
-      console.log(addProduct);
-      if (addProduct.status === 200) {
-        message.success("Add success!");
-      }
-      reset();
-      setFocus("name");
-      setimgBlob([]);
+      console.log(1);
+      // const formData = new FormData();
+      // const arr = Object.values(data.imgs);
+      // arr.map((item) => {
+      //   formData.append('images[]', item);
+      // });
+      // formData.append('name', data.name.trim());
+      // formData.append('category_id', data.category.trim());
+      // formData.append('description', data.description.trim());
+      // formData.append('price', data.price.trim());
+      // formData.append('quantity', data.quantity.trim());
+      // formData.append('saleoff', data.sale.trim());
+      // formData.append('status', data.status.trim());
+      // const addProduct = await ProductService.update(formData);
+      // console.log(addProduct);
+      // if (addProduct.status === 200) {
+      //   message.success('Add success!');
+      // }
+      // reset();
+      // setFocus('name');
+      // setimgBlob([]);
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   };
   const [listCategory, setlistCategory] = useState([]);
@@ -57,26 +59,27 @@ const ProductAdmin = () => {
     listC();
     return () => {};
   }, []);
-  const price = watch("price");
+  const price = watch('price');
   const lessThanPrice = (value) => {
     if (!isNaN(value) && !isNaN(price)) {
-      return parseFloat(value) <= parseFloat(price) || "sale < price";
+      return parseFloat(value) <= parseFloat(price) || 'sale < price';
     }
     return true;
   };
   useEffect(() => {
-    const numberImg = watch("imgs").length;
+    const numberImg = watch('imgs').length;
     if (numberImg > 0) {
-      const arr = Object.values(watch("imgs"));
+      const arr = Object.values(watch('imgs'));
       const newImg = arr.map((item) => URL.createObjectURL(item));
       setimgBlob(newImg);
     }
-    return () => {};
-  }, [watch("imgs")]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watch('imgs')]);
+
   const HandleDelBlob = (item, index) => {
-    const arr = Object.values(watch("imgs"));
+    const arr = Object.values(watch('imgs'));
     arr.splice(index, 1);
-    setValue("imgs", arr, { shouldValidate: true });
+    setValue('imgs', arr, { shouldValidate: true });
     URL.revokeObjectURL(item);
     const chay = imgBlob.filter((img) => img !== item);
     setimgBlob(chay);
@@ -90,11 +93,11 @@ const ProductAdmin = () => {
             <Form.Control
               type="text"
               placeholder="Product name"
-              {...register("name", {
-                required: "Name is required",
+              {...register('name', {
+                required: 'Name is required',
                 pattern: {
                   value: /^\S.*\S$/,
-                  message: "No space",
+                  message: 'No space',
                 },
               })}
             />
@@ -109,8 +112,8 @@ const ProductAdmin = () => {
           <Form.Group className="mb-3">
             <Form.Label>Category</Form.Label>
             <Form.Select
-              {...register("category", {
-                required: "Category is required",
+              {...register('category', {
+                required: 'Category is required',
               })}
             >
               <option value="">--- Chọn ---</option>
@@ -139,14 +142,14 @@ const ProductAdmin = () => {
               imgBlob.map((item, index) => (
                 <span key={index}>
                   <span
-                    style={{ position: "relative" }}
+                    style={{ position: 'relative' }}
                     className="product_admin_img"
                   >
                     <img
                       style={{
                         height: 160,
                         margin: 2,
-                        objectFit: "cover",
+                        objectFit: 'cover',
                       }}
                       src={item}
                       alt=""
@@ -154,7 +157,7 @@ const ProductAdmin = () => {
                     <i
                       onClick={() => HandleDelBlob(item, index)}
                       style={{
-                        position: "absolute",
+                        position: 'absolute',
                         top: -60,
                         right: 10,
                         fontSize: 20,
@@ -167,14 +170,14 @@ const ProductAdmin = () => {
           </div>
           <Form.Control
             multiple
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
             id="file_product"
             type="file"
-            {...register("imgs", {
+            {...register('imgs', {
               required:
-                watch("imgs") && Object.values(watch("imgs")).length > 0
+                watch('imgs') && Object.values(watch('imgs')).length > 0
                   ? false
-                  : "img is required",
+                  : 'img is required',
             })}
           />
           {errors.imgs && (
@@ -185,11 +188,12 @@ const ProductAdmin = () => {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>
+          <TTesst />
           <Form.Control
             as="textarea"
             rows={3}
-            {...register("description", {
-              required: "description is required",
+            {...register('description', {
+              required: 'description is required',
             })}
           />
           {errors.description && (
@@ -204,11 +208,11 @@ const ProductAdmin = () => {
             <Form.Control
               type="number"
               placeholder="Product name"
-              {...register("quantity", {
-                required: "Quantity is required",
+              {...register('quantity', {
+                required: 'Quantity is required',
                 min: {
                   value: 0,
-                  message: "lớn hơn 0",
+                  message: 'lớn hơn 0',
                 },
               })}
             />
@@ -223,10 +227,10 @@ const ProductAdmin = () => {
             <Form.Control
               type="number"
               placeholder="..."
-              {...register("sale", {
+              {...register('sale', {
                 min: {
                   value: 0,
-                  message: "Lớn hơn 0",
+                  message: 'Lớn hơn 0',
                 },
                 required: true,
                 validate: {
@@ -247,7 +251,7 @@ const ProductAdmin = () => {
             <Form.Control
               type="number"
               placeholder="..."
-              {...register("price", { min: 1, required: "price is required" })}
+              {...register('price', { min: 1, required: 'price is required' })}
             />
             {errors.price && (
               <p className="text-danger" role="alert">
@@ -257,7 +261,7 @@ const ProductAdmin = () => {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>status</Form.Label>
-            <Form.Select defaultValue={"Còn hàng"} {...register("status")}>
+            <Form.Select defaultValue={'Còn hàng'} {...register('status')}>
               <option value="Còn hàng">Còn hàng</option>
               <option value="Hết hàng">Hết hàng</option>
             </Form.Select>
