@@ -10,9 +10,9 @@ const ShopNav = ({ cate }) => {
     return name.replace(/ /g, '-').toLowerCase();
   };
   const path = useParams();
-  useEffect(() => {
-    console.log(path);
-  }, [path]);
+  // useEffect(() => {
+  //   console.log(path);
+  // }, [path]);
 
   return (
     <div className="shopNav">

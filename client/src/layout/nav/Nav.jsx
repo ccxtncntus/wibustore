@@ -68,7 +68,7 @@ const Nav = () => {
             <i className="fa-solid fa-magnifying-glass icon"></i>
           </span>
           <Badge
-            badgeContent={cardNumber.length}
+            badgeContent={cardNumber}
             color="primary"
             onClick={handleShowModalCard}
           >

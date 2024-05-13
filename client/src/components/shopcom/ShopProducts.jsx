@@ -26,6 +26,18 @@ const ShopProducts = () => {
   const countPage = (count) => {
     return Math.ceil(count / 12);
   };
+
+  const returnMinPrice = (data) => {
+    const jsonArray = JSON.parse(data);
+    const uniqueArray = Array.from(new Set(jsonArray.map(JSON.stringify))).map(
+      JSON.parse
+    );
+    const minPriceElement = uniqueArray.reduce((min, current) =>
+      min.price < current.price ? min : current
+    );
+    return minPriceElement;
+  };
+
   useEffect(() => {
     const run = async () => {
       setListFillter([]);
@@ -100,6 +112,9 @@ const ShopProducts = () => {
       if (listAll.status === 200) {
         setPageAll(countPage(listAll.count));
         setListProducts(listAll.data.data);
+
+        // const data = returnMinPrice(listAll.data.data[0].price_and_saleoff);
+        // console.log(data);
       }
       setLoading(false);
     };

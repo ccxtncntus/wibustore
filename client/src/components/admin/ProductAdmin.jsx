@@ -8,6 +8,8 @@ import { message } from 'antd';
 import TTesst from './tesst';
 
 const ProductAdmin = () => {
+  const [Description, setDescription] = useState('');
+  const [ErrorDe, setErrorDe] = useState('');
   const {
     register,
     handleSubmit,
@@ -18,30 +20,41 @@ const ProductAdmin = () => {
     setValue,
   } = useForm();
   const [imgBlob, setimgBlob] = useState([]);
+  const validateDe = (de) => {
+    if (de.trim() == '') {
+      setErrorDe('không bỏ trống');
+      return false;
+    }
+    setErrorDe('');
 
+    return true;
+  };
   const onSubmit = async (data) => {
     try {
-      console.log(1);
-      // const formData = new FormData();
-      // const arr = Object.values(data.imgs);
-      // arr.map((item) => {
-      //   formData.append('images[]', item);
-      // });
-      // formData.append('name', data.name.trim());
-      // formData.append('category_id', data.category.trim());
-      // formData.append('description', data.description.trim());
-      // formData.append('price', data.price.trim());
-      // formData.append('quantity', data.quantity.trim());
-      // formData.append('saleoff', data.sale.trim());
-      // formData.append('status', data.status.trim());
-      // const addProduct = await ProductService.update(formData);
-      // console.log(addProduct);
-      // if (addProduct.status === 200) {
-      //   message.success('Add success!');
-      // }
-      // reset();
-      // setFocus('name');
-      // setimgBlob([]);
+      if (validateDe(Description)) {
+        const formData = new FormData();
+        const arr = Object.values(data.imgs);
+        arr.map((item) => {
+          formData.append('images[]', item);
+        });
+        formData.append('name', data.name.trim());
+        formData.append('category_id', data.category.trim());
+        formData.append('description', Description.trim());
+        // formData.append('price', data.price.trim());
+        formData.append('quantity', data.quantity.trim());
+        // formData.append('saleoff', data.sale.trim());
+        formData.append('status', data.status.trim());
+        const addProduct = await ProductService.update(formData);
+        console.log(addProduct);
+        if (addProduct.status === 200) {
+          message.success('Add success!');
+        }
+        reset();
+        setFocus('name');
+        setDescription('');
+        setimgBlob([]);
+        return;
+      }
     } catch (error) {
       console.error('Error:', error);
     }
@@ -59,13 +72,6 @@ const ProductAdmin = () => {
     listC();
     return () => {};
   }, []);
-  const price = watch('price');
-  const lessThanPrice = (value) => {
-    if (!isNaN(value) && !isNaN(price)) {
-      return parseFloat(value) <= parseFloat(price) || 'sale < price';
-    }
-    return true;
-  };
   useEffect(() => {
     const numberImg = watch('imgs').length;
     if (numberImg > 0) {
@@ -188,17 +194,10 @@ const ProductAdmin = () => {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>
-          <TTesst />
-          <Form.Control
-            as="textarea"
-            rows={3}
-            {...register('description', {
-              required: 'description is required',
-            })}
-          />
-          {errors.description && (
+          <TTesst setDescription={setDescription} />
+          {ErrorDe.trim() !== '' && (
             <p className="text-danger" role="alert">
-              {errors.description?.message}
+              Không bỏ trống
             </p>
           )}
         </Form.Group>
@@ -222,43 +221,8 @@ const ProductAdmin = () => {
               </p>
             )}
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Sale off</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="..."
-              {...register('sale', {
-                min: {
-                  value: 0,
-                  message: 'Lớn hơn 0',
-                },
-                required: true,
-                validate: {
-                  lessThanPrice,
-                },
-              })}
-            />
-            {errors.sale && (
-              <p className="text-danger" role="alert">
-                {errors.sale?.message}
-              </p>
-            )}
-          </Form.Group>
         </div>
         <div className="col-md-6">
-          <Form.Group className="mb-3">
-            <Form.Label>Price</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="..."
-              {...register('price', { min: 1, required: 'price is required' })}
-            />
-            {errors.price && (
-              <p className="text-danger" role="alert">
-                {errors.price?.message}
-              </p>
-            )}
-          </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>status</Form.Label>
             <Form.Select defaultValue={'Còn hàng'} {...register('status')}>

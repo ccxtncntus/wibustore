@@ -31,11 +31,11 @@ const editorConfiguration = {
     contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
   },
 };
-const TTesst = () => {
+const TTesst = ({ setDescription }) => {
   // eslint-disable-next-line no-unused-vars
   const [data, setdata] = useState('');
   const handleChange = (event, editor) => {
-    setdata(editor.getData());
+    setDescription(editor.getData());
   };
   return (
     <>

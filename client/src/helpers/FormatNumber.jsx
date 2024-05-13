@@ -63,7 +63,41 @@ const validate = (data) => {
   }
   return '';
 };
-
+const returnMinPrice = (data) => {
+  const jsonArray = JSON.parse(data);
+  const uniqueArray = Array.from(new Set(jsonArray.map(JSON.stringify))).map(
+    JSON.parse
+  );
+  const minPriceElement = uniqueArray.reduce((min, current) =>
+    min.price < current.price ? min : current
+  );
+  return minPriceElement;
+};
+const returnPrice = (data) => {
+  const jsonArray = JSON.parse(data);
+  const uniqueArray = Array.from(new Set(jsonArray.map(JSON.stringify))).map(
+    JSON.parse
+  );
+  for (let i = 0; i < uniqueArray.length; i++) {
+    for (let x = 0; x < uniqueArray.length - 1 - i; x++) {
+      if (uniqueArray[x].price > uniqueArray[x + 1].price) {
+        [uniqueArray[x], uniqueArray[x + 1]] = [
+          uniqueArray[x + 1],
+          uniqueArray[x],
+        ];
+      }
+    }
+  }
+  return uniqueArray;
+  // return uniqueArray;
+};
+const returnImgs = (data) => {
+  const imageUrls = data;
+  const imageUrlArray = imageUrls.split(',');
+  const uniqueImageUrlSet = new Set(imageUrlArray);
+  const uniqueImageUrlArray = Array.from(uniqueImageUrlSet);
+  return uniqueImageUrlArray;
+};
 export {
   FormatNumber,
   OrderStatus,
@@ -73,4 +107,7 @@ export {
   ExportExcel,
   validateEmail,
   validate,
+  returnMinPrice,
+  returnImgs,
+  returnPrice,
 };

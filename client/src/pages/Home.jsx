@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 import { CategoriesContexts } from '../components/context/CategoriesContexts';
@@ -28,7 +29,8 @@ const Home = () => {
             return ShoppingCartsService.listOfUser(i.data.id);
           })
           .then((i) => {
-            list(i);
+            // console.log(i.length);
+            list(i.length);
           })
           .catch((i) => {
             console.log(i);

@@ -1,5 +1,10 @@
+/* eslint-disable react/prop-types */
 import './cart.css';
-import { FormatNumber } from '../../helpers/FormatNumber';
+import {
+  FormatNumber,
+  returnMinPrice,
+  returnPrice,
+} from '../../helpers/FormatNumber';
 import { HOST } from '../../configs/DataEnv';
 import { NavLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -43,10 +48,24 @@ const Cart = ({ item }) => {
   }, [da]);
   const handleAddCart = async (i) => {
     // add cart
+    // console.log(returnMinPrice(item.price_and_saleoff).id_addPrice);
+    // return;
     if (User) {
       const img = i.all_images.split(',')[0];
-      addCard(i);
-      const chay = await ShoppingCartsService.add(User.id, i.id, img, 1);
+      // console.log(i);
+      const test1 = {
+        idProduct: i.id,
+        idPrice: returnMinPrice(item.price_and_saleoff).id_addPrice,
+      };
+      // console.log(test1);
+      addCard(test1);
+      const chay = await ShoppingCartsService.add(
+        User.id,
+        i.id,
+        returnMinPrice(item.price_and_saleoff).id_addPrice,
+        img,
+        1
+      );
       chay.status === 200 && message.success(chay.message);
       return;
     }
@@ -70,10 +89,13 @@ const Cart = ({ item }) => {
             {item.name || 'name'}
           </NavLink>
           <span style={{ display: 'block' }} className="mt-1">
-            {format(item.price, item.saleoff)}{' '}
-            {item.saleoff > 0 && (
+            {format(
+              returnMinPrice(item.price_and_saleoff).price,
+              returnMinPrice(item.price_and_saleoff).saleoff
+            )}{' '}
+            {returnMinPrice(item.price_and_saleoff).saleoff > 0 && (
               <del style={{ fontSize: '.8rem' }}>
-                {FormatNumber(item.price)}
+                {FormatNumber(returnMinPrice(item.price_and_saleoff).price)}
               </del>
             )}
           </span>

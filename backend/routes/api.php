@@ -16,6 +16,7 @@ use App\Http\Controllers\SlidersController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AddpriceController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -151,3 +152,10 @@ Route::get('dashboard/getBest', [DashboardController::class, 'getBest']);
 Route::get('dashboard/getData', [DashboardController::class, 'getData']);
 // notification
 Route::post('sendNotifi', [NotificationController::class, 'sendNoti']);
+
+
+// addprice
+Route::prefix('addprice')->group(function () {
+    Route::get('/{product_id}', [AddpriceController::class, 'index']);
+    Route::post('/', [AddpriceController::class, 'create']);
+});

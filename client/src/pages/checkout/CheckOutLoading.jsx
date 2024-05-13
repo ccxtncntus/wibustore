@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-prototype-builtins */
 import { useEffect, useContext, useState } from 'react';
 import * as CheckOutService from '../../services/CheckOutService';
 import * as ShoppingCartsService from '../../services/ShoppingCartsService';
@@ -29,7 +32,7 @@ const parseURLParams = (url) => {
 };
 
 const CheckOutLoading = () => {
-  const { delCard, setAll } = useContext(Contexts);
+  const { delNumberCard } = useContext(Contexts);
   const navigate = useNavigate();
   const [isPay, setIsPay] = useState(false);
   const [isFalse, setFalse] = useState('Đang xử lí đơn hàng của bạn...');
@@ -92,7 +95,6 @@ const CheckOutLoading = () => {
                 item.img
               );
               if (da.status === 200 && item.id !== 0) {
-                // delCard(item);
                 await ShoppingCartsService.productBuyed(
                   item.idProduct,
                   Number(item.quantity)
@@ -105,7 +107,7 @@ const CheckOutLoading = () => {
             }
           }
           await NotificationService.sendMess('notification');
-          setAll();
+          delNumberCard(cartss.length);
           navigate('/check-out/success');
         } else {
           message.error('Có lỗi xảy ra xin thử lại sau');

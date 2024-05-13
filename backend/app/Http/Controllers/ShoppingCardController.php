@@ -14,11 +14,22 @@ class ShoppingCardController extends Controller
         $shoppingCard = ShoppingCart::all();
         return $shoppingCard;
     }
+    // DB::raw('(SELECT MIN(price) FROM addprices WHERE addprices.product_id = products.id) AS price'),
+    // DB::raw('(SELECT saleoff FROM addprices WHERE addprices.product_id = products.id ORDER BY price ASC LIMIT 1) AS saleoff')
 
     function listOfUser($id)
     {
-        $shoppingCard = ShoppingCart::select('shopping_carts.id', 'shopping_carts.img', 'shopping_carts.quantity', 'products.id as idProduct',  'products.name', 'products.saleoff', 'products.price')
+        $shoppingCard = ShoppingCart::select(
+            'shopping_carts.id',
+            'shopping_carts.img',
+            'shopping_carts.quantity',
+            'products.id as idProduct',
+            'products.name',
+            'addprices.price as price',
+            'addprices.saleoff as saleoff',
+        )
             ->join('products', 'shopping_carts.product_id', '=', 'products.id')
+            ->join('addprices', 'shopping_carts.addprice_id', '=', 'addprices.id')
             ->where('shopping_carts.user_id', $id)
             ->get();
         return response()->json($shoppingCard, 200);
@@ -118,6 +129,7 @@ class ShoppingCardController extends Controller
         $validator = Validator::make($request->all(), [
             'user_id' => ['required'],
             "product_id" => ['required'],
+            "addprice_id" => ['required'],
             "img" => ['required'],
             "quantity" => ['numeric', 'min:1'],
         ]);
@@ -128,10 +140,10 @@ class ShoppingCardController extends Controller
             ];
             return response()->json($data, 400);
         } else {
-            $cart = DB::table('shopping_carts')->where('product_id',  $request->product_id)->first();
+            $cart = DB::table('shopping_carts')->where('product_id',  $request->product_id)->where('addprice_id',  $request->addprice_id)->first();
             if ($cart) {
                 $sl = $cart->quantity + $request->quantity;
-                $edit = DB::table('shopping_carts')->where('product_id', $request->product_id)
+                $edit = DB::table('shopping_carts')->where('product_id', $request->product_id)->where('addprice_id',  $request->addprice_id)
                     ->update(['quantity' => $sl]);
                 $data = [
                     "status" => 200,
@@ -147,7 +159,7 @@ class ShoppingCardController extends Controller
                 $shoppingCard->user_id = $request->user_id;
                 $shoppingCard->product_id = $request->product_id;
                 $shoppingCard->img = $request->img;
-                // $shoppingCard->status = 'Chưa mua';
+                $shoppingCard->addprice_id = $request->addprice_id;
                 $shoppingCard->quantity = $request->quantity;
                 $shoppingCard->save();
                 $data = [

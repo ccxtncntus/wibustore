@@ -15,8 +15,8 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id')->nullable(false);
             $table->text('description')->nullable(false);
             $table->integer('quantity')->nullable(false);
-            $table->integer('price')->nullable(false);
-            $table->integer('saleoff')->nullable();
+            // $table->integer('price')->nullable(false);
+            // $table->integer('saleoff')->nullable();
             $table->string('status')->nullable(false)->default("1");
             $table->integer('bought')->nullable(true)->default("0");
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');

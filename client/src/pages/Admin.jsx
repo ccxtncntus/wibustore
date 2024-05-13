@@ -1,14 +1,14 @@
-import { useEffect, useState, useContext } from "react";
-import { Link, Outlet } from "react-router-dom";
-import * as AccountService from "../services/AccountService";
-import { useCookies } from "react-cookie";
-import AdminNav from "./admin/AdminNav";
-import "./admin/admincontent.css";
-import "./admin/adminnav.css";
-import LoadingComponent from "../components/loading/Loading";
-import { UContexts } from "../components/context/UserContext";
+import { useEffect, useState, useContext } from 'react';
+import { Link, Outlet } from 'react-router-dom';
+import * as AccountService from '../services/AccountService';
+import { useCookies } from 'react-cookie';
+import AdminNav from './admin/AdminNav';
+import './admin/admincontent.css';
+import './admin/adminnav.css';
+import LoadingComponent from '../components/loading/Loading';
+import { UContexts } from '../components/context/UserContext';
 const Admin = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const [IsAdmin, setIsAdmin] = useState(false);
   const [Loading, setLoading] = useState(false);
   const { User } = useContext(UContexts);
@@ -16,7 +16,7 @@ const Admin = () => {
     const adminCheck = async () => {
       if (User) {
         setLoading(true);
-        User.role === "admin" && setIsAdmin(true);
+        User.role === 'admin' && setIsAdmin(true);
         setLoading(false);
       } else {
         setIsAdmin(false);
@@ -25,8 +25,8 @@ const Admin = () => {
           if (cookies.token) {
             const login = await AccountService.authen(cookies.token);
             if (login.status === 200) {
-              login.data.role === "user"
-                ? console.log("is not admin")
+              login.data.role === 'user'
+                ? console.log('is not admin')
                 : setIsAdmin(true);
             }
           }
@@ -51,8 +51,8 @@ const Admin = () => {
             </div>
           </div>
         ) : (
-          <div style={{ textAlign: "center" }}>
-            Bạn k đủ thẩm quyền <Link to={"/"}>về</Link>
+          <div style={{ textAlign: 'center' }}>
+            Bạn k đủ thẩm quyền <Link to={'/'}>về</Link>
           </div>
         )
       ) : (

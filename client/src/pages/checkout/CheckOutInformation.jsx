@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useForm } from 'react-hook-form';
 import { useEffect, useState, useContext } from 'react';
 import * as CheckOutService from '../../services/CheckOutService';
@@ -15,7 +16,7 @@ import { message } from 'antd';
 
 const CheckOutInformation = (props) => {
   const { User } = useContext(UContexts);
-  const { delCard } = useContext(Contexts);
+  const { delNumberCard } = useContext(Contexts);
   const natigate = useNavigate();
   const { Carts, Totail } = props;
 
@@ -77,7 +78,7 @@ const CheckOutInformation = (props) => {
               if (da.status === 200) {
                 if (item.id != 0) {
                   // bớt số lượng trong product
-                  delCard(item);
+
                   await ShoppingCartsService.productBuyed(
                     item.idProduct,
                     Number(item.quantity)
@@ -91,6 +92,8 @@ const CheckOutInformation = (props) => {
               return;
             }
           });
+          // console.log({ testC: Carts });
+          delNumberCard(Carts.length);
           NotificationService.sendMess('notification')
             .then((i) => {
               setLoading(false);

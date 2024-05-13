@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import './productdetail.css';
 import { useEffect, useState, useContext } from 'react';
 import { HOST } from '../../configs/DataEnv';
@@ -6,7 +7,12 @@ import { useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { UContexts } from '../../components/context/UserContext';
 import { message } from 'antd';
-import { FormatNumber } from '../../helpers/FormatNumber';
+import {
+  FormatNumber,
+  returnImgs,
+  returnMinPrice,
+  returnPrice,
+} from '../../helpers/FormatNumber';
 import * as ShoppingCartsService from '../../services/ShoppingCartsService';
 import * as ProductsService from '../../services/ProductService';
 import LoadingConponent from '../../components/loading/Loading';
@@ -16,7 +22,7 @@ import ProductLoading from '../../components/loadingProduct/ProductLoading';
 const ProductsDetail = () => {
   const paths = useParams();
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'path_end']);
-  const { addCard, delCard, cardNumber } = useContext(Contexts);
+  const { addCard } = useContext(Contexts);
   const { User } = useContext(UContexts);
   const [Product, setProduct] = useState('');
   const [ListImg, setListImg] = useState([]);
@@ -25,17 +31,23 @@ const ProductsDetail = () => {
   const [IdUser, setIdUser] = useState('');
   const [ListRandom, setListRandom] = useState([]);
   const test = [1, 2, 3, 4];
+  const [Prices, setPrices] = useState([]);
+  const [Prii, setPrii] = useState(null);
   useEffect(() => {
     const run = async () => {
       if (paths && paths.idProduct) {
         const data = await ProductsService.productId(paths.idProduct);
-
         setProduct(data.data[0]);
+        const pri = returnPrice(data.data[0].price_and_saleoff);
+        setPrices(pri);
+        setPrii(pri[0]);
+
+        const imageUrls = data.data[0].all_images;
+        const dataImgs = returnImgs(imageUrls);
+        setListImg(dataImgs);
 
         const ran = await ProductsService.ListRandom(data.data[0].id);
         ran.status === 200 ? setListRandom(ran.data) : setListRandom([]);
-        const imgs = data.data[0].all_images.split(',');
-        setListImg(imgs);
       }
       if (Object.values(User) == '') {
         // kiểm tra đăng nhập chưa
@@ -57,13 +69,19 @@ const ProductsDetail = () => {
     setValue(e.target.value);
   };
   const [modalShow, setModalShow] = useState(false);
+
   const handleAddcard = async () => {
     if (IsLogin) {
       const img = Product.all_images.split(',')[0];
-      addCard(Product);
+      const test1 = {
+        idProduct: Product.id,
+        idPrice: Prii.id_addPrice,
+      };
+      addCard(test1);
       const chay = await ShoppingCartsService.add(
         IdUser,
         Product.id,
+        Prii.id_addPrice,
         img,
         value
       );
@@ -74,7 +92,6 @@ const ProductsDetail = () => {
   };
   return (
     <div className="productDetail">
-      1
       <LoginModal show={modalShow} onHide={() => setModalShow(false)} />
       {Product !== '' ? (
         <>
@@ -109,14 +126,32 @@ const ProductsDetail = () => {
             <div className="col-md-6 product_detail_titles">
               <div className="product_detail_title">{Product.name}</div>
               <div className="product_detail_price">
-                {FormatNumber(Product.price - Product.saleoff)}{' '}
-                {Product.saleoff > 0 && (
+                {Prii && FormatNumber(Prii.price - Prii.saleoff)}{' '}
+                {Prii.saleoff > 0 && (
                   <span style={{ fontSize: '1.2rem', color: 'gray' }}>
-                    <del>{FormatNumber(Product.price)}</del>
+                    <del>{FormatNumber(Prii.price)}</del>
                   </span>
                 )}
               </div>
-              <div>{Product.description}</div>
+              <div>
+                <p>Kích thước</p>
+                <div>
+                  {Prices.length > 0 &&
+                    Prices.map((item, index) => (
+                      <button
+                        className={
+                          item.size == Prii.size
+                            ? 'btn product_detail_btn_un product_detail_btn_active'
+                            : 'btn product_detail_btn_un'
+                        }
+                        key={index}
+                        onClick={() => setPrii(item)}
+                      >
+                        {item.size}
+                      </button>
+                    ))}
+                </div>
+              </div>
               <div>
                 Kho {Product.quantity} ({Product.status})
               </div>
@@ -139,6 +174,7 @@ const ProductsDetail = () => {
                 >
                   Thêm vào giỏ hàng
                 </button>{' '}
+                <div className="mt-4">{Product.description}</div>
               </div>
             </div>
           </div>

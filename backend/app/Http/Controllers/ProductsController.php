@@ -27,21 +27,19 @@ class ProductsController extends Controller
             'products.status',
             'products.description',
             'products.quantity',
-            'products.price',
-            'products.saleoff',
-            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+            DB::raw('GROUP_CONCAT(images.url) AS all_images'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
             ->join('images', 'images.product_id', '=', 'products.id')
+            ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->groupBy(
                 'products.id',
                 'products.status',
-                'products.saleoff',
-                'products.price',
                 'products.quantity',
                 'products.description',
                 'products.name',
             )
-            ->orderBy('products.price', $request->sort)
+            ->orderBy('products.id', $request->sort)
             ->paginate(12, ['*'], 'page', $pageNumber);
         if ($products->count() === 0) {
             $upData = [
@@ -50,7 +48,6 @@ class ProductsController extends Controller
             ];
             return response()->json($upData, 200);
         } else {
-
             $data = [
                 "status" => 200,
                 'count' => $count,
@@ -71,22 +68,22 @@ class ProductsController extends Controller
             'products.status',
             'products.description',
             'products.quantity',
-            'products.price',
-            'products.saleoff',
-            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+            // 'products.price',
+            // 'products.saleoff',
+            DB::raw('GROUP_CONCAT(images.url) AS all_images'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
+            ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
             ->groupBy(
                 'products.id',
                 'products.status',
-                'products.saleoff',
-                'products.price',
                 'products.quantity',
                 'products.description',
                 'products.name',
             )
-            ->where('products.saleoff', '>', 0)
-            ->orderBy('products.price', $request->sort)
+            ->where('addprices.saleoff', '>', 0)
+            ->orderBy('products.id', $request->sort)
             ->paginate(12, ['*'], 'page', $pageNumber);
         if ($products->count() === 0) {
             $upData = [
@@ -95,7 +92,6 @@ class ProductsController extends Controller
             ];
             return response()->json($upData, 200);
         } else {
-
             $data = [
                 "status" => 200,
                 'count' => $count,
@@ -113,18 +109,20 @@ class ProductsController extends Controller
             'products.status',
             'products.description',
             'products.quantity',
-            'products.price',
-            'products.saleoff',
+            // 'products.price',
+            // 'products.saleoff',
             'products.bought',
-            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+            DB::raw('GROUP_CONCAT(images.url) AS all_images'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
+            ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
             ->groupBy(
                 'products.id',
                 'products.status',
-                'products.saleoff',
+                // 'products.saleoff',
                 'products.bought',
-                'products.price',
+                // 'products.price',
                 'products.quantity',
                 'products.description',
                 'products.name',
@@ -164,23 +162,21 @@ class ProductsController extends Controller
             'products.status',
             'products.description',
             'products.quantity',
-            'products.price',
-            'products.saleoff',
             'products.bought',
-            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+            DB::raw('GROUP_CONCAT(images.url) AS all_images'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
+            ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
             ->groupBy(
                 'products.id',
                 'products.status',
-                'products.saleoff',
                 'products.bought',
-                'products.price',
                 'products.quantity',
                 'products.description',
                 'products.name',
-            )->where('products.price', '>', $first)
-            ->whereRaw('(products.price - products.saleoff) BETWEEN ? AND ?', [$first, $second])
+            )->where('addprices.price', '>', $first)
+            ->whereRaw('(addprices.price - addprices.saleoff) BETWEEN ? AND ?', [$first, $second])
             ->orderBy('products.id', "desc")
             ->paginate(12, ['*'], 'page', 1);
         if ($products->count() === 0) {
@@ -209,18 +205,16 @@ class ProductsController extends Controller
             'products.status',
             'products.description',
             'products.quantity',
-            'products.price',
-            'products.saleoff',
             'products.bought',
-            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+            DB::raw('GROUP_CONCAT(images.url) AS all_images'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
+            ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
             ->groupBy(
                 'products.id',
                 'products.status',
-                'products.saleoff',
                 'products.bought',
-                'products.price',
                 'products.quantity',
                 'products.description',
                 'products.name',
@@ -252,17 +246,15 @@ class ProductsController extends Controller
             'products.status',
             'products.description',
             'products.quantity',
-            'products.price',
-            'products.saleoff',
-            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+            DB::raw('GROUP_CONCAT(images.url) AS all_images'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
+            ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
             ->where('name', 'like', '%' . $value . '%')
             ->groupBy(
                 'products.id',
                 'products.status',
-                'products.saleoff',
-                'products.price',
                 'products.quantity',
                 'products.description',
                 'products.name',
@@ -294,22 +286,24 @@ class ProductsController extends Controller
             'products.status',
             'products.description',
             'products.quantity',
-            'products.price',
-            'products.saleoff',
-            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+            // 'products.price',
+            // 'products.saleoff',
+            DB::raw('GROUP_CONCAT(images.url) AS all_images'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
+            ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
             ->where('products.category_id', $id)
             ->groupBy(
                 'products.id',
                 'products.status',
-                'products.saleoff',
-                'products.price',
+                // 'products.saleoff',
+                // 'products.price',
                 'products.quantity',
                 'products.description',
                 'products.name',
             )
-            ->orderBy('products.price', $request->sort)
+            ->orderBy('products.id', $request->sort)
             ->paginate(12, ['*'], 'page', $pageNumber);
         if (count($products) > 0) {
             $data = [
@@ -335,12 +329,12 @@ class ProductsController extends Controller
             "category_id" => ['required'],
             "description" =>  ['required'],
             "quantity" => ['numeric', 'min:1'],
-            "price" =>  ['numeric', 'min:1'],
-            "saleoff" => ['nullable', 'numeric', 'min:0', function ($attribute, $value, $fail) use ($price) {
-                if (!empty($value) && $value >= $price) {
-                    $fail('The saleoff must be less than the price.');
-                }
-            },],
+            // "price" =>  ['numeric', 'min:1'],
+            // "saleoff" => ['nullable', 'numeric', 'min:0', function ($attribute, $value, $fail) use ($price) {
+            //     if (!empty($value) && $value >= $price) {
+            //         $fail('The saleoff must be less than the price.');
+            //     }
+            // },],
             "status" => ['required', 'max:100'],
         ]);
         if ($validator->fails()) {
@@ -355,8 +349,8 @@ class ProductsController extends Controller
             $products->category_id = $request->category_id;
             $products->description = $request->description;
             $products->quantity = $request->quantity;
-            $products->price = $request->price;
-            $products->saleoff = $request->saleoff;
+            // $products->price = $request->price;
+            // $products->saleoff = $request->saleoff;
             $products->status = $request->status;
             $products->save();
             $lastInsertId = $products->id;
@@ -385,17 +379,19 @@ class ProductsController extends Controller
             'products.status',
             'products.description',
             'products.quantity',
-            'products.price',
-            'products.saleoff',
-            DB::raw('GROUP_CONCAT(images.url) AS all_images')
+            // 'products.price',
+            // 'products.saleoff',
+            DB::raw('GROUP_CONCAT(images.url) AS all_images'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
+            ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
             ->where('products.id', '=', $id)
             ->groupBy(
                 'products.id',
                 'products.status',
-                'products.saleoff',
-                'products.price',
+                // 'products.saleoff',
+                // 'products.price',
                 'products.quantity',
                 'products.description',
                 'products.name',

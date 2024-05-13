@@ -1,30 +1,42 @@
+/* eslint-disable react/prop-types */
 import { createContext, useState } from 'react';
 export const Contexts = createContext();
 
 function CardContext({ children }) {
-  const [cardNumber, setcardNumber] = useState([]);
+  const [cardNumber, setcardNumber] = useState(0);
+  const [ListAdd, setListAdd] = useState([]);
   const list = (data) => {
     setcardNumber(data);
   };
   const addCard = async (data) => {
-    const test = cardNumber.some((item) => item.name == data.name);
-    if (test) {
+    const addCheck = ListAdd.some(
+      (item) => item.idProduct == data.idProduct && item.idPrice == data.idPrice
+    );
+    if (addCheck) {
       // cộng
-      console.log('không làm gì');
+      console.log('Đã tồn tại sp trong giỏ hàng');
     } else {
       // thêm
-      setcardNumber([...cardNumber, data]);
+      setcardNumber((pre) => pre + 1);
+      setListAdd([...ListAdd, data]);
     }
   };
-  const setAll = () => {
-    setcardNumber([]);
+  const delNumberCard = async (number) => {
+    setcardNumber((pre) => pre - Number(number));
   };
-  const delCard = async (data) => {
-    const index = cardNumber.findIndex((item) => item.name !== data.name);
-    cardNumber.splice(index, 1);
+  const delCardByModal = () => {
+    setcardNumber((pre) => pre - 1);
   };
   return (
-    <Contexts.Provider value={{ cardNumber, addCard, delCard, list, setAll }}>
+    <Contexts.Provider
+      value={{
+        cardNumber,
+        addCard,
+        list,
+        delCardByModal,
+        delNumberCard,
+      }}
+    >
       {children}
     </Contexts.Provider>
   );
