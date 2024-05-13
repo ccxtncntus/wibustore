@@ -48,8 +48,6 @@ const Cart = ({ item }) => {
   }, [da]);
   const handleAddCart = async (i) => {
     // add cart
-    // console.log(returnMinPrice(item.price_and_saleoff).id_addPrice);
-    // return;
     if (User) {
       const img = i.all_images.split(',')[0];
       // console.log(i);
@@ -71,6 +69,13 @@ const Cart = ({ item }) => {
     }
     message.warning('Đăng nhập để thêm vào giỏ hàng');
   };
+
+  const handletest = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'instant',
+    });
+  };
   return (
     <>
       {item ? (
@@ -85,6 +90,7 @@ const Cart = ({ item }) => {
             to={path + item.id}
             style={{ display: 'block' }}
             className="mt-2"
+            onClick={handletest}
           >
             {item.name || 'name'}
           </NavLink>

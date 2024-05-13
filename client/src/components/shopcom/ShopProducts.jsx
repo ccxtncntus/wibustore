@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useContext } from 'react';
 import Form from 'react-bootstrap/Form';
 import './shopproductschild.css';
@@ -25,17 +26,6 @@ const ShopProducts = () => {
   };
   const countPage = (count) => {
     return Math.ceil(count / 12);
-  };
-
-  const returnMinPrice = (data) => {
-    const jsonArray = JSON.parse(data);
-    const uniqueArray = Array.from(new Set(jsonArray.map(JSON.stringify))).map(
-      JSON.parse
-    );
-    const minPriceElement = uniqueArray.reduce((min, current) =>
-      min.price < current.price ? min : current
-    );
-    return minPriceElement;
   };
 
   useEffect(() => {
@@ -108,6 +98,7 @@ const ShopProducts = () => {
         }
       }
       // shop k page
+      setLoading(true);
       const listAll = await ProductsServices.List(page, Sort);
       if (listAll.status === 200) {
         setPageAll(countPage(listAll.count));
@@ -120,15 +111,23 @@ const ShopProducts = () => {
     };
     run();
   }, [pathParams, Sort, page]);
-
+  const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
   useEffect(() => {
-    if (ListFillter.length > 0) {
-      setLoading(true);
-      setPageAll(countPage(ListFillter.count));
-      setListProducts(ListFillter);
-      setLoading(false);
-    }
+    const run = async () => {
+      if (ListFillter.length > 0) {
+        setLoading(true);
+        await sleep(200);
+        setPageAll(countPage(ListFillter.count));
+        setListProducts(ListFillter);
+        setLoading(false);
+      }
+    };
+    run();
   }, [ListFillter]);
+
+  // const test = async () => {};
 
   const handleChange = (event, value) => {
     console.log(value);

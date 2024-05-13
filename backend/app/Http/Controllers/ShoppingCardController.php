@@ -25,6 +25,7 @@ class ShoppingCardController extends Controller
             'shopping_carts.quantity',
             'products.id as idProduct',
             'products.name',
+            'addprices.id as idPrice',
             'addprices.price as price',
             'addprices.saleoff as saleoff',
         )

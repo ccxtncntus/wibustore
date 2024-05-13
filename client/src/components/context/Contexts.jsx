@@ -6,7 +6,8 @@ function CardContext({ children }) {
   const [cardNumber, setcardNumber] = useState(0);
   const [ListAdd, setListAdd] = useState([]);
   const list = (data) => {
-    setcardNumber(data);
+    setListAdd(data);
+    setcardNumber(data.length);
   };
   const addCard = async (data) => {
     const addCheck = ListAdd.some(
@@ -21,11 +22,19 @@ function CardContext({ children }) {
       setListAdd([...ListAdd, data]);
     }
   };
-  const delNumberCard = async (number) => {
-    setcardNumber((pre) => pre - Number(number));
+
+  const delListAdd = async (data) => {
+    const del = ListAdd.filter(
+      (item) => item.idProduct == data.idProduct && item.idPrice == data.idPrice
+    );
+    setListAdd(del);
   };
   const delCardByModal = () => {
     setcardNumber((pre) => pre - 1);
+  };
+
+  const delNumberCard = async (number) => {
+    setcardNumber((pre) => pre - Number(number));
   };
   return (
     <Contexts.Provider
@@ -35,6 +44,7 @@ function CardContext({ children }) {
         list,
         delCardByModal,
         delNumberCard,
+        delListAdd,
       }}
     >
       {children}

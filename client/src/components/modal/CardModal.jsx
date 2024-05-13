@@ -11,7 +11,7 @@ import { HOST } from '../../configs/DataEnv';
 import * as ShoppingCartsService from '../../services/ShoppingCartsService';
 import { useNavigate } from 'react-router-dom';
 const CardModal = ({ placement, show, onClose }) => {
-  const { delCardByModal } = useContext(Contexts);
+  const { delCardByModal, delListAdd } = useContext(Contexts);
   const { User } = useContext(UContexts);
   const [ListCarts, setListCarts] = useState([]);
   const [Load, setLoad] = useState(false);
@@ -29,6 +29,7 @@ const CardModal = ({ placement, show, onClose }) => {
   const handleDel = async (i) => {
     await ShoppingCartsService.delCart(i.id);
     delCardByModal();
+    delListAdd(i);
     setLoad((pre) => !pre);
   };
   let tong = 0;

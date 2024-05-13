@@ -33,9 +33,11 @@ const ProductsDetail = () => {
   const test = [1, 2, 3, 4];
   const [Prices, setPrices] = useState([]);
   const [Prii, setPrii] = useState(null);
+  const [loading, setloading] = useState(false);
   useEffect(() => {
     const run = async () => {
       if (paths && paths.idProduct) {
+        setloading(true);
         const data = await ProductsService.productId(paths.idProduct);
         setProduct(data.data[0]);
         const pri = returnPrice(data.data[0].price_and_saleoff);
@@ -48,6 +50,7 @@ const ProductsDetail = () => {
 
         const ran = await ProductsService.ListRandom(data.data[0].id);
         ran.status === 200 ? setListRandom(ran.data) : setListRandom([]);
+        setloading(false);
       }
       if (Object.values(User) == '') {
         // kiểm tra đăng nhập chưa
@@ -92,6 +95,7 @@ const ProductsDetail = () => {
   };
   return (
     <div className="productDetail">
+      {loading && <LoadingConponent />}
       <LoginModal show={modalShow} onHide={() => setModalShow(false)} />
       {Product !== '' ? (
         <>

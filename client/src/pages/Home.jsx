@@ -30,7 +30,7 @@ const Home = () => {
           })
           .then((i) => {
             // console.log(i.length);
-            list(i.length);
+            list(i);
           })
           .catch((i) => {
             console.log(i);
