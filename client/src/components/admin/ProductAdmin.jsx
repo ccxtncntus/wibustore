@@ -194,7 +194,7 @@ const ProductAdmin = () => {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>
-          <TTesst setDescription={setDescription} />
+          <TTesst setDescription={setDescription} description={Description} />
           {ErrorDe.trim() !== '' && (
             <p className="text-danger" role="alert">
               Không bỏ trống

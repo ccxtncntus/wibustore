@@ -1,27 +1,27 @@
-import { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import * as AccountService from "../../../services/AccountService";
-import { message } from "antd";
+import { useEffect, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import * as AccountService from '../../../services/AccountService';
+import { message } from 'antd';
 const UsersEditAdminModal = (props) => {
   const { onHide, show, onRun, useredit } = props;
-  const [Password, setPassword] = useState("");
-  const [PasswordConfirm, setPasswordConfirm] = useState("");
-  const [err, seterr] = useState("");
+  const [Password, setPassword] = useState('');
+  const [PasswordConfirm, setPasswordConfirm] = useState('');
+  const [err, seterr] = useState('');
   const validate = (data) => {
-    if (data == "") {
-      return "Không bỏ trống";
+    if (data == '') {
+      return 'Không bỏ trống';
     }
-    return "";
+    return '';
   };
   const validateConfirm = (p1, p2) => {
-    if (p1 == "") {
-      return "Không bỏ trống";
+    if (p1 == '') {
+      return 'Không bỏ trống';
     }
     if (p1.toLowerCase() != p2.toLowerCase()) {
-      return "Nhập lại không đúng";
+      return 'Nhập lại không đúng';
     }
-    return "";
+    return '';
   };
   const changePass = () => {
     seterr({
@@ -31,9 +31,9 @@ const UsersEditAdminModal = (props) => {
   };
   useEffect(() => {
     if (show) {
-      seterr("");
-      setPassword("");
-      setPasswordConfirm("");
+      seterr('');
+      setPassword('');
+      setPasswordConfirm('');
     }
   }, [show]);
 
@@ -41,10 +41,10 @@ const UsersEditAdminModal = (props) => {
     const run = async () => {
       try {
         const check = [...new Set(Object.values(err))];
-        if (check.length == 1 && check[0] == "") {
+        if (check.length == 1 && check[0] == '') {
           const data = await AccountService.editOfAd(useredit.id, Password);
-          data.status === 200 && message.success("Edit thành công");
-          seterr("");
+          data.status === 200 && message.success('Edit thành công');
+          seterr('');
           onHide();
         }
       } catch (error) {
@@ -62,7 +62,7 @@ const UsersEditAdminModal = (props) => {
         centered
       >
         <Modal.Body>
-          <h5>{useredit != "" && useredit.email}</h5>
+          <h5>{useredit != '' && useredit.email}</h5>
           <div className="row">
             <div className="form-group">
               <label>Password</label>
@@ -74,7 +74,7 @@ const UsersEditAdminModal = (props) => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <p className="text-danger">
-                {err.Password != "" && err.Password}
+                {err.Password != '' && err.Password}
               </p>
             </div>
             <div className="form-group">
@@ -87,7 +87,7 @@ const UsersEditAdminModal = (props) => {
                 onChange={(e) => setPasswordConfirm(e.target.value)}
               />
               <p className="text-danger">
-                {err.PasswordConfirm != "" && err.PasswordConfirm}
+                {err.PasswordConfirm != '' && err.PasswordConfirm}
               </p>
             </div>
           </div>

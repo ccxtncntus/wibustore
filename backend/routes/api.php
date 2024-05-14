@@ -44,11 +44,19 @@ Route::post('categorys', [CategoryController::class, 'upload']);
 Route::put('categorys/edit/{id}', [CategoryController::class, 'edit']);
 Route::delete('categorys/delete/{id}', [CategoryController::class, 'delete']);
 // products
+// admin
+Route::prefix('productsAdmin')->group(function () {
+    Route::get('/', [ProductsController::class, 'indexAdmin']);
+    Route::get('/{id}', [ProductsController::class, 'listProductOfCategoryAdmin']);
+    // Route::post('/', [AddpriceController::class, 'create']);
+});
+
+
+// user
 Route::get('products', [ProductsController::class, 'index']);
 Route::get('products/sale', [ProductsController::class, 'indexSale']);
 Route::get('products/hot', [ProductsController::class, 'indexHot']);
 Route::get('products/number', [ProductsController::class, 'indeNumber']);
-
 Route::get('products/random/{id}', [ProductsController::class, 'indexRandom']);
 Route::get('products/once/{value}', [ProductsController::class, 'onceProduct']);
 Route::get('products/listPro/{id}', [ProductsController::class, 'listProductOfCategory']);
@@ -158,4 +166,6 @@ Route::post('sendNotifi', [NotificationController::class, 'sendNoti']);
 Route::prefix('addprice')->group(function () {
     Route::get('/{product_id}', [AddpriceController::class, 'index']);
     Route::post('/', [AddpriceController::class, 'create']);
+    Route::delete('/{id}', [AddpriceController::class, 'destroy']);
+    Route::put('/{id}', [AddpriceController::class, 'edit']);
 });

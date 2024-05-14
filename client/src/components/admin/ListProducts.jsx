@@ -25,7 +25,7 @@ const ListProducts = () => {
         const data = await CategoryService.List(1);
         data.status == 200 && setlistCate(data.data.data);
         if (Cate == 0) {
-          const dataProCategory = await ProductService.List(page, 'desc');
+          const dataProCategory = await ProductService.ListAdmin(page);
           if (dataProCategory.status === 200) {
             setlistProductCate(dataProCategory.data.data);
             setCountAll(dataProCategory.count);
@@ -33,10 +33,9 @@ const ListProducts = () => {
             setlistProductCate([]);
           }
         } else {
-          const dataProCategory = await ProductService.listProCategory(
+          const dataProCategory = await ProductService.listProCategoryAdmin(
             Cate,
-            page,
-            'desc'
+            page
           );
           if (dataProCategory.status === 200) {
             setlistProductCate(dataProCategory.data.data);
@@ -59,7 +58,7 @@ const ListProducts = () => {
     message.success('Delete success');
   };
   const cancel = () => {
-    message.error('Undelete');
+    message.warning('Hủy xóa');
   };
   const [show, setShow] = useState(false);
   const [dataProduct, setdataProduct] = useState([]);

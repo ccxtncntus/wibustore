@@ -3,7 +3,7 @@ import './cart.css';
 import {
   FormatNumber,
   returnMinPrice,
-  returnPrice,
+  // returnPrice,
 } from '../../helpers/FormatNumber';
 import { HOST } from '../../configs/DataEnv';
 import { NavLink } from 'react-router-dom';

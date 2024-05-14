@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as request from '../configs/Axios';
 
 const List = async (page, sort) => {
@@ -88,8 +89,19 @@ const crawlDetail = async (path) => {
   const res = await request.GET(`/api/crawl/detail/products/${path}`);
   return res;
 };
+// admin
+const ListAdmin = async (page) => {
+  const res = await request.GET(`/api/productsAdmin?pageNumber=${page}`);
+  return res;
+};
+const listProCategoryAdmin = async (id, page) => {
+  const res = await request.GET(`/api/productsAdmin/${id}?pageNumber=${page}`);
+  return res;
+};
 
 export {
+  ListAdmin,
+  listProCategoryAdmin,
   List,
   update,
   listProCategory,

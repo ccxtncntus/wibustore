@@ -14,8 +14,9 @@ class AddpriceController extends Controller
      */
     public function index($product_id)
     {
-        $users = DB::select('select * from addprices where product_id = ?', [$product_id]);
-        return response()->json($users, 200);
+        $add = DB::table('addprices')->where('product_id', $product_id)->get();
+        // $users = DB::select('select * from addprices where product_id = ?', [$product_id]);
+        return response()->json($add, 200);
     }
 
     /**
@@ -57,43 +58,56 @@ class AddpriceController extends Controller
             return response()->json($data, 200);
         }
     }
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function destroy($id)
     {
-        //
+        $u = DB::table('addprices')->where('id', '=', $id)->delete();
+        if ($u) {
+            $data = [
+                'status' => 200,
+                'message' => 'Delete price success'
+            ];
+            return response($data, 200);
+        } else {
+            $data = [
+                'status' => 400,
+                'message' => 'Delete thất bại'
+            ];
+            return response($data, 200);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Addprice $addprice)
+    public function edit(Request $request, $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Addprice $addprice)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Addprice $addprice)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Addprice $addprice)
-    {
-        //
+        $size = $request->size;
+        $price = $request->price;
+        $saleoff = $request->saleoff;
+        $validator = Validator::make($request->all(), [
+            "size" => ['required'],
+            "price" =>  ['numeric', 'min:1'],
+            "saleoff" => ['nullable', 'numeric', 'min:0', function ($attribute, $value, $fail) use ($price) {
+                if (!empty($value) && $value >= $price) {
+                    $fail('The sale must be less than the price.');
+                }
+            },],
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $add = DB::table('addprices')->where('id', $id)->update([
+                'size' => $size,
+                'price' => $request->price,
+                'saleoff' => $saleoff,
+            ]);
+            $data = [
+                "status" => $add ? 200 : 400,
+                "message" => $add ?  "Update thành công" : "Lỗi xảy ra",
+            ];
+            return response()->json($data, 200);
+        }
     }
 }

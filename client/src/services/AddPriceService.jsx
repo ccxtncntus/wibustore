@@ -15,21 +15,16 @@ const add = async (product_id, size, price, saleoff) => {
   return res;
 };
 
-const deleteA = async (id) => {
-  const res = await request.DELETE(`/api/address/delete/${id}`);
+const deletePrice = async (id) => {
+  const res = await request.DELETE(`/api/addprice/${id}`);
   return res;
 };
-const setDefault = async (id, idUser) => {
-  const res = await request.PATCH(`/api/address/updateDefault/${id}/${idUser}`);
-  return res;
-};
-const editPatch = async (id, name, phone, address) => {
-  // id address
-  const res = await request.PATCH(`/api/address/updatePatch/${id}`, {
-    name: name,
-    phone: phone,
-    address: address,
+const editPrice = async (id, size, price, saleoff) => {
+  const res = await request.PUT(`/api/addprice/${id}`, {
+    size: size,
+    price: price,
+    saleoff: saleoff,
   });
   return res;
 };
-export { List, add, deleteA, setDefault, editPatch };
+export { List, add, deletePrice, editPrice };

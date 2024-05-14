@@ -52,11 +52,11 @@ const UserAddPriceModal = (props) => {
     return true;
   };
   const handleAdd = async () => {
-    console.log(item.id);
-    console.log(size);
+    // console.log(item.id);
+    // console.log(size);
     const check = validateSize(size.size, size.price, size.saleoff);
     if (check) {
-      console.log('Thêm thành công');
+      // console.log('Thêm thành công');
       const checkAdd = await AddPriceService.add(
         item.id,
         size.size,
@@ -65,6 +65,7 @@ const UserAddPriceModal = (props) => {
       );
       if (checkAdd.status == 200) {
         message.success('Thêm thành công');
+        handleView();
         resetAll();
       } else {
         message.success('Có lỗi xảy ra thử lại sau');
@@ -79,13 +80,19 @@ const UserAddPriceModal = (props) => {
       [name]: value,
     }));
   };
-  const handleDel = (item) => {
+  const handleDel = async (item) => {
     const del = prompt('Xác nhận xóa (y/n)');
     if (del == 'y') {
-      console.log(item);
+      const del = await AddPriceService.deletePrice(item);
+      if (del.status == 200) {
+        message.success('Xóa thành công');
+        handleView();
+        return;
+      }
+      message.error('Có lỗi xảy ra xin thử lại sau');
       return;
     }
-    console.log('Hủy xóa');
+    message.warning('Hủy xóa');
   };
   const [ListPrices, setListPrices] = useState([]);
   const handleView = async () => {
@@ -93,6 +100,36 @@ const UserAddPriceModal = (props) => {
     setListPrices(data);
     data.length == 0 && message.warning('Chưa thêm giá cho sản phẩm 😒');
   };
+  // edit
+  const [idEdit, setidEdit] = useState(null);
+  const [isEdit, setisEdit] = useState(false);
+
+  const handleEdit = (i) => {
+    setidEdit(i.id);
+    setisEdit(true);
+    setsize({
+      size: i.size,
+      price: i.price,
+      saleoff: i.saleoff,
+    });
+  };
+  const handleEditSucces = async () => {
+    const checkEdit = await AddPriceService.editPrice(
+      idEdit,
+      size.size,
+      size.price,
+      size.saleoff
+    );
+    if (checkEdit.status == 200) {
+      message.success('Sửa thành công');
+      setisEdit(false);
+      resetAll();
+      handleView();
+      return;
+    }
+    message.error('Có lỗi xảy ra xin thử lại sau');
+  };
+
   return (
     <Modal {...props} size="xl" centered>
       <Modal.Header closeButton>
@@ -129,7 +166,7 @@ const UserAddPriceModal = (props) => {
             </Col>
             <Col>
               <Form.Group className="mb-3">
-                <Form.Label>Khuyến mãi</Form.Label>
+                <Form.Label>Khuyến mãi 000đ</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Khuyến mãi"
@@ -140,9 +177,15 @@ const UserAddPriceModal = (props) => {
               </Form.Group>
             </Col>
           </Row>
-          <Button variant="primary" onClick={handleAdd}>
-            Add
-          </Button>
+          {isEdit ? (
+            <Button variant="success" onClick={handleEditSucces}>
+              Edit
+            </Button>
+          ) : (
+            <Button variant="primary" onClick={handleAdd}>
+              Add
+            </Button>
+          )}
         </Form>
         <hr />
         {/* variant="dark" */}
@@ -167,7 +210,7 @@ const UserAddPriceModal = (props) => {
                 <td>{item.price}</td>
                 <td>{item.saleoff}</td>
                 <td>
-                  <Button variant="success" onClick={props.onHide}>
+                  <Button variant="success" onClick={() => handleEdit(item)}>
                     Sửa
                   </Button>{' '}
                   <Button variant="danger" onClick={() => handleDel(item.id)}>
