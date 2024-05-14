@@ -16,3 +16,6 @@ div.ShopProducts_list_child.col-md-3 {
   float: right;
   margin: 20px 0;
 }
+.Pagination button {
+  color: var(--newtext);
+}

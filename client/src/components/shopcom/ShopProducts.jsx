@@ -130,10 +130,14 @@ const ShopProducts = () => {
   // const test = async () => {};
 
   const handleChange = (event, value) => {
+    window.scroll({
+      top: 0,
+      behavior: 'instant',
+    });
+
     console.log(value);
     navigator('/shop/page/' + value);
     setPage(value);
-    // setcheckFilter(false);
   };
   const handleChangeSort = (e) => {
     setSort(e.target.value);

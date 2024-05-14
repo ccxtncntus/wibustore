@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './menu.css';
 const Menu = () => {
   return (
@@ -9,10 +9,8 @@ const Menu = () => {
           Sản phẩm <i className="fa-solid fa-angle-down"></i>
         </NavLink>
         {/* <NavLink to={'/shop'}>Sale</NavLink> */}
-        {/* <NavLink to={'/posts'}>Bài viết</NavLink> */}
-        <Link to={'/'}>Bài viết</Link>
-        {/* <NavLink to={'/contact'}>Liên hệ</NavLink> */}
-        <Link to={'/'}>Liên hệ</Link>
+        <NavLink to={'/posts'}>Bài viết</NavLink>
+        <NavLink to={'/contact'}>Liên hệ</NavLink>
       </ul>
     </div>
   );

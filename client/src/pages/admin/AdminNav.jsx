@@ -34,6 +34,9 @@ const AdminNav = () => {
         <NavLink to={'sliders'} className="list-group-item">
           Sliders
         </NavLink>
+        <NavLink to={'post'} className="list-group-item">
+          Post
+        </NavLink>
         <div className="admin_nav_out">
           <img src={img} alt="" />
           <p onClick={handleOut}>

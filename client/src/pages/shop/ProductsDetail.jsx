@@ -19,6 +19,8 @@ import LoadingConponent from '../../components/loading/Loading';
 import LoginModal from '../../components/modal/LoginModal';
 import Cart from '../../components/product/Cart';
 import ProductLoading from '../../components/loadingProduct/ProductLoading';
+
+import parse from 'html-react-parser';
 const ProductsDetail = () => {
   const paths = useParams();
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'path_end']);
@@ -138,7 +140,7 @@ const ProductsDetail = () => {
                 )}
               </div>
               <div>
-                <p>Kích thước</p>
+                <p>Kích thước (cm)</p>
                 <div>
                   {Prices.length > 0 &&
                     Prices.map((item, index) => (
@@ -178,7 +180,8 @@ const ProductsDetail = () => {
                 >
                   Thêm vào giỏ hàng
                 </button>{' '}
-                <div className="mt-4">{Product.description}</div>
+                {/* description */}
+                <div className="mt-4">{parse(Product.description)}</div>
               </div>
             </div>
           </div>
