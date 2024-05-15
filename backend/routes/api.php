@@ -17,6 +17,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AddpriceController;
+use App\Http\Controllers\BlogController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -168,4 +169,13 @@ Route::prefix('addprice')->group(function () {
     Route::post('/', [AddpriceController::class, 'create']);
     Route::delete('/{id}', [AddpriceController::class, 'destroy']);
     Route::put('/{id}', [AddpriceController::class, 'edit']);
+});
+// blog
+Route::prefix('blogs')->group(function () {
+    // Route::get('/', [BlogController::class, 'index']);
+    Route::post('/', [BlogController::class, 'store']);
+
+    // Route::get('/{product_id}', [BlogController::class, 'index1']);
+    // Route::delete('/{id}', [BlogController::class, 'destroy']);
+    // Route::put('/{id}', [BlogController::class, 'edit']);
 });

@@ -11,7 +11,7 @@ const Admin = () => {
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const [IsAdmin, setIsAdmin] = useState(false);
   const [Loading, setLoading] = useState(false);
-  const { User } = useContext(UContexts);
+  const { User, addUser } = useContext(UContexts);
   useEffect(() => {
     const adminCheck = async () => {
       if (User) {
@@ -25,6 +25,7 @@ const Admin = () => {
           if (cookies.token) {
             const login = await AccountService.authen(cookies.token);
             if (login.status === 200) {
+              addUser(login.data);
               login.data.role === 'user'
                 ? console.log('is not admin')
                 : setIsAdmin(true);

@@ -20,6 +20,7 @@
     "@mui/material": "^5.15.4",
     "@mui/styled-engine-sc": "^6.0.0-alpha.12",
     "@reduxjs/toolkit": "^2.2.1",
+    "@tinymce/tinymce-react": "^5.0.1",
     "@uidotdev/usehooks": "^2.4.1",
     "animated-number-react": "^0.1.2",
     "antd": "^5.12.8",
