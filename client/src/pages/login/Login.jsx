@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { orbit } from 'ldrs';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import loginImg from '../../../public/login.jpg';
+import loginImg from '/login.jpg';
 import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { auth } from '../../firebase/FireBaseConfig';
 orbit.register();

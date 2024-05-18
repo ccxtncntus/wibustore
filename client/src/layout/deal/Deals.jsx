@@ -1,6 +1,6 @@
 import './deals.css';
 import { Link } from 'react-router-dom';
-import imgSale from '../../../public/sale.jpg';
+import imgSale from '/sale.jpg';
 const Deal = () => {
   return (
     <>

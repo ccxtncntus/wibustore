@@ -6,15 +6,21 @@ use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($page = 1)
     {
-        return 1;
+        $cart = DB::table('blogs')
+            ->select('blogs.*', 'users.name')
+            ->join('users', 'users.id', '=', 'blogs.user_id')->orderBy('blogs.id', 'DESC')
+            ->paginate(12, ['*'], 'page', $page);
+        return response()->json($cart, 200);
     }
 
     /**
@@ -74,9 +80,13 @@ class BlogController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Blog $blog)
+    public function show($idblog)
     {
-        //
+        $blog = DB::table('blogs')
+            ->select('blogs.*', 'users.name')
+            ->join('users', 'users.id', '=', 'blogs.user_id')
+            ->where('blogs.id', $idblog)->get();
+        return response()->json($blog, 200);
     }
 
     /**
@@ -98,8 +108,19 @@ class BlogController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Blog $blog)
+    public function destroy($idblog)
     {
-        //
+        $findImg = DB::table('blogs')->select('fimg')->where('blogs.id', $idblog)->first();
+        $img = $findImg->fimg;
+        $imagePath = public_path('uploads') . '/' . $img;
+        if (File::exists($imagePath)) {
+            File::delete($imagePath);
+        }
+        $deleted = DB::table('blogs')->where('blogs.id', $idblog)->delete();
+        $data = [
+            "status" => $deleted ? 200 : 400,
+            "message" => $deleted ? "Xóa thành công" : 'Có lỗi xảy ra',
+        ];
+        return response()->json($data, 200);
     }
 }

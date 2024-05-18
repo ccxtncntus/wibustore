@@ -172,10 +172,10 @@ Route::prefix('addprice')->group(function () {
 });
 // blog
 Route::prefix('blogs')->group(function () {
-    // Route::get('/', [BlogController::class, 'index']);
+    Route::get('/page/{page}', [BlogController::class, 'index']);
+    Route::get('/{idblog}', [BlogController::class, 'show']);
     Route::post('/', [BlogController::class, 'store']);
+    Route::delete('/{id}', [BlogController::class, 'destroy']);
 
-    // Route::get('/{product_id}', [BlogController::class, 'index1']);
-    // Route::delete('/{id}', [BlogController::class, 'destroy']);
     // Route::put('/{id}', [BlogController::class, 'edit']);
 });
