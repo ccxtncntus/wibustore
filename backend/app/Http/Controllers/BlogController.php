@@ -19,6 +19,16 @@ class BlogController extends Controller
         $cart = DB::table('blogs')
             ->select('blogs.*', 'users.name')
             ->join('users', 'users.id', '=', 'blogs.user_id')->orderBy('blogs.id', 'DESC')
+            ->where("blogs.active", true)
+            ->paginate(4, ['*'], 'page', $page);
+        return response()->json($cart, 200);
+    }
+    public function indexAdmin($page = 1)
+    {
+        $cart = DB::table('blogs')
+            ->select('blogs.*', 'users.name')
+            ->join('users', 'users.id', '=', 'blogs.user_id')->orderBy('blogs.active', 'ASC')
+            ->orderBy('blogs.id', 'DESC')
             ->paginate(12, ['*'], 'page', $page);
         return response()->json($cart, 200);
     }
@@ -76,10 +86,6 @@ class BlogController extends Controller
             return response()->json($data, 200);
         }
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show($idblog)
     {
         $blog = DB::table('blogs')
@@ -88,26 +94,109 @@ class BlogController extends Controller
             ->where('blogs.id', $idblog)->get();
         return response()->json($blog, 200);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Blog $blog)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Blog $blog)
+    public function updateActive($id)
     {
-        //
+        $isActive = DB::table('blogs')->where('id', $id)->first();
+        $checkActive = $isActive->active;
+        $checkUpdate = DB::table('blogs')->where('id', $id)->update(
+            [
+                'active' =>  $checkActive ? false : true,
+            ]
+        );
+        $data = [
+            "status" => $checkUpdate ? 200 : 400,
+            "message" => $checkUpdate ?  "update thành công" : "Có lỗi xảy ra",
+        ];
+        return response()->json($data, 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function updatedefault(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'description' => 'required',
+            'content' => 'required'
+        ]);
+        if ($validator->fails()) {
+            $data = [
+                "status" => 400,
+                "message" => $validator->errors()->first(),
+            ];
+            return response()->json($data, 400);
+        } else {
+            $checkUpdate = DB::table('blogs')->where('id', $id)->update(
+                [
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'content' => $request->content
+                ]
+            );
+            $data = [
+                "status" => $checkUpdate ? 200 : 400,
+                "message" => $checkUpdate ?  "update thành công" : "Có lỗi xảy ra",
+            ];
+            return response()->json($data, 200);
+        }
+    }
+
+
+    public function updateHasImg(Request $request, $id)
+    {
+        if ($request->hasFile('img')) {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'description' => 'required',
+                'content' => 'required'
+            ]);
+            if ($validator->fails()) {
+                $data = [
+                    "status" => 400,
+                    "message" => $validator->errors()->first(),
+                ];
+                return response()->json($data, 400);
+            } else {
+                $findImg = DB::table('blogs')->select('fimg')->where('blogs.id', $id)->first();
+                $img = $findImg->fimg;
+                $imagePath = public_path('uploads') . '/' . $img;
+                if (File::exists($imagePath)) {
+                    File::delete($imagePath);
+                }
+                // 
+                $img = $request->file('img');
+                $imgName = time() . '_' . $img->getClientOriginalName();
+                $img->move(public_path('uploads'), $imgName);
+                $checkUp = DB::table('blogs')
+                    ->where('id', $id)
+                    ->update(
+                        [
+                            'title' => $request->title,
+                            'fimg' => $imgName,
+                            'description' => $request->description,
+                            'content' =>  $request->content,
+                        ]
+                    );
+                $data = [
+                    "status" => $checkUp ? 200 : 400,
+                    "message" => $checkUp ?  "update thành công" : "Có lỗi xảy ra",
+                ];
+                return response()->json($data, 200);
+            }
+        } else {
+            $data = [
+                "status" => 400,
+                "message" => "Không có file img",
+            ];
+            return response()->json($data, 200);
+        }
+    }
+
+
+
     public function destroy($idblog)
     {
         $findImg = DB::table('blogs')->select('fimg')->where('blogs.id', $idblog)->first();

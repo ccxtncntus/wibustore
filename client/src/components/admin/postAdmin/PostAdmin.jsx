@@ -66,7 +66,6 @@ const PostAdmin = () => {
           formdata.append('title', Datapost.title);
           formdata.append('description', Datapost.description);
           formdata.append('content', content);
-
           const add = await BlogServices.updateImgtest(formdata);
           if (add.status == 200) {
             alert('Thêm bài viết thành công');

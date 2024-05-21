@@ -15,6 +15,9 @@ const SlidersAdminLazy = lazy(() => import('./components/admin/SlidersAdmin'));
 const PostAdminLazy = lazy(() =>
   import('./components/admin/postAdmin/PostAdmin')
 );
+const ListPostAdminLazy = lazy(() =>
+  import('./components/admin/postAdmin/ListPosts')
+);
 const DashBoardAdminLazy = lazy(() =>
   import('./pages/admin/dashboard/DashBoard')
 );
@@ -278,8 +281,15 @@ function App() {
               </Suspense>
             }
           />
+          <Route
+            path="posts"
+            element={
+              <Suspense fallback={<Loading />}>
+                <ListPostAdminLazy />
+              </Suspense>
+            }
+          />
         </Route>
-
         <Route
           path="/crawl"
           element={

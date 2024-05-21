@@ -172,10 +172,16 @@ Route::prefix('addprice')->group(function () {
 });
 // blog
 Route::prefix('blogs')->group(function () {
+    // admin
+    Route::get('/admin/{page}', [BlogController::class, 'indexAdmin']);
+
     Route::get('/page/{page}', [BlogController::class, 'index']);
     Route::get('/{idblog}', [BlogController::class, 'show']);
     Route::post('/', [BlogController::class, 'store']);
     Route::delete('/{id}', [BlogController::class, 'destroy']);
+    Route::patch('/{id}', [BlogController::class, 'updateActive']);
+    Route::patch('/update/{id}', [BlogController::class, 'updatedefault']);
+    Route::post('/update/{id}', [BlogController::class, 'updateHasImg']);
 
     // Route::put('/{id}', [BlogController::class, 'edit']);
 });

@@ -3,6 +3,11 @@ import { utils, writeFile } from 'xlsx';
 const FormatNumber = (num) => {
   return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') + ' đ';
 };
+
+const Count = (count, chia) => {
+  const c = Math.ceil(count / chia);
+  return c;
+};
 const CountPage = (count) => {
   const c = Math.ceil(count / 12);
   return c;
@@ -110,4 +115,5 @@ export {
   returnMinPrice,
   returnImgs,
   returnPrice,
+  Count,
 };

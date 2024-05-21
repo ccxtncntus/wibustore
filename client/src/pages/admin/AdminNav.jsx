@@ -37,6 +37,9 @@ const AdminNav = () => {
         <NavLink to={'post'} className="list-group-item">
           Post
         </NavLink>
+        <NavLink to={'posts'} className="list-group-item">
+          List posts
+        </NavLink>
         <div className="admin_nav_out">
           <img src={img} alt="" />
           <p onClick={handleOut}>
