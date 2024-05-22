@@ -36,8 +36,10 @@ const Featured = () => {
       if (ProductsHome) {
         // console.log(ProductsHome);
         setListFeatured(ProductsHome.data.data);
+        // console.log(ProductsHome.data.data);
       } else {
         const listFeatured = await ProductService.List(1, 'desc');
+        console.log(listFeatured.data.data);
         setListFeatured(
           listFeatured.status === 200 ? listFeatured.data.data : []
         );

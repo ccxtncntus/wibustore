@@ -176,34 +176,34 @@ class ShoppingCardController extends Controller
     {
         // idShoppingCart, numberBuy
         $cart = DB::table('products')->where('name',  $request->name)->first();
-        return $cart;
-        // if ($cart) {
-        //     $sl = $cart->quantity + $request->quantity;
-        //     $edit = DB::table('shopping_carts')->where('product_id', $request->product_id)
-        //         ->update(['quantity' => $sl]);
-        //     $data = [
-        //         "status" => 200,
-        //         "message" => "update thành công",
-        //     ];
-        //     $dataNG = [
-        //         "status" => 400,
-        //         "message" => "Lỗi update",
-        //     ];
-        //     return $edit ?  response()->json($data, 200) : response()->json($dataNG, 400);
-        // } else {
-        //     $shoppingCard = new ShoppingCart;
-        //     $shoppingCard->user_id = $request->user_id;
-        //     $shoppingCard->product_id = $request->product_id;
-        //     $shoppingCard->img = $request->img;
-        //     $shoppingCard->status = 'Chưa mua';
-        //     $shoppingCard->quantity = $request->quantity;
-        //     $shoppingCard->save();
-        //     $data = [
-        //         "status" => 200,
-        //         "message" => "add thành công",
-        //     ];
-        //     return response()->json($data, 200);
-        // }
+        // return $cart;
+        if ($cart) {
+            $sl = $cart->quantity + $request->quantity;
+            $edit = DB::table('shopping_carts')->where('product_id', $request->product_id)
+                ->update(['quantity' => $sl]);
+            $data = [
+                "status" => 200,
+                "message" => "update thành công",
+            ];
+            $dataNG = [
+                "status" => 400,
+                "message" => "Lỗi update",
+            ];
+            return $edit ?  response()->json($data, 200) : response()->json($dataNG, 400);
+        } else {
+            $shoppingCard = new ShoppingCart;
+            $shoppingCard->user_id = $request->user_id;
+            $shoppingCard->product_id = $request->product_id;
+            $shoppingCard->img = $request->img;
+            $shoppingCard->status = 'Chưa mua';
+            $shoppingCard->quantity = $request->quantity;
+            $shoppingCard->save();
+            $data = [
+                "status" => 200,
+                "message" => "add thành công",
+            ];
+            return response()->json($data, 200);
+        }
     }
     function product(Request $request)
     {

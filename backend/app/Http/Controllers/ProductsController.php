@@ -91,7 +91,7 @@ class ProductsController extends Controller
             'products.description',
             'products.quantity',
             DB::raw('GROUP_CONCAT(images.url) AS all_images'),
-            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
             ->join('images', 'images.product_id', '=', 'products.id')
             ->join('addprices', 'addprices.product_id', '=', 'products.id')
@@ -134,7 +134,7 @@ class ProductsController extends Controller
             // 'products.price',
             // 'products.saleoff',
             DB::raw('GROUP_CONCAT(images.url) AS all_images'),
-            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
             ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
@@ -176,7 +176,7 @@ class ProductsController extends Controller
             // 'products.saleoff',
             'products.bought',
             DB::raw('GROUP_CONCAT(images.url) AS all_images'),
-            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
             ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
@@ -227,7 +227,7 @@ class ProductsController extends Controller
             'products.quantity',
             'products.bought',
             DB::raw('GROUP_CONCAT(images.url) AS all_images'),
-            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
             ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
@@ -270,7 +270,7 @@ class ProductsController extends Controller
             'products.quantity',
             'products.bought',
             DB::raw('GROUP_CONCAT(images.url) AS all_images'),
-            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
             ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
@@ -310,7 +310,7 @@ class ProductsController extends Controller
             'products.description',
             'products.quantity',
             DB::raw('GROUP_CONCAT(images.url) AS all_images'),
-            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
             ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
@@ -352,7 +352,7 @@ class ProductsController extends Controller
             // 'products.price',
             // 'products.saleoff',
             DB::raw('GROUP_CONCAT(images.url) AS all_images'),
-            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
             ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')
@@ -445,7 +445,7 @@ class ProductsController extends Controller
             // 'products.price',
             // 'products.saleoff',
             DB::raw('GROUP_CONCAT(images.url) AS all_images'),
-            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
+            DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
             ->join('addprices', 'addprices.product_id', '=', 'products.id')
             ->join('images', 'images.product_id', '=', 'products.id')

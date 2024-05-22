@@ -69,6 +69,7 @@ const validate = (data) => {
   return '';
 };
 const returnMinPrice = (data) => {
+  // console.log(data);
   const jsonArray = JSON.parse(data);
   const uniqueArray = Array.from(new Set(jsonArray.map(JSON.stringify))).map(
     JSON.parse
