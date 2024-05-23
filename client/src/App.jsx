@@ -30,6 +30,9 @@ const CrawDetaillLazy = lazy(() => import('./pages/crawl/CrawlDetail'));
 
 const ShopllLazy = lazy(() => import('./pages/shop/Shop'));
 const PostsllLazy = lazy(() => import('./pages/posts/Posts'));
+const PostDetailLazy = lazy(() =>
+  import('./pages/posts/postDetail/PostDetail')
+);
 const ContactllLazy = lazy(() => import('./pages/contact/Contact'));
 const HomeContentllLazy = lazy(() => import('./pages/home/HomeContent'));
 const ProductsDetailllLazy = lazy(() => import('./pages/shop/ProductsDetail'));
@@ -188,6 +191,14 @@ function App() {
             element={
               <Suspense fallback={<Loading />}>
                 <PostsllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/posts/:idPost"
+            element={
+              <Suspense fallback={<Loading />}>
+                <PostDetailLazy />
               </Suspense>
             }
           />

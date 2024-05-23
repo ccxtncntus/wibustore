@@ -21,7 +21,7 @@ const NavTop = () => {
     setShowUser(true);
   };
   return (
-    <div style={{ background: 'rgb(40, 40, 40)' }}>
+    <div className="bg-light">
       <div className="container navtop">
         <UserModal
           placement={'end'}

@@ -5,6 +5,10 @@ const List = async (page) => {
   const res = await request.GET(`/api/blogs/page/${page}`);
   return res;
 };
+const once = async (id_blog) => {
+  const res = await request.GET(`/api/blogs/${id_blog}`);
+  return res;
+};
 const updateImgtest = async (formdata) => {
   const res = await request.POST(`/api/blogs`, formdata, {
     headers: { 'content-type': 'multipart/form-data' },
@@ -47,4 +51,5 @@ export {
   updateDefault,
   updateHasImg,
   changeActive,
+  once,
 };

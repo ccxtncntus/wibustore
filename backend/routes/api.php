@@ -182,6 +182,4 @@ Route::prefix('blogs')->group(function () {
     Route::patch('/{id}', [BlogController::class, 'updateActive']);
     Route::patch('/update/{id}', [BlogController::class, 'updatedefault']);
     Route::post('/update/{id}', [BlogController::class, 'updateHasImg']);
-
-    // Route::put('/{id}', [BlogController::class, 'edit']);
 });

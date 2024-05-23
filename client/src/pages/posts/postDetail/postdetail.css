@@ -1,0 +1,6 @@
+.postDetail {
+  min-height: 80vh;
+  background-color: var(--newbg);
+  color: var(--newtext);
+  border-top: 1px solid gray;
+}

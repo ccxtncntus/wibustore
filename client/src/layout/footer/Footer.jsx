@@ -125,7 +125,7 @@ const Footer = () => {
           </div>
         </div>
       </section>
-      <div className="p-4 text-center bg-dark">&copy; 2024. Wibustore</div>
+      <div className="p-4 text-center bg-light">&copy; 2024. Wibustore</div>
     </footer>
   );
 };
