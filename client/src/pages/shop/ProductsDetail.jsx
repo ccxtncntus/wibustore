@@ -21,6 +21,9 @@ import Cart from '../../components/product/Cart';
 import ProductLoading from '../../components/loadingProduct/ProductLoading';
 
 import parse from 'html-react-parser';
+import Accordion from 'react-bootstrap/Accordion';
+import { Collapse } from 'antd';
+
 const ProductsDetail = () => {
   const paths = useParams();
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'path_end']);
@@ -97,116 +100,193 @@ const ProductsDetail = () => {
       setModalShow(true);
     }
   };
+
+  const items = [
+    {
+      key: '1',
+      label: <h6>Giao hàng</h6>,
+      children: (
+        <div>
+          {' '}
+          <p>
+            Wibu&nbsp;lu&ocirc;n hướng đến việc cung cấp dịch vụ vận chuyển tốt
+            nhất với mức ph&iacute; cạnh tranh cho tất cả c&aacute;c đơn
+            h&agrave;ng m&agrave; qu&yacute; kh&aacute;ch đặt với ch&uacute;ng
+            t&ocirc;i. Ch&uacute;ng t&ocirc;i hỗ trợ giao h&agrave;ng tr&ecirc;n
+            to&agrave;n quốc với ch&iacute;nh s&aacute;ch giao h&agrave;ng cụ
+            thể như sau:
+          </p>
+          <p>
+            <strong>
+              01. Thời gian ho&agrave;n thiện v&agrave; giao h&agrave;ng
+            </strong>
+            &nbsp;
+          </p>
+          <ul>
+            <li style={{ listStyleType: 'inherit' }}>
+              Khu vực nội th&agrave;nh H&agrave; Nội: Ho&agrave;n thiện sản phẩm
+              v&agrave; giao h&agrave;ng trong 3-5 ng&agrave;y l&agrave;m việc.
+            </li>
+            <li style={{ listStyleType: 'inherit' }}>
+              Khu vực ngo&agrave;i H&agrave; Nội:&nbsp;Ho&agrave;n thiện sản
+              phẩm v&agrave; giao h&agrave;ng&nbsp;trong khoảng&nbsp;7-10
+              ng&agrave;y l&agrave;m việc.
+            </li>
+            <li style={{ listStyleType: 'inherit' }}>
+              <em>
+                Wibustore&nbsp;sẽ b&aacute;o&nbsp;trước thời gian giao
+                h&agrave;ng cho kh&aacute;ch h&agrave;ng ở c&aacute;c tỉnh,
+                th&agrave;nh phố kh&aacute;c.
+              </em>
+            </li>
+          </ul>
+          <p>
+            <strong>02. Khu vực giao h&agrave;ng</strong>
+            <br />
+            Wibustore&nbsp;giao h&agrave;ng v&agrave; chấp nhận thanh
+            to&aacute;n sau khi nhận h&agrave;ng tr&ecirc;n to&agrave;n quốc.
+          </p>
+          <div>
+            <strong>04. Dịch vụ giao h&agrave;ng</strong>
+            <br />
+            Wibustore&nbsp;sử dụng c&aacute;c dịch vụ giao h&agrave;ng
+            chuy&ecirc;n nghiệp để giao h&agrave;ng tới qu&yacute; kh&aacute;ch
+            h&agrave;ng được nhanh v&agrave; tốt nhất như: Viettel, EM
+          </div>
+        </div>
+      ),
+    },
+  ];
+
   return (
-    <div className="productDetail">
+    <div className="productDetail_vip">
       {loading && <LoadingConponent />}
-      <LoginModal show={modalShow} onHide={() => setModalShow(false)} />
-      {Product !== '' ? (
-        <>
-          <div className="row mt-4 productDetail_img">
-            <div className="product_detail col-md-6">
-              {ListImg.length > 0 && (
-                <div className="row">
-                  <div className="product_detail_listimg col-md-2">
-                    {ListImg.map((item, index) => {
-                      return (
-                        <img
-                          key={index}
-                          src={HOST + '/uploads/' + item}
-                          alt=""
-                          onClick={() => handleView(index)}
-                          className={
-                            index === ViewImg
-                              ? 'product_detail_listimg_boder'
-                              : null
-                          }
-                        />
-                      );
-                    })}
+      <div className="productDetail pt-4 container">
+        <LoginModal show={modalShow} onHide={() => setModalShow(false)} />
+        {Product == '' && <LoadingConponent />}
+        {Product !== '' && (
+          <>
+            <div className="row productDetail_img">
+              <div className="product_detail col-md-7">
+                {ListImg.length > 0 && (
+                  <div className="row">
+                    <div className="product_detail_listimg col-md-2">
+                      {ListImg.map((item, index) => {
+                        return (
+                          <img
+                            key={index}
+                            src={HOST + '/uploads/' + item}
+                            alt=""
+                            onClick={() => handleView(index)}
+                            className={
+                              index === ViewImg
+                                ? 'product_detail_listimg_boder'
+                                : null
+                            }
+                          />
+                        );
+                      })}
+                    </div>
+                    <div className="col-md-10 product_detail_imgPro">
+                      <img src={HOST + '/uploads/' + ListImg[ViewImg]} alt="" />
+                    </div>
                   </div>
-                  <div className="col-md-10 product_detail_imgPro">
-                    <img src={HOST + '/uploads/' + ListImg[ViewImg]} alt="" />
-                  </div>
-                </div>
-              )}
-            </div>
-            {/* title */}
-            <div className="col-md-6 product_detail_titles">
-              <div className="product_detail_title">{Product.name}</div>
-              <div className="product_detail_price">
-                {Prii && FormatNumber(Prii.price - Prii.saleoff)}{' '}
-                {Prii.saleoff > 0 && (
-                  <span style={{ fontSize: '1.2rem', color: 'gray' }}>
-                    <del>{FormatNumber(Prii.price)}</del>
-                  </span>
                 )}
               </div>
-              <div>
-                <p>Kích thước (cm)</p>
-                <div>
-                  {Prices.length > 0 &&
-                    Prices.map((item, index) => (
-                      <button
-                        className={
-                          item.size == Prii.size
-                            ? 'btn product_detail_btn_un product_detail_btn_active'
-                            : 'btn product_detail_btn_un'
-                        }
-                        key={index}
-                        onClick={() => setPrii(item)}
-                      >
-                        {item.size}
-                      </button>
-                    ))}
+              {/* title */}
+              <div className="col-md-5 product_detail_titles">
+                <span style={{ fontSize: '.9rem', fontStyle: 'italic' }}>
+                  wibustore
+                </span>
+                <h1 className="m-0">{Product.name}</h1>
+                <div className="product_detail_price mt-3">
+                  {Prii && FormatNumber(Prii.price - Prii.saleoff)}{' '}
+                  {Prii.saleoff > 0 && (
+                    <span style={{ fontSize: '1.2rem', color: 'gray' }}>
+                      <del>{FormatNumber(Prii.price)}</del>
+                    </span>
+                  )}
                 </div>
-              </div>
-              <div>
-                Kho {Product.quantity} ({Product.status})
-              </div>
-              <div className="product_detail_quantity">
-                <p>Số lượng</p>
-                <input
-                  className="form-control w-25"
-                  type="number"
-                  value={value}
-                  onChange={(e) => handleChangeQuantity(e)}
-                />
-              </div>
-              <div>
-                <button
-                  className="btn btn-primary"
-                  onClick={handleAddcard}
-                  disabled={
-                    value > 0 && value <= Product.quantity ? false : true
-                  }
-                >
-                  Thêm vào giỏ hàng
-                </button>{' '}
-                {/* description */}
-                <div className="mt-4">{parse(Product.description)}</div>
+
+                <div>
+                  <span style={{ fontSize: '.9rem' }}>
+                    Đã bao gồm thuế. Phí vận chuyển được tính khi thanh toán.
+                  </span>
+                  <p className="mt-3 mb-1">Kích thước (cm)</p>
+                  <div>
+                    {Prices.length > 0 &&
+                      Prices.map((item, index) => (
+                        <button
+                          className={
+                            item.size == Prii.size
+                              ? 'btn product_detail_btn_un product_detail_btn_active'
+                              : 'btn product_detail_btn_un'
+                          }
+                          key={index}
+                          onClick={() => setPrii(item)}
+                        >
+                          {item.size}
+                        </button>
+                      ))}
+                  </div>
+                </div>
+                {/* <div>
+                  Kho {Product.quantity} ({Product.status})
+                </div> */}
+                <div className="product_detail_quantity mt-3">
+                  <p className="m-0 p-0">Số lượng</p>
+                  <input
+                    style={{ width: '30%' }}
+                    className="form-control mt-1"
+                    type="number"
+                    value={value}
+                    onChange={(e) => handleChangeQuantity(e)}
+                  />
+                </div>
+                <div>
+                  <button
+                    className="btn btn_add_product mt-3"
+                    onClick={handleAddcard}
+                    disabled={
+                      value > 0 && value <= Product.quantity ? false : true
+                    }
+                  >
+                    Thêm vào giỏ hàng
+                  </button>{' '}
+                  {/* description */}
+                  <div className="mt-4">{parse(Product.description)}</div>
+                </div>
+                <Collapse items={items} />
               </div>
             </div>
-          </div>
-          <div className="mt-5 product_detail_more">
-            <p>Sản phẩm liên quan</p>
-            <div className="product_detail_more_list mb-4 row">
-              {ListRandom.length > 0
-                ? ListRandom.map((item, index) => (
-                    <div className="col-md-3" key={index}>
-                      <Cart item={item} />
-                    </div>
-                  ))
-                : test.map((item, index) => (
-                    <div className="col-md-3" key={index}>
-                      <ProductLoading />
-                    </div>
-                  ))}
+            {/* more */}
+            <hr />
+            Đánh giá sản phẩm
+            <hr />
+            <div className="product_detail_more">
+              <p className="text-center h4">
+                Sản phẩm <span className="vip">liên quan</span>
+              </p>
+              <span className="d-block text-center">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </span>
+              <div className="product_detail_more_list row mt-2">
+                {ListRandom.length > 0
+                  ? ListRandom.map((item, index) => (
+                      <div className="col-md-3" key={index}>
+                        <Cart item={item} />
+                      </div>
+                    ))
+                  : test.map((item, index) => (
+                      <div className="col-md-3" key={index}>
+                        <ProductLoading />
+                      </div>
+                    ))}
+              </div>
             </div>
-          </div>
-        </>
-      ) : (
-        <LoadingConponent />
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
