@@ -1,15 +1,12 @@
-import { useEffect, useState, useContext } from 'react';
-
+import { useEffect, useState } from 'react';
 import './featured.css';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Cart from '../../components/product/Cart';
 import ProductLoading from '../../components/loadingProduct/ProductLoading';
 import * as ProductService from '../../services/ProductService';
-import { ProHomeContexts } from '../../components/context/ProductHomeContex';
 import { Link } from 'react-router-dom';
 const Featured = () => {
-  const { ProductsHome } = useContext(ProHomeContexts);
   const test = [1, 2, 3, 4];
   const [ListFeatured, setListFeatured] = useState([]);
   const responsive = {
@@ -30,24 +27,15 @@ const Featured = () => {
       items: 2,
     },
   };
-
   useEffect(() => {
     const run = async () => {
-      if (ProductsHome) {
-        // console.log(ProductsHome);
-        setListFeatured(ProductsHome.data.data);
-        // console.log(ProductsHome.data.data);
-      } else {
-        const listFeatured = await ProductService.List(1, 'desc');
-        console.log(listFeatured.data.data);
-        setListFeatured(
-          listFeatured.status === 200 ? listFeatured.data.data : []
-        );
-      }
+      const listFeatured = await ProductService.List(1, 'desc');
+      setListFeatured(
+        listFeatured.status === 200 ? listFeatured.data.data : []
+      );
     };
     run();
-  }, [ProductsHome]);
-
+  }, []);
   return (
     <div className="featured_vip">
       <div className="featured container p-0">

@@ -4,7 +4,7 @@ import { Suspense, lazy } from 'react';
 import CheckOutSuccess from './pages/checkout/CheckOutSuccess';
 import Loading from './components/loading/Loading';
 import CheckOutLoading from './pages/checkout/CheckOutLoading';
-
+import Nothing from './pages/posts/nothing/Nothing';
 const HomeLazy = lazy(() => import('./pages/Home'));
 const AdminLazy = lazy(() => import('./pages/Admin'));
 const ProductAdminLazy = lazy(() => import('./components/admin/ProductAdmin'));
@@ -319,6 +319,7 @@ function App() {
           }
         />
         <Route path="/loading" element={<Loading />} />
+        <Route path="*" element={<Nothing />} />
       </Routes>
     </>
   );

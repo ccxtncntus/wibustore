@@ -76,20 +76,20 @@
 }
 
 .product_detail_btn_active {
-  background-color: var(--newbg);
-  color: var(--newtext);
+  background-color: var(--text);
+  color: var(--bg);
   margin-right: 8px;
-  border: 1px solid var(--newbg);
+  border: 1px solid var(--text);
 }
 .product_detail_btn_active:hover {
   border: 1px solid var(--newbg);
 }
 .product_detail_btn_un {
-  border: 1px solid var(--newbg);
+  border: 1px solid var(--text);
   margin-right: 8px;
 }
 .product_detail_btn_un:hover {
-  background-color: var(--newbg);
-  color: var(--newtext);
-  border: 1px solid var(--newbg);
+  background-color: var(--text);
+  color: var(--bg);
+  border: 1px solid var(--text);
 }

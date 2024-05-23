@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import { useEffect, useState, useContext } from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import './cardmodal.css';
@@ -25,14 +27,10 @@ const UserModal = ({ placement, show, onClose }) => {
     };
     uModal();
   }, [show]);
-
   const logOut = async () => {
     await removeToken(['token']);
     await removeToken(['path_end']);
     onClose();
-    // setTimeout(async () => {
-    //   await natigate('/login');
-    // }, 1000);
   };
   const handleClose = () => {
     onClose();

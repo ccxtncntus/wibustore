@@ -27,6 +27,8 @@ const CardModal = ({ placement, show, onClose }) => {
     chay();
   }, [show, Load]);
   const handleDel = async (i) => {
+    console.log(i);
+    // return;
     await ShoppingCartsService.delCart(i.id);
     delCardByModal();
     delListAdd(i);

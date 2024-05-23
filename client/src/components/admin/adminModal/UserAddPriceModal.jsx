@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
@@ -8,6 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import * as AddPriceService from '../../../services/AddPriceService';
 import { message } from 'antd';
+import { FormatNumber } from '../../../helpers/FormatNumber';
 const UserAddPriceModal = (props) => {
   const [item, setitem] = useState('');
   const [size, setsize] = useState({
@@ -22,12 +24,14 @@ const UserAddPriceModal = (props) => {
       saleoff: '',
     });
   };
+
   useEffect(() => {
     const run = async () => {
       if (props.itemAddprice !== '') {
         setListPrices([]);
         resetAll();
         setitem(props.itemAddprice);
+        handleView();
       }
     };
     run();
@@ -131,7 +135,12 @@ const UserAddPriceModal = (props) => {
   };
 
   return (
-    <Modal {...props} size="xl" centered>
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {item.name}
@@ -188,10 +197,6 @@ const UserAddPriceModal = (props) => {
           )}
         </Form>
         <hr />
-        {/* variant="dark" */}
-        <Button variant="primary" onClick={handleView}>
-          Xem
-        </Button>
         <Table striped bordered hover className="mt-2">
           <thead>
             <tr>
@@ -207,8 +212,8 @@ const UserAddPriceModal = (props) => {
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{item.size}</td>
-                <td>{item.price}</td>
-                <td>{item.saleoff}</td>
+                <td>{FormatNumber(item.price)}</td>
+                <td>{FormatNumber(item.saleoff)}</td>
                 <td>
                   <Button variant="success" onClick={() => handleEdit(item)}>
                     Sửa

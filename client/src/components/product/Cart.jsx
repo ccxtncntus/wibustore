@@ -50,14 +50,10 @@ const Cart = ({ item }) => {
     // add cart
     if (User) {
       const img = i.all_images.split(',')[0];
-      // console.log(i);
-      // console.log(returnMinPrice(item.price_and_saleoff));
-      // return;
       const test1 = {
         idProduct: i.id,
         idPrice: returnMinPrice(item.price_and_saleoff).id_addPrice,
       };
-      console.log(test1);
       addCard(test1);
       const chay = await ShoppingCartsService.add(
         User.id,

@@ -82,6 +82,8 @@ const ProductsDetail = () => {
         idProduct: Product.id,
         idPrice: Prii.id_addPrice,
       };
+      console.log(test1);
+      // return;
       addCard(test1);
       const chay = await ShoppingCartsService.add(
         IdUser,

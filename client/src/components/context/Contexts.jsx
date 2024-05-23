@@ -16,16 +16,17 @@ function CardContext({ children }) {
     if (addCheck) {
       // cộng
       console.log('Đã tồn tại sp trong giỏ hàng');
-    } else {
-      // thêm
-      setcardNumber((pre) => pre + 1);
-      setListAdd([...ListAdd, data]);
+      return;
     }
+    // thêm
+    console.log('Thêm sản phẩm mới');
+    setcardNumber((pre) => pre + 1);
+    setListAdd([...ListAdd, data]);
   };
 
   const delListAdd = async (data) => {
     const del = ListAdd.filter(
-      (item) => item.idProduct == data.idProduct && item.idPrice == data.idPrice
+      (item) => item.idProduct != data.idProduct && item.idPrice != data.idPrice
     );
     setListAdd(del);
   };

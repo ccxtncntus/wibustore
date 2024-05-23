@@ -80,8 +80,12 @@ const ListProducts = () => {
   };
   const [itemAddprice, setitemAddprice] = useState('');
   const handleAddPrice = (item) => {
+    // return;
     setitemAddprice(item);
     setModalShow(true);
+  };
+  const handleHide = () => {
+    setModalShow(false);
   };
   const [modalShow, setModalShow] = useState(false);
   return (
@@ -91,6 +95,11 @@ const ListProducts = () => {
         onShow={handleShow}
         onLoad={handleLoad}
         dataProduct={dataProduct}
+      />
+      <UserAddPriceModal
+        show={modalShow}
+        onHide={() => handleHide()}
+        itemAddprice={itemAddprice}
       />
       <div className="row">
         <div className="col-md-6">
@@ -152,11 +161,7 @@ const ListProducts = () => {
                       >
                         Edit
                       </Button>
-                      <UserAddPriceModal
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                        itemAddprice={itemAddprice}
-                      />
+
                       <Button
                         className="m-1"
                         onClick={() => handleAddPrice(item)}
