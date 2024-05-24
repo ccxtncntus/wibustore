@@ -23,6 +23,7 @@ import ProductLoading from '../../components/loadingProduct/ProductLoading';
 import parse from 'html-react-parser';
 import Accordion from 'react-bootstrap/Accordion';
 import { Collapse } from 'antd';
+import Evaluate from './evaluate/Evaluate';
 
 const ProductsDetail = () => {
   const paths = useParams();
@@ -261,7 +262,7 @@ const ProductsDetail = () => {
             </div>
             {/* more */}
             <hr />
-            Đánh giá sản phẩm
+            <Evaluate product={Product} />
             <hr />
             <div className="product_detail_more">
               <p className="text-center h4">
