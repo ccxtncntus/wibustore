@@ -1,4 +1,5 @@
-import * as request from "../configs/Axios";
+/* eslint-disable react-refresh/only-export-components */
+import * as request from '../configs/Axios';
 
 const List = async (page, sort) => {
   const res = await request.GET(
@@ -16,6 +17,15 @@ const ListHot = async (page, sort) => {
   const res = await request.GET(
     `/api/products/hot?pageNumber=${page}&sort=${sort}`
   );
+  return res;
+};
+const ListBetween = async (first, second) => {
+  const res = await request.GET(
+    `/api/products/number?first=${first}&second=${second}`
+  );
+  if (res.status == 200) {
+    return res.data.data;
+  }
   return res;
 };
 
@@ -37,7 +47,7 @@ const onceProduct = async (value) => {
 const update = async (formData) => {
   const res = await request.POST(`/api/products`, formData, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      'Content-Type': 'multipart/form-data',
     },
   });
   return res;
@@ -79,8 +89,19 @@ const crawlDetail = async (path) => {
   const res = await request.GET(`/api/crawl/detail/products/${path}`);
   return res;
 };
+// admin
+const ListAdmin = async (page) => {
+  const res = await request.GET(`/api/productsAdmin?pageNumber=${page}`);
+  return res;
+};
+const listProCategoryAdmin = async (id, page) => {
+  const res = await request.GET(`/api/productsAdmin/${id}?pageNumber=${page}`);
+  return res;
+};
 
 export {
+  ListAdmin,
+  listProCategoryAdmin,
   List,
   update,
   listProCategory,
@@ -95,4 +116,5 @@ export {
   ListRandom,
   updateQuantity,
   updateBought,
+  ListBetween,
 };

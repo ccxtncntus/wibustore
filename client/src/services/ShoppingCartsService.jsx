@@ -1,10 +1,11 @@
-import * as request from "../configs/Axios";
+import * as request from '../configs/Axios';
 
-const add = async (user_id, product_id, img, quantity) => {
+const add = async (user_id, product_id, addprice_id, img, quantity) => {
   const res = await request.POST(`/api/shoppingcard/adOneProduct`, {
     user_id: user_id,
     product_id: product_id,
     img: img,
+    addprice_id: addprice_id,
     quantity: quantity,
   });
   return res;

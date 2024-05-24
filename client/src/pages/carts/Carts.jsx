@@ -1,29 +1,31 @@
-import Table from "react-bootstrap/Table";
-import "./carts.css";
-import { useContext, useEffect, useState } from "react";
-import { UContexts } from "../../components/context/UserContext";
-import { Contexts } from "../../components/context/Contexts";
-import { FormatNumber } from "../../helpers/FormatNumber";
-import { HOST } from "../../configs/DataEnv";
-import * as ShoppingCartService from "../../services/ShoppingCartsService";
-import * as ProductService from "../../services/ProductService";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Button, message, Popconfirm } from "antd";
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+import Table from 'react-bootstrap/Table';
+import './carts.css';
+import { useContext, useEffect, useState } from 'react';
+import { UContexts } from '../../components/context/UserContext';
+import { Contexts } from '../../components/context/Contexts';
+import { FormatNumber } from '../../helpers/FormatNumber';
+import { HOST } from '../../configs/DataEnv';
+import * as ShoppingCartService from '../../services/ShoppingCartsService';
+import * as ProductService from '../../services/ProductService';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Button, message, Popconfirm } from 'antd';
 
 const Carts = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { User } = useContext(UContexts);
-  const { delCard } = useContext(Contexts);
+  const { delCardByModal } = useContext(Contexts);
   const [isCheck, setisCheck] = useState([]);
   const [ListCart, setListCart] = useState([]);
   const FormatImg = (imgs) => {
-    const img = imgs.split(",")[0];
+    const img = imgs.split(',')[0];
     return img;
   };
   useEffect(() => {
     const chay = async () => {
-      console.log(state);
+      // console.log(state);
       if (state) {
         if (state.list) {
           const { list } = state;
@@ -44,7 +46,7 @@ const Carts = () => {
               quantity: 1,
               saleoff: product.saleoff,
             };
-            console.log(newItem);
+            // console.log(newItem);
             setListCart([newItem]);
           }
         }
@@ -103,15 +105,15 @@ const Carts = () => {
   };
   const handleCheckOut = () => {
     // console.log(isCheck);
-    navigate("/check-out", { state: { listCart: isCheck } });
+    navigate('/check-out', { state: { listCart: isCheck } });
   };
 
   const confirm = async (i) => {
-    delCard(i);
+    delCardByModal(i);
     await ShoppingCartService.delCart(i.id);
     const del = ListCart.filter((item) => item.id !== i.id);
     setListCart(del);
-    message.success("Xóa thành công");
+    message.success('Xóa thành công');
   };
   const cancel = () => {};
   return (
@@ -148,7 +150,7 @@ const Carts = () => {
                     </td>
                     <td className="carts_img">
                       <img
-                        src={HOST + "/uploads/" + item.img}
+                        src={HOST + '/uploads/' + item.img}
                         alt={item.name}
                       />
                       <span>{item.name}</span>
@@ -188,33 +190,27 @@ const Carts = () => {
                   </tr>
                 );
               })}
+              <tr>
+                <td colSpan="4"></td>
+                <td>
+                  Giá trị tổng:
+                  <p style={{ margin: 0 }}>{FormatNumber(AllTotail)}</p>
+                </td>
+                <td>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={handleCheckOut}
+                    disabled={!isCheck.length}
+                  >
+                    Mua ngay
+                  </button>
+                </td>
+              </tr>
             </tbody>
           </Table>
-          <div className="carts_footer">
-            {" "}
-            <Table striped bordered hover>
-              <tbody>
-                <tr>
-                  <td>
-                    Tổng thanh toán:
-                    <p style={{ margin: 0 }}>{FormatNumber(AllTotail)}</p>
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-secondary"
-                      onClick={handleCheckOut}
-                      disabled={!isCheck.length}
-                    >
-                      Mua ngay
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          </div>
         </>
       ) : (
-        "Không có sản phẩm"
+        'Không có sản phẩm'
       )}
     </div>
   );

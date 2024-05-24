@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(false);
             $table->unsignedBigInteger('product_id')->nullable(false);
+            $table->unsignedBigInteger('addPrice_id')->nullable(false);
             $table->integer('quantity')->nullable(false);
             $table->string('img')->nullable(false);
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');

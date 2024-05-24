@@ -1,0 +1,22 @@
+.star-rating .active {
+  color: var(--vip);
+}
+.star-rating * {
+  font-size: 1.1rem;
+  margin: 4px;
+}
+.star-rating *:hover {
+  cursor: pointer;
+}
+.evaluate_content i:hover {
+  cursor: pointer;
+  /* color: var(--vip); */
+  transform: scale(1.1);
+}
+.evaluate_content i {
+  border: 1px solid black;
+  color: white;
+  border-radius: 4px;
+  background-color: black;
+  transition: all 0.5s;
+}

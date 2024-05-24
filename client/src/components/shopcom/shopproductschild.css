@@ -1,6 +1,7 @@
 .shop_products {
   display: flex;
   gap: 20px;
+  background-color: var(--newbg);
   flex-wrap: wrap;
 }
 .ShopProducts_list {
@@ -14,4 +15,7 @@ div.ShopProducts_list_child.col-md-3 {
 .Pagination {
   float: right;
   margin: 20px 0;
+}
+.Pagination button {
+  color: var(--newtext);
 }

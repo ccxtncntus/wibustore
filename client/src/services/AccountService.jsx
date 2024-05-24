@@ -1,9 +1,16 @@
-import * as request from "../configs/Axios";
+import * as request from '../configs/Axios';
 
 const login = async (email, password) => {
   const res = await request.POST(`/api/login`, {
     email: email,
     password: password,
+  });
+  return res;
+};
+const loginGG = async (email, name) => {
+  const res = await request.POST(`/api/loginGG`, {
+    email: email,
+    name: name,
   });
   return res;
 };
@@ -101,4 +108,5 @@ export {
   delUser,
   registerOfAd,
   editOfAd,
+  loginGG,
 };

@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
-import Offcanvas from "react-bootstrap/Offcanvas";
-import "./cardmodal.css";
-import * as Helpers from "../../helpers/FormatNumber";
-import { Contexts } from "../../components/context/Contexts";
-import { UContexts } from "../../components/context/UserContext";
-import { useContext } from "react";
-import { HOST } from "../../configs/DataEnv";
-import * as ShoppingCartsService from "../../services/ShoppingCartsService";
-import { useNavigate } from "react-router-dom";
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react';
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import './cardmodal.css';
+import * as Helpers from '../../helpers/FormatNumber';
+import { Contexts } from '../../components/context/Contexts';
+import { UContexts } from '../../components/context/UserContext';
+import { useContext } from 'react';
+import { HOST } from '../../configs/DataEnv';
+import * as ShoppingCartsService from '../../services/ShoppingCartsService';
+import { useNavigate } from 'react-router-dom';
 const CardModal = ({ placement, show, onClose }) => {
-  const { delCard } = useContext(Contexts);
+  const { delCardByModal, delListAdd } = useContext(Contexts);
   const { User } = useContext(UContexts);
   const [ListCarts, setListCarts] = useState([]);
   const [Load, setLoad] = useState(false);
@@ -18,21 +20,25 @@ const CardModal = ({ placement, show, onClose }) => {
     const chay = async () => {
       if (User) {
         const list = await ShoppingCartsService.listOfUser(User.id);
+        // console.log(list);
         setListCarts(list);
       }
     };
     chay();
   }, [show, Load]);
   const handleDel = async (i) => {
+    console.log(i);
+    // return;
     await ShoppingCartsService.delCart(i.id);
-    delCard(i);
+    delCardByModal();
+    delListAdd(i);
     setLoad((pre) => !pre);
   };
   let tong = 0;
 
   const handleBuy = () => {
     onClose();
-    natigate("/carts", { state: { list: ListCarts } });
+    natigate('/carts', { state: { list: ListCarts } });
   };
   return (
     <>
@@ -52,7 +58,7 @@ const CardModal = ({ placement, show, onClose }) => {
                       <div>
                         <span>
                           {item.name} {item.quantity}
-                          {" * "}
+                          {' * '}
                           {Helpers.FormatNumber(item.price - item.saleoff)}
                         </span>
                         <p>
@@ -62,7 +68,7 @@ const CardModal = ({ placement, show, onClose }) => {
                         </p>
                       </div>
                       <img
-                        src={HOST + "/uploads/" + item.img}
+                        src={HOST + '/uploads/' + item.img}
                         alt={item.name}
                       />
                       <i
@@ -74,11 +80,11 @@ const CardModal = ({ placement, show, onClose }) => {
                   </div>
                 );
               })
-            : "Không có sản phẩm trong đây"}
+            : 'Không có sản phẩm trong đây'}
           <div>Tổng tiền: {Helpers.FormatNumber(tong)}</div>
           <button
             onClick={handleBuy}
-            className={"btn btn-secondary mt-2"}
+            className={'btn btn-secondary mt-2'}
             disabled={!ListCarts.length}
           >
             Giỏ hàng

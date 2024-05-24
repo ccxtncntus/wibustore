@@ -16,6 +16,8 @@ use App\Http\Controllers\SlidersController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AddpriceController;
+use App\Http\Controllers\BlogController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -43,9 +45,19 @@ Route::post('categorys', [CategoryController::class, 'upload']);
 Route::put('categorys/edit/{id}', [CategoryController::class, 'edit']);
 Route::delete('categorys/delete/{id}', [CategoryController::class, 'delete']);
 // products
+// admin
+Route::prefix('productsAdmin')->group(function () {
+    Route::get('/', [ProductsController::class, 'indexAdmin']);
+    Route::get('/{id}', [ProductsController::class, 'listProductOfCategoryAdmin']);
+    // Route::post('/', [AddpriceController::class, 'create']);
+});
+
+
+// user
 Route::get('products', [ProductsController::class, 'index']);
 Route::get('products/sale', [ProductsController::class, 'indexSale']);
 Route::get('products/hot', [ProductsController::class, 'indexHot']);
+Route::get('products/number', [ProductsController::class, 'indeNumber']);
 Route::get('products/random/{id}', [ProductsController::class, 'indexRandom']);
 Route::get('products/once/{value}', [ProductsController::class, 'onceProduct']);
 Route::get('products/listPro/{id}', [ProductsController::class, 'listProductOfCategory']);
@@ -69,6 +81,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [UserCotroller::class, 'logout']);
 });
 Route::post('login', [UserCotroller::class, 'login']);
+Route::post('loginGG', [UserCotroller::class, 'loginGG']);
 Route::post('authentication', [UserCotroller::class, 'authentication']);
 Route::post('register', [UserCotroller::class, 'register']);
 Route::patch('changePass', [UserCotroller::class, 'changePass']);
@@ -148,3 +161,25 @@ Route::get('dashboard/getBest', [DashboardController::class, 'getBest']);
 Route::get('dashboard/getData', [DashboardController::class, 'getData']);
 // notification
 Route::post('sendNotifi', [NotificationController::class, 'sendNoti']);
+
+
+// addprice
+Route::prefix('addprice')->group(function () {
+    Route::get('/{product_id}', [AddpriceController::class, 'index']);
+    Route::post('/', [AddpriceController::class, 'create']);
+    Route::delete('/{id}', [AddpriceController::class, 'destroy']);
+    Route::put('/{id}', [AddpriceController::class, 'edit']);
+});
+// blog
+Route::prefix('blogs')->group(function () {
+    // admin
+    Route::get('/admin/{page}', [BlogController::class, 'indexAdmin']);
+
+    Route::get('/page/{page}', [BlogController::class, 'index']);
+    Route::get('/{idblog}', [BlogController::class, 'show']);
+    Route::post('/', [BlogController::class, 'store']);
+    Route::delete('/{id}', [BlogController::class, 'destroy']);
+    Route::patch('/{id}', [BlogController::class, 'updateActive']);
+    Route::patch('/update/{id}', [BlogController::class, 'updatedefault']);
+    Route::post('/update/{id}', [BlogController::class, 'updateHasImg']);
+});

@@ -2,4 +2,11 @@
   --text: rgb(41, 41, 41);
   --bg: rgb(255, 255, 255);
   --vip: rgb(0, 139, 232);
+  /* --newbg: rgb(24, 24, 24); */
+  --newbg: rgb(230, 230, 230);
+  --newtext: rgb(35, 35, 35);
+  /* --newtext: rgb(255, 255, 255); */
+}
+.vip {
+  color: var(--vip);
 }

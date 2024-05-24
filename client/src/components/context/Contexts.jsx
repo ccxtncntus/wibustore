@@ -1,28 +1,53 @@
-import { createContext, useState } from "react";
+/* eslint-disable react/prop-types */
+import { createContext, useState } from 'react';
 export const Contexts = createContext();
 
 function CardContext({ children }) {
-  const [cardNumber, setcardNumber] = useState([]);
+  const [cardNumber, setcardNumber] = useState(0);
+  const [ListAdd, setListAdd] = useState([]);
   const list = (data) => {
-    // console.log(data);
-    setcardNumber(data);
+    setListAdd(data);
+    setcardNumber(data.length);
   };
   const addCard = async (data) => {
-    const test = cardNumber.some((item) => item.name == data.name);
-    if (test) {
+    const addCheck = ListAdd.some(
+      (item) => item.idProduct == data.idProduct && item.idPrice == data.idPrice
+    );
+    if (addCheck) {
       // cộng
-      console.log("không làm gì");
-    } else {
-      // thêm
-      setcardNumber([...cardNumber, data]);
+      console.log('Đã tồn tại sp trong giỏ hàng');
+      return;
     }
+    // thêm
+    console.log('Thêm sản phẩm mới');
+    setcardNumber((pre) => pre + 1);
+    setListAdd([...ListAdd, data]);
   };
-  const delCard = async (data) => {
-    const index = cardNumber.findIndex((item) => item.name !== data.name);
-    cardNumber.splice(index, 1);
+
+  const delListAdd = async (data) => {
+    const del = ListAdd.filter(
+      (item) => item.idProduct != data.idProduct && item.idPrice != data.idPrice
+    );
+    setListAdd(del);
+  };
+  const delCardByModal = () => {
+    setcardNumber((pre) => pre - 1);
+  };
+
+  const delNumberCard = async (number) => {
+    setcardNumber((pre) => pre - Number(number));
   };
   return (
-    <Contexts.Provider value={{ cardNumber, addCard, delCard, list }}>
+    <Contexts.Provider
+      value={{
+        cardNumber,
+        addCard,
+        list,
+        delCardByModal,
+        delNumberCard,
+        delListAdd,
+      }}
+    >
       {children}
     </Contexts.Provider>
   );

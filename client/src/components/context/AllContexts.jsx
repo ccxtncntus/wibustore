@@ -1,22 +1,23 @@
-import { createContext, useState } from "react";
-import CardContext from "./Contexts";
-import CateContext from "./CategoriesContexts";
-import UserContext from "./UserContext";
-import SliderContex from "./SliderContex";
-import ProductHomeContex from "./ProductHomeContex";
+import { createContext } from 'react';
+import CardContext from './Contexts';
+import CateContext from './CategoriesContexts';
+import UserContext from './UserContext';
+import SliderContex from './SliderContex';
+import FillterProductsContext from './FillterContext';
 export const Contexts = createContext();
+// eslint-disable-next-line react/prop-types
 function All({ children }) {
   return (
     <Contexts.Provider value={null}>
-      <ProductHomeContex>
-        <SliderContex>
-          <UserContext>
-            <CateContext>
+      <SliderContex>
+        <UserContext>
+          <CateContext>
+            <FillterProductsContext>
               <CardContext>{children}</CardContext>
-            </CateContext>
-          </UserContext>
-        </SliderContex>
-      </ProductHomeContex>
+            </FillterProductsContext>
+          </CateContext>
+        </UserContext>
+      </SliderContex>
     </Contexts.Provider>
   );
 }

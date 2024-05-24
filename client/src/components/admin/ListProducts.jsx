@@ -1,13 +1,14 @@
-import Form from "react-bootstrap/Form";
-import { Button, message, Popconfirm } from "antd";
-import Table from "react-bootstrap/Table";
-import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import * as CategoryService from "../../services/CategoryService";
-import * as ProductService from "../../services/ProductService";
-import EditProductAdmin from "../modal/EditProductAdmin";
-import Pagination from "@mui/material/Pagination";
-import { CountPage } from "../../helpers/FormatNumber";
+import Form from 'react-bootstrap/Form';
+import { Button, message, Popconfirm } from 'antd';
+import Table from 'react-bootstrap/Table';
+import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import * as CategoryService from '../../services/CategoryService';
+import * as ProductService from '../../services/ProductService';
+import EditProductAdmin from '../modal/EditProductAdmin';
+import Pagination from '@mui/material/Pagination';
+import { CountPage } from '../../helpers/FormatNumber';
+import UserAddPriceModal from './adminModal/UserAddPriceModal';
 const ListProducts = () => {
   const { register, watch } = useForm();
   const [listCate, setlistCate] = useState([]);
@@ -24,8 +25,7 @@ const ListProducts = () => {
         const data = await CategoryService.List(1);
         data.status == 200 && setlistCate(data.data.data);
         if (Cate == 0) {
-          const dataProCategory = await ProductService.List(page, "desc");
-          console.log(dataProCategory);
+          const dataProCategory = await ProductService.ListAdmin(page);
           if (dataProCategory.status === 200) {
             setlistProductCate(dataProCategory.data.data);
             setCountAll(dataProCategory.count);
@@ -33,12 +33,10 @@ const ListProducts = () => {
             setlistProductCate([]);
           }
         } else {
-          const dataProCategory = await ProductService.listProCategory(
+          const dataProCategory = await ProductService.listProCategoryAdmin(
             Cate,
-            page,
-            "desc"
+            page
           );
-          console.log(dataProCategory);
           if (dataProCategory.status === 200) {
             setlistProductCate(dataProCategory.data.data);
             setCountAll(dataProCategory.count);
@@ -56,12 +54,11 @@ const ListProducts = () => {
 
   const confirm = async (item) => {
     const del = await ProductService.delProduct(item.id);
-    console.log(del);
     setdelSuccess((pre) => !pre);
-    message.success("Delete success");
+    message.success('Delete success');
   };
   const cancel = () => {
-    message.error("Undelete");
+    message.warning('Hủy xóa');
   };
   const [show, setShow] = useState(false);
   const [dataProduct, setdataProduct] = useState([]);
@@ -81,6 +78,16 @@ const ListProducts = () => {
   const handleChange = (event, value) => {
     setPage(value);
   };
+  const [itemAddprice, setitemAddprice] = useState('');
+  const handleAddPrice = (item) => {
+    // return;
+    setitemAddprice(item);
+    setModalShow(true);
+  };
+  const handleHide = () => {
+    setModalShow(false);
+  };
+  const [modalShow, setModalShow] = useState(false);
   return (
     <>
       <EditProductAdmin
@@ -89,16 +96,18 @@ const ListProducts = () => {
         onLoad={handleLoad}
         dataProduct={dataProduct}
       />
+      <UserAddPriceModal
+        show={modalShow}
+        onHide={() => handleHide()}
+        itemAddprice={itemAddprice}
+      />
       <div className="row">
         <div className="col-md-6">
           <Form.Select
             aria-label="Default select example"
-            // {...register("category", {
-            //   required: "Category is required",
-            // })}
             onChange={(e) => handleChaneAll(e)}
           >
-            <option value={"0"}>All</option>
+            <option value={'0'}>All</option>
             {listCate.length > 0 &&
               listCate.map((item, index) => (
                 <option key={index} value={item.id}>
@@ -118,7 +127,7 @@ const ListProducts = () => {
                 <th>Name</th>
                 <th>Depcription</th>
                 <th>Quantity</th>
-                <th>Price</th>
+                {/* <th>Price</th> */}
                 <th>Status</th>
                 <th>*</th>
               </tr>
@@ -131,7 +140,7 @@ const ListProducts = () => {
                     <td>{item.name}</td>
                     <td>{item.description}</td>
                     <td>{item.quantity}</td>
-                    <td>{item.price} đ</td>
+                    {/* <td>{item.price} đ</td> */}
                     <td>{item.status}</td>
 
                     <td>
@@ -152,6 +161,15 @@ const ListProducts = () => {
                       >
                         Edit
                       </Button>
+
+                      <Button
+                        className="m-1"
+                        onClick={() => handleAddPrice(item)}
+                        type="primary "
+                        ghost
+                      >
+                        Giá
+                      </Button>
                     </td>
                   </tr>
                 ))}
@@ -169,7 +187,7 @@ const ListProducts = () => {
           page={page}
           onChange={handleChange}
           color="primary"
-          style={{ float: "right" }}
+          style={{ float: 'right' }}
         />
       )}
     </>

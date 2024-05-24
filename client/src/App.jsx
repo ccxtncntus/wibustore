@@ -1,43 +1,54 @@
-import "./App.css";
-import { Routes, Route } from "react-router-dom";
-import { Suspense, lazy } from "react";
-import CheckOutSuccess from "./pages/checkout/CheckOutSuccess";
-import Loading from "./components/loading/Loading";
-
-const HomeLazy = lazy(() => import("./pages/Home"));
-const AdminLazy = lazy(() => import("./pages/Admin"));
-const ProductAdminLazy = lazy(() => import("./components/admin/ProductAdmin"));
-const OrderAdminLazy = lazy(() => import("./components/admin/OrderAdmin"));
-const AccountAdminLazy = lazy(() => import("./components/admin/AccountAdmin"));
-const SlidersAdminLazy = lazy(() => import("./components/admin/SlidersAdmin"));
+import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+import CheckOutSuccess from './pages/checkout/CheckOutSuccess';
+import Loading from './components/loading/Loading';
+import CheckOutLoading from './pages/checkout/CheckOutLoading';
+import Nothing from './pages/posts/nothing/Nothing';
+const HomeLazy = lazy(() => import('./pages/Home'));
+const AdminLazy = lazy(() => import('./pages/Admin'));
+const ProductAdminLazy = lazy(() => import('./components/admin/ProductAdmin'));
+const OrderAdminLazy = lazy(() => import('./components/admin/OrderAdmin'));
+const AccountAdminLazy = lazy(() => import('./components/admin/AccountAdmin'));
+const SlidersAdminLazy = lazy(() => import('./components/admin/SlidersAdmin'));
+// admin
+const PostAdminLazy = lazy(() =>
+  import('./components/admin/postAdmin/PostAdmin')
+);
+const ListPostAdminLazy = lazy(() =>
+  import('./components/admin/postAdmin/ListPosts')
+);
 const DashBoardAdminLazy = lazy(() =>
-  import("./pages/admin/dashboard/DashBoard")
+  import('./pages/admin/dashboard/DashBoard')
 );
 const CategoriesAdminLazy = lazy(() =>
-  import("./components/admin/CategoriesAdmin")
+  import('./components/admin/CategoriesAdmin')
 );
-const ListProductLazy = lazy(() => import("./components/admin/ListProducts"));
-const CrawlLazy = lazy(() => import("./pages/crawl/Crawl"));
-const CrawDetaillLazy = lazy(() => import("./pages/crawl/CrawlDetail"));
+const ListProductLazy = lazy(() => import('./components/admin/ListProducts'));
+const CrawlLazy = lazy(() => import('./pages/crawl/Crawl'));
+const CrawDetaillLazy = lazy(() => import('./pages/crawl/CrawlDetail'));
 
-const ShopllLazy = lazy(() => import("./pages/shop/Shop"));
-const PostsllLazy = lazy(() => import("./pages/posts/Posts"));
-const ContactllLazy = lazy(() => import("./pages/contact/Contact"));
-const HomeContentllLazy = lazy(() => import("./pages/home/HomeContent"));
-const ProductsDetailllLazy = lazy(() => import("./pages/shop/ProductsDetail"));
-const LoginllLazy = lazy(() => import("./pages/login/Login"));
-const RegisterllLazy = lazy(() => import("./pages/register/Register"));
-const CheckOutllLazy = lazy(() => import("./pages/checkout/CheckOut"));
-const CartsllLazy = lazy(() => import("./pages/carts/Carts"));
+const ShopllLazy = lazy(() => import('./pages/shop/Shop'));
+const PostsllLazy = lazy(() => import('./pages/posts/Posts'));
+const PostDetailLazy = lazy(() =>
+  import('./pages/posts/postDetail/PostDetail')
+);
+const ContactllLazy = lazy(() => import('./pages/contact/Contact'));
+const HomeContentllLazy = lazy(() => import('./pages/home/HomeContent'));
+const ProductsDetailllLazy = lazy(() => import('./pages/shop/ProductsDetail'));
+const LoginllLazy = lazy(() => import('./pages/login/Login'));
+const RegisterllLazy = lazy(() => import('./pages/register/Register'));
+const CheckOutllLazy = lazy(() => import('./pages/checkout/CheckOut'));
+const CartsllLazy = lazy(() => import('./pages/carts/Carts'));
 const ForgotPassllLazy = lazy(() =>
-  import("./pages/forgotpassword/ForgotPass")
+  import('./pages/forgotpassword/ForgotPass')
 );
 const ChangePassllLazy = lazy(() =>
-  import("./pages/changepassword/ChangePass")
+  import('./pages/changepassword/ChangePass')
 );
-const MyCartsllLazy = lazy(() => import("./pages/orders/MyOders"));
+const MyCartsllLazy = lazy(() => import('./pages/orders/MyOders'));
 // profile
-const ProfilellLazy = lazy(() => import("./pages/profile/Profile"));
+const ProfilellLazy = lazy(() => import('./pages/profile/Profile'));
 
 function App() {
   return (
@@ -150,6 +161,7 @@ function App() {
             }
           />
           <Route path="/check-out/success" element={<CheckOutSuccess />} />
+          <Route path="/check-out/loading" element={<CheckOutLoading />} />
           <Route
             path="/carts"
             element={
@@ -179,6 +191,14 @@ function App() {
             element={
               <Suspense fallback={<Loading />}>
                 <PostsllLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/posts/:idPost"
+            element={
+              <Suspense fallback={<Loading />}>
+                <PostDetailLazy />
               </Suspense>
             }
           />
@@ -263,8 +283,24 @@ function App() {
               </Suspense>
             }
           />
+          {/* adminpost */}
+          <Route
+            path="post"
+            element={
+              <Suspense fallback={<Loading />}>
+                <PostAdminLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="posts"
+            element={
+              <Suspense fallback={<Loading />}>
+                <ListPostAdminLazy />
+              </Suspense>
+            }
+          />
         </Route>
-
         <Route
           path="/crawl"
           element={
@@ -283,6 +319,7 @@ function App() {
           }
         />
         <Route path="/loading" element={<Loading />} />
+        <Route path="*" element={<Nothing />} />
       </Routes>
     </>
   );

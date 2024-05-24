@@ -22,13 +22,13 @@
 }
 @media screen and (max-width: 375px) {
 }
-
+/* 
 .carts_footer {
   position: absolute;
   bottom: 12px;
   z-index: 1;
   right: 160px;
-}
+} */
 .carts .fa-trash-can:hover {
   cursor: pointer;
   color: red;

@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import Table from "react-bootstrap/Table";
-import { FormatNumber } from "../../helpers/FormatNumber";
-import { useLocation } from "react-router-dom";
-import { HOST } from "../../configs/DataEnv";
+import { useEffect, useState } from 'react';
+import Table from 'react-bootstrap/Table';
+import { FormatNumber } from '../../helpers/FormatNumber';
+import { useLocation } from 'react-router-dom';
+import { HOST } from '../../configs/DataEnv';
 const CheckOutCart = (props) => {
   const { onTotail } = props;
   const { state } = useLocation();
   const [Buy, setBuy] = useState([]);
   const [Totail, setTotail] = useState(0);
   const FormatImg = (imgs) => {
-    const img = imgs.split(",")[0];
+    const img = imgs.split(',')[0];
     return img;
   };
   useEffect(() => {
     if (state) {
       const { listCart } = state;
       setBuy(listCart);
-      console.log(listCart);
+      // console.log(listCart);
     }
     return () => {};
   }, []);
@@ -38,10 +38,10 @@ const CheckOutCart = (props) => {
         <Table striped hover>
           <thead>
             <tr>
-              <th style={{ color: "gray" }}>Sản phẩm</th>
-              <th style={{ color: "gray" }}>Đơn giá</th>
-              <th style={{ color: "gray" }}>Số luợng</th>
-              <th style={{ color: "gray" }}>Thành tiền</th>
+              <th style={{ color: 'gray' }}>Sản phẩm</th>
+              <th style={{ color: 'gray' }}>Đơn giá</th>
+              <th style={{ color: 'gray' }}>Số luợng</th>
+              <th style={{ color: 'gray' }}>Thành tiền</th>
             </tr>
           </thead>
           <tbody>
@@ -52,7 +52,7 @@ const CheckOutCart = (props) => {
                     <img
                       src={
                         HOST +
-                        "/uploads/" +
+                        '/uploads/' +
                         (item.img || FormatImg(item.all_images))
                       }
                       alt=""

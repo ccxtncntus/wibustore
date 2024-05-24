@@ -1,21 +1,18 @@
-import { useEffect, useState, useContext } from "react";
-
-import "./featured.css";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import Cart from "../../components/product/Cart";
-import ProductLoading from "../../components/loadingProduct/ProductLoading";
-import * as ProductService from "../../services/ProductService";
-import { ProHomeContexts } from "../../components/context/ProductHomeContex";
+import { useEffect, useState } from 'react';
+import './featured.css';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import Cart from '../../components/product/Cart';
+import ProductLoading from '../../components/loadingProduct/ProductLoading';
+import * as ProductService from '../../services/ProductService';
+import { Link } from 'react-router-dom';
 const Featured = () => {
-  const { ProductsHome } = useContext(ProHomeContexts);
-  const [Data, setData] = useState(null);
   const test = [1, 2, 3, 4];
   const [ListFeatured, setListFeatured] = useState([]);
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 1024 },
-      items: 4,
+      items: 5,
     },
     desktop: {
       breakpoint: { max: 1024, min: 800 },
@@ -30,65 +27,36 @@ const Featured = () => {
       items: 2,
     },
   };
-
   useEffect(() => {
     const run = async () => {
-      if (ProductsHome) {
-        setListFeatured(ProductsHome.data.data);
-        return;
-      }
+      const listFeatured = await ProductService.List(1, 'desc');
+      setListFeatured(
+        listFeatured.status === 200 ? listFeatured.data.data : []
+      );
     };
     run();
-  }, [ProductsHome]);
-
-  useEffect(() => {
-    const run = async () => {
-      if (Data == 0) {
-        if (ProductsHome) {
-          setListFeatured(ProductsHome.data.data);
-        } else {
-          const listFeatured = await ProductService.List(1, "desc");
-          setListFeatured(
-            listFeatured.status === 200 ? listFeatured.data.data : []
-          );
-        }
-        return;
-      }
-      if (Data && Data != 0) {
-        const listFeatured = await ProductService.ListSale(1, "desc");
-        setListFeatured(
-          listFeatured.status === 200 ? listFeatured.data.data : []
-        );
-      }
-    };
-    run();
-  }, [Data]);
+  }, []);
   return (
-    <div className="featured">
-      <div className="featured_title">
-        <span
-          className={
-            Data === 0 || Data == null ? "featured_title_active" : undefined
-          }
-          onClick={() => setData(0)}
-        >
-          Featured
-        </span>
-        <span
-          className={Data === 1 ? "featured_title_active" : undefined}
-          onClick={() => setData(1)}
-        >
-          Sale
-        </span>
-      </div>
-      <div className="featured_listSp mt-4">
-        <Carousel responsive={responsive} showDots={ListFeatured.length > 4}>
-          {ListFeatured.length > 0
-            ? ListFeatured.map((item, index) => (
-                <Cart key={index} item={item} />
-              ))
-            : test.map((item, index) => <ProductLoading key={index} />)}
-        </Carousel>
+    <div className="featured_vip">
+      <div className="featured container p-0">
+        <div className="featured_title">
+          <h5>
+            Sản phẩm <span className="vip">mới</span>
+          </h5>
+          <span>Sản phẩm được cập nhật liên tục mỗi ngày</span>
+        </div>
+        <Link to={'/shop'} className="views_all vip">
+          Xem tất cả <i className="fa-solid fa-angles-right"></i>
+        </Link>
+        <div className="featured_listSp mt-2">
+          <Carousel responsive={responsive} showDots={ListFeatured.length > 4}>
+            {ListFeatured.length > 0
+              ? ListFeatured.map((item, index) => (
+                  <Cart key={index} item={item} />
+                ))
+              : test.map((item, index) => <ProductLoading key={index} />)}
+          </Carousel>
+        </div>
       </div>
     </div>
   );

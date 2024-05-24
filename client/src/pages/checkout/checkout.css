@@ -41,7 +41,7 @@
 .CheckOutSuccess {
   display: grid;
   place-content: center;
-  background: url("https://i.pinimg.com/originals/fe/1c/24/fe1c24bd035bb202ce7c7de8d16ab00d.jpg")
+  background: url('https://i.pinimg.com/originals/fe/1c/24/fe1c24bd035bb202ce7c7de8d16ab00d.jpg')
     center/cover no-repeat;
   height: 80vh;
 }
@@ -73,4 +73,60 @@
   }
 }
 @media screen and (max-width: 375px) {
+}
+
+.checkout_loading_vip {
+  background: url('../../../public/bgloading.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.checkout_loading_vip_child {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.checkout_loading {
+  display: grid;
+  place-items: center;
+}
+.loaderss {
+  width: 48px;
+  height: 48px;
+  display: block;
+  margin: 15px auto;
+  position: relative;
+  /* color: #ccc; */
+  color: #dd1010;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.loaderss::after,
+.loaderss::before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 50%;
+  left: 50%;
+  transform: scale(0.5) translate(0, 0);
+  background-color: var(--vip);
+  border-radius: 50%;
+  animation: animloader 1s infinite ease-in-out;
+}
+.loaderss::before {
+  background-color: #000;
+  transform: scale(0.5) translate(-48px, -48px);
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes animloader {
+  50% {
+    transform: scale(1) translate(-50%, -50%);
+  }
 }

@@ -1,19 +1,22 @@
-.productDetail {
-  padding: 8px 160px;
+.productDetail_vip {
   min-height: 80vh;
-  background-color: aliceblue;
+  background-color: var(--newbg);
+  position: relative;
 }
 .product_detail {
-  display: flex;
-  gap: 10px;
+  position: sticky;
+  top: 4px;
+  height: 100vh;
 }
 .product_detail_imgPro img {
   width: 100%;
+  height: 100vh;
+  object-fit: cover;
 }
 .product_detail_listimg {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .product_detail_listimg img {
@@ -28,10 +31,7 @@
 }
 /* title */
 .product_detail_titles {
-  display: flex;
-  gap: 16px;
-  flex-direction: column;
-  padding: 0 40px;
+  padding: 0 28px;
 }
 .product_detail_title {
   font-size: 24px;
@@ -39,7 +39,7 @@
   text-transform: capitalize;
 }
 .product_detail_price {
-  font-size: 30px;
+  font-size: 24px;
   color: #222;
   font-weight: 700;
   display: inline-block;
@@ -47,30 +47,67 @@
   line-height: 100%;
 }
 /* more */
-.product_detail_more p {
-  font-size: 1.2rem;
-  font-weight: 500;
+.product_detail_more {
+  padding: 20px 0;
 }
+/* .product_detail_more p {
+  font-size: 1.4rem;
+  font-weight: 500;
+} */
 .productDetail_img {
   min-height: 75vh;
 }
 @media screen and (max-width: 1280px) {
   .productDetail {
-    padding: 8px 120px;
+    /* padding: 8px 120px; */
   }
 }
 @media screen and (max-width: 1024px) {
   .productDetail {
-    padding: 8px 60px;
+    /* padding: 8px 60px; */
   }
 }
 @media screen and (max-width: 768px) {
 }
 @media screen and (max-width: 599px) {
   .productDetail {
-    padding: 8px 20px;
+    /* padding: 8px 20px; */
     justify-content: flex-end;
   }
 }
 @media screen and (max-width: 375px) {
+}
+
+.product_detail_btn_active {
+  background-color: var(--text);
+  color: var(--bg);
+  margin-right: 8px;
+  border: 1px solid var(--text);
+}
+.product_detail_btn_active:hover {
+  border: 1px solid var(--newbg);
+}
+.product_detail_btn_un {
+  border: 1px solid var(--text);
+  margin-right: 8px;
+}
+.product_detail_btn_un:hover {
+  background-color: var(--text);
+  color: var(--bg);
+  border: 1px solid var(--text);
+}
+
+.btn_add_product {
+  width: 60%;
+  padding: 10px 40px;
+  border: 2px solid var(--vip);
+  color: var(--vip);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.btn_add_product:hover {
+  background-color: var(--vip);
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }

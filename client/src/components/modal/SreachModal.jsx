@@ -1,15 +1,16 @@
-import { useEffect, useState, useRef } from "react";
-import Offcanvas from "react-bootstrap/Offcanvas";
-import "./sreachmodal.css";
-import { useDebounce } from "@uidotdev/usehooks";
-import * as ProductService from "../../services/ProductService";
-import { HOST } from "../../configs/DataEnv";
-import { FormatNumber } from "../../helpers/FormatNumber";
-import { Link } from "react-router-dom";
+/* eslint-disable react/prop-types */
+import { useEffect, useState, useRef } from 'react';
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import './sreachmodal.css';
+import { useDebounce } from '@uidotdev/usehooks';
+import * as ProductService from '../../services/ProductService';
+import { HOST } from '../../configs/DataEnv';
+import { FormatNumber, returnMinPrice } from '../../helpers/FormatNumber';
+import { Link } from 'react-router-dom';
 
 const SreachModal = (props) => {
   const { placement, show, onClose } = props;
-  const [Sreach, setSreach] = useState("");
+  const [Sreach, setSreach] = useState('');
   const [ListSreach, setListSreach] = useState([]);
   const [IsSreach, setIsSreach] = useState(false);
   const debouncedSearch = useDebounce(Sreach, 300);
@@ -20,7 +21,7 @@ const SreachModal = (props) => {
       if (show) {
         setLoad((pre) => !pre);
         setListSreach([]);
-        setSreach("");
+        setSreach('');
       }
     };
     chay();
@@ -36,7 +37,7 @@ const SreachModal = (props) => {
 
   useEffect(() => {
     const chay = async () => {
-      if (Sreach != "") {
+      if (Sreach != '') {
         setIsSreach(true);
         const data = await ProductService.onceProduct(Sreach.trim());
         data.status === 200 ? setListSreach(data.data) : setListSreach([]);
@@ -44,9 +45,10 @@ const SreachModal = (props) => {
       }
     };
     chay();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
   const formatImg = (list) => {
-    const img = list.split(",")[0].trim();
+    const img = list.split(',')[0].trim();
     return img;
   };
   return (
@@ -68,25 +70,31 @@ const SreachModal = (props) => {
             />
             <hr className="mt-4" />
             {/* child */}
-            {IsSreach && "Đang tìm kiếm"}
+            {IsSreach && 'Đang tìm kiếm'}
             {!IsSreach && ListSreach.length > 0
               ? ListSreach.map((item, index) => {
                   return (
                     <div className="sreachModal" key={index}>
                       <img
-                        src={HOST + "/uploads/" + formatImg(item.all_images)}
+                        src={HOST + '/uploads/' + formatImg(item.all_images)}
                         alt={item.name}
                       />
                       <span>
                         <Link to={`shop/${item.id}`} onClick={onClose}>
                           {item.name}
                         </Link>
-                        <p>{FormatNumber(item.price - item.saleoff)}</p>
+
+                        <p>
+                          {FormatNumber(
+                            returnMinPrice(item.price_and_saleoff).price -
+                              returnMinPrice(item.price_and_saleoff).saleoff
+                          )}
+                        </p>
                       </span>
                     </div>
                   );
                 })
-              : "..."}
+              : '...'}
           </div>
         </Offcanvas.Body>
       </Offcanvas>
