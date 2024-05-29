@@ -9,6 +9,12 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import ImgEvaluate from './ImgEvaluate';
 import { UContexts } from '../../../components/context/UserContext';
+import * as NotificationService from '../../../services/NotificationService';
+import * as CommentsService from '../../../services/CommentsService';
+import { useParams, Link } from 'react-router-dom';
+import Pusher from 'pusher-js';
+import { message } from 'antd';
+import { HOST } from '../../../configs/DataEnv';
 const Evaluate = ({ product }) => {
   const { User } = useContext(UContexts);
   const [rating, setRating] = useState(0);
@@ -16,57 +22,201 @@ const Evaluate = ({ product }) => {
   const [content, setcontent] = useState('');
   const [files, setfiles] = useState([]);
   const [isValidate, setisValidate] = useState(false);
+
   const handleClick = (index) => {
     setisEvalute(true);
-    console.log(index + 1);
     setRating(index + 1);
   };
-  const handleSend = () => {
-    setisValidate(true);
-    if (content == '') {
-      return;
-    }
-    console.log(files.length);
-    if (files.length == 0) {
-      console.log({
-        type: 'Không có img',
-        content: content,
-        star: rating,
-        product_id: product.id,
-        user_id: User.id,
-      });
+  const handleSend = async () => {
+    if (User) {
+      setisValidate(true);
+      if (content == '') {
+        return;
+      }
+      if (files.length < 1) {
+        // console.log({
+        //   type: 'Không có img',
+        // });
+        // user_id, product_id, comments, stars, imgs;
+        let formData = new FormData();
+        formData.append('user_id', User.id);
+        formData.append('product_id', product.id);
+        formData.append('comments', content);
+        formData.append('stars', rating);
+        const comment = await CommentsService.insert(formData);
+        if (comment.status == 200) {
+          delFile();
+          reset();
+          message.success('Bạn đã bình luận sản phẩm');
+          // renderComment();
+          await NotificationService.comment(User.name, product.id);
+          return;
+        }
+        message.warning('Có lỗi xảy ra xin thử lại sau');
+        setisValidate(false);
+        return;
+      }
+      // console.log({
+      //   type: 'Có img',
+      //   files: files,
+      // });
+
+      let formData = new FormData();
+      formData.append('user_id', User.id);
+      formData.append('product_id', product.id);
+      formData.append('comments', content);
+      formData.append('stars', rating);
+      // formData.append('imgs', files);
+      for (let i = 0; i < files.length; i++) {
+        formData.append(`imgs[${i}]`, files[i]);
+      }
+      const comment = await CommentsService.insert(formData);
+      if (comment.status == 200) {
+        delFile();
+        reset();
+        message.success('Bạn đã bình luận sản phẩm');
+        await NotificationService.comment(User.name, product.id);
+        // renderComment();
+        return;
+      }
+      message.warning('Có lỗi xảy ra xin thử lại sau');
       setisValidate(false);
       return;
     }
-    console.log({
-      type: 'Có img',
-      content: content,
-      star: rating,
-      img: files,
-      product_id: product.id,
-      user_id: User.id,
-    });
-    setisValidate(false);
+    message.warning('Vui lòng đăng nhập để bình luận thực hiện chức năng này');
   };
 
   const [imgsBlob, setimgsBlob] = useState([]);
   const handleFiles = (e) => {
     const files = e.target.files;
+    setfiles(files);
     const list = [];
     for (let index = 0; index < files.length; index++) {
       const element = files[index];
       list.push(URL.createObjectURL(element));
     }
     setimgsBlob(list);
-    var result = Object.keys(files).map((key) => files[key]);
-    setfiles(result);
   };
-  const delFile = (index) => {
-    files.splice(index, 1);
-    setfiles(files);
+
+  const reset = () => {
+    setisEvalute(false);
+    setisValidate(false);
+    setRating(0);
+    setcontent('');
   };
+
+  const delFile = () => {
+    imgsBlob.map((item) => {
+      URL.revokeObjectURL(item);
+    });
+    setfiles([]);
+    setimgsBlob([]);
+  };
+  const [comments, setComments] = useState([]);
+  const renderComment = async () => {
+    const cs = await CommentsService.getLimitP(product.id);
+    setComments(cs);
+  };
+
+  // product.id;
+  // const datas = useParams();
+  // real time
+  useEffect(() => {
+    renderComment();
+    const pusher = new Pusher('3c30b00645ce31e7d36e', {
+      cluster: 'ap1',
+    });
+    const channel = pusher.subscribe('comment');
+    const handleMessage = (data) => {
+      if (data.idProduct == product.id) {
+        // console.log(data);
+        renderComment();
+      }
+    };
+    channel.bind('message', handleMessage);
+    return () => {
+      channel.unbind('message', handleMessage);
+      pusher.unsubscribe('comment');
+    };
+  }, []);
+
+  // const handleComment = async () => {
+  //   if (User) {
+  //     await NotificationService.comment(User.name, datas.idProduct);
+  //     return;
+  //   }
+  //   message.warning('Vui lòng đăng nhập để bình luận thực hiện chức năng này');
+  // };
+  function formatDate(d) {
+    var date = new Date(d);
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return (
+      date.getMonth() +
+      1 +
+      '/' +
+      date.getDate() +
+      '/' +
+      date.getFullYear() +
+      '  ' +
+      strTime
+    );
+  }
+  const [viewAll, setviewAll] = useState(false);
+  const renderCommentAll = async () => {
+    const cs = await CommentsService.getP(product.id);
+    setComments(cs);
+  };
+  const handleView = () => {
+    setviewAll((pre) => !pre);
+    if (viewAll) {
+      renderComment();
+      return;
+    }
+    renderCommentAll();
+  };
+  const handleDelComment = async (id) => {
+    const check = prompt('Xác nhận xóa (y/n)');
+    if (check == 'y') {
+      const checkc = await CommentsService.destroy(id);
+      if (checkc.status == 200) {
+        message.success('Xóa thành công');
+        await NotificationService.comment(User.name, product.id);
+        return;
+      }
+      message.warning('Có lỗi xảy ra xin thử lại sau');
+      return;
+    }
+  };
+  // recomment
+  const [reComments, setreComments] = useState('');
+  const [contentRe, setcontentRe] = useState('');
+  const handleRecomment = (id) => {
+    if (id.recomments) {
+      setcontentRe(id.recomments);
+    }
+    setreComments(id);
+  };
+  const handleRecommenSuccess = async () => {
+    const rec = await CommentsService.recomment(reComments.id, contentRe);
+    if (rec.status == 200) {
+      message.success('Phản hồi thành công');
+      await NotificationService.comment(User.name, product.id);
+      setreComments('');
+      setcontentRe('');
+      return;
+    }
+    message.warning('Có lỗi xảy ra xin thử lại sau');
+  };
+
   return (
     <>
+      {/* <button onClick={handleComment}>testSend comment</button> */}
       <div className="h4 text-center">
         <span className="vip">Đánh giá</span> sản phẩm
       </div>
@@ -87,9 +237,18 @@ const Evaluate = ({ product }) => {
               <label>Hình ảnh sản phẩm</label>
               <br />
               <label htmlFor="evaluate_file">
-                <i className="fa-solid fa-circle-plus p-2" />
-                {/* <i className="fa-solid fa-circle-xmark p-2" /> */}
+                <i
+                  className="fa-solid fa-circle-plus p-2"
+                  style={{ marginRight: 8 }}
+                />
               </label>
+              {imgsBlob.length > 0 && (
+                <i
+                  onClick={delFile}
+                  className="fa-solid fa-circle-xmark p-2"
+                  style={{ background: 'red', border: '1px solid red' }}
+                />
+              )}
               <Form.Control
                 onChange={handleFiles}
                 className="d-none"
@@ -99,11 +258,7 @@ const Evaluate = ({ product }) => {
               />
             </Form.Group>
             {/* imgs */}
-            <ImgEvaluate
-              imgsblob={imgsBlob}
-              setimgsblob={setimgsBlob}
-              delfile={delFile}
-            />
+            <ImgEvaluate imgsblob={imgsBlob} />
             {/* ---- */}
             <Form.Group className="mb-3 mt-2">
               <Form.Label htmlFor="textarea_evaluate">Nội dung</Form.Label>
@@ -136,6 +291,112 @@ const Evaluate = ({ product }) => {
           </Form>
         </div>
       )}
+      <>
+        <hr />
+        {comments.length == 0 && 'Sản phẩm chưa có bình luận nào'}
+        {comments.length > 0 &&
+          comments.map((item, index) => (
+            <div className={'mt-4'} key={index}>
+              <Link
+                href="#"
+                style={{ fontSize: '1.1rem' }}
+                className="m-0 p-0 fixa d-block"
+              >
+                {item.user_name}{' '}
+                <span style={{ fontSize: '.8rem' }}>
+                  {formatDate(item.updated_at)}
+                </span>
+              </Link>
+              <span>
+                {Array.from({ length: item.stars }).map((_, index) => (
+                  <i key={index} className="fa-solid fa-star vip"></i>
+                ))}
+              </span>
+              <p className="m-0 p-0 fixa">{item.comments}</p>
+              <div>
+                {item.imgs &&
+                  JSON.parse(item.imgs).map((i, index) => (
+                    <img
+                      key={index}
+                      src={HOST + '/uploads/' + i}
+                      alt={i}
+                      style={{ height: 80, marginRight: 4 }}
+                    />
+                  ))}
+
+                {(item.recomments || item?.recomments == '') && (
+                  <p
+                    className={'p-2 m-0 mt-2 text-bg-light'}
+                    style={{ borderRadius: 4 }}
+                  >
+                    <span>Phản Hồi Của shop</span>
+                    <span className={'d-block'} style={{ fontSize: '.9rem' }}>
+                      {item.recomments}
+                    </span>
+                  </p>
+                )}
+              </div>
+
+              {User && (item.user_id == User.id || User.role == 'admin') && (
+                <button
+                  className="text-danger btn"
+                  style={{ fontSize: '.9rem', marginRight: 8 }}
+                  onClick={() => handleDelComment(item.id)}
+                >
+                  Xóa
+                </button>
+              )}
+
+              {User && User.role == 'admin' && (
+                <button
+                  className="vip btn"
+                  style={{ fontSize: '.9rem' }}
+                  onClick={() => handleRecomment(item)}
+                >
+                  Phản hồi
+                </button>
+              )}
+              {reComments.id == item.id && (
+                <>
+                  <div className="form-group">
+                    <textarea
+                      className="form-control"
+                      rows="3"
+                      placeholder="Phản hồi của shop"
+                      value={contentRe}
+                      onChange={(e) => setcontentRe(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    className="vip btn btn-success mt-1"
+                    style={{ fontSize: '.9rem' }}
+                    onClick={() => handleRecommenSuccess()}
+                    disabled={contentRe.trim() == ''}
+                  >
+                    Xác nhận
+                  </button>
+                  <button
+                    className="vip btn btn-secondary mt-1"
+                    style={{ fontSize: '.9rem', marginLeft: 4 }}
+                    onClick={() => {
+                      setreComments('');
+                      setcontentRe('');
+                    }}
+                  >
+                    Hủy
+                  </button>
+                </>
+              )}
+            </div>
+          ))}
+      </>
+      <span
+        className="d-block mt-4 viph"
+        style={{ textDecoration: 'underline' }}
+        onClick={handleView}
+      >
+        {viewAll ? 'Ẩn bớt' : 'Xem thêm'}
+      </span>
     </>
   );
 };

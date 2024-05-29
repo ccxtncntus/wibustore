@@ -1,12 +1,11 @@
-import Badge from "@mui/material/Badge";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import { useEffect, useState, useContext } from "react";
-import { NavLink } from "react-router-dom";
-import "./notifi.css";
-import Pusher from "pusher-js";
-import { UContexts } from "../../components/context/UserContext";
-import * as OrdersService from "../../services/OrdersService";
-import { message } from "antd";
+import Badge from '@mui/material/Badge';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import { useEffect, useState, useContext } from 'react';
+import { NavLink } from 'react-router-dom';
+import './notifi.css';
+import Pusher from 'pusher-js';
+import { UContexts } from '../../components/context/UserContext';
+import * as OrdersService from '../../services/OrdersService';
 const Notification = () => {
   const { User } = useContext(UContexts);
   const [Processing, setProcessing] = useState(0);
@@ -18,20 +17,26 @@ const Notification = () => {
     setHide(false);
   };
   useEffect(() => {
-    const pusher = new Pusher("3c30b00645ce31e7d36e", {
-      cluster: "ap1",
+    const pusher = new Pusher('3c30b00645ce31e7d36e', {
+      cluster: 'ap1',
     });
-    const channel = pusher.subscribe("chat");
-    channel.bind("message", function (data) {
+    const channel = pusher.subscribe('chat');
+    const handleMessage = (data) => {
       OrdersService.getPending()
         .then((i) => {
+          console.log(data);
           setProcessing(i.count);
-          console.log("đã nhận thông báo");
+          console.log('đã nhận thông báo');
           // message.warning("Có đơn hàng mới cần xử lí");
         })
         .catch((e) => console.log(e));
       return;
-    });
+    };
+    channel.bind('message', handleMessage);
+    return () => {
+      channel.unbind('message', handleMessage);
+      pusher.unsubscribe('chat');
+    };
   }, []);
   useEffect(() => {
     if (User) {
@@ -44,10 +49,10 @@ const Notification = () => {
   }, [User]);
 
   return (
-    <div style={{ position: "relative" }} className="notification">
+    <div style={{ position: 'relative' }} className="notification">
       {Processing > 0 ? (
         <NavLink
-          to={"/admin/orders"}
+          to={'/admin/orders'}
           onMouseEnter={hadleMouse}
           onMouseLeave={handleLeave}
         >
@@ -68,14 +73,14 @@ const Notification = () => {
       <div
         className={
           Hide
-            ? "notification_content"
-            : "notification_content notification_content_hide"
+            ? 'notification_content'
+            : 'notification_content notification_content_hide'
         }
-        style={{ position: "absolute" }}
+        style={{ position: 'absolute' }}
       >
         {Processing > 0
-          ? Processing + " đơn hàng chưa xử lí"
-          : "Không có đơn hàng chờ xử lí"}
+          ? Processing + ' đơn hàng chưa xử lí'
+          : 'Không có đơn hàng chờ xử lí'}
       </div>
     </div>
   );

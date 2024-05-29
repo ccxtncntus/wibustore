@@ -1,4 +1,4 @@
-import * as request from "../configs/Axios";
+import * as request from '../configs/Axios';
 
 const sendMess = async (username) => {
   const res = await request.POST(`/api/sendNotifi`, {
@@ -6,4 +6,11 @@ const sendMess = async (username) => {
   });
   return res;
 };
-export { sendMess };
+const comment = async (username, idProduct) => {
+  const res = await request.POST(`/api/comment`, {
+    username: username,
+    idProduct: idProduct,
+  });
+  return res;
+};
+export { sendMess, comment };

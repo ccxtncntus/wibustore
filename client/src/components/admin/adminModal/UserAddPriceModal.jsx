@@ -31,7 +31,7 @@ const UserAddPriceModal = (props) => {
         setListPrices([]);
         resetAll();
         setitem(props.itemAddprice);
-        handleView();
+        // handleView();
       }
     };
     run();
@@ -197,6 +197,8 @@ const UserAddPriceModal = (props) => {
           )}
         </Form>
         <hr />
+        <Button onClick={handleView}>Xem</Button>
+
         <Table striped bordered hover className="mt-2">
           <thead>
             <tr>

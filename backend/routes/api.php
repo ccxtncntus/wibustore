@@ -18,6 +18,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AddpriceController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -159,8 +160,10 @@ Route::patch('address/updateDefault/{id}/{idUser}', [AddressController::class, '
 Route::get('dashboard', [DashboardController::class, 'index']);
 Route::get('dashboard/getBest', [DashboardController::class, 'getBest']);
 Route::get('dashboard/getData', [DashboardController::class, 'getData']);
+
 // notification
 Route::post('sendNotifi', [NotificationController::class, 'sendNoti']);
+Route::post('comment', [NotificationController::class, 'comment']);
 
 
 // addprice
@@ -182,4 +185,18 @@ Route::prefix('blogs')->group(function () {
     Route::patch('/{id}', [BlogController::class, 'updateActive']);
     Route::patch('/update/{id}', [BlogController::class, 'updatedefault']);
     Route::post('/update/{id}', [BlogController::class, 'updateHasImg']);
+});
+
+
+//comments
+Route::prefix('comments')->group(function () {
+    Route::get('/', [CommentController::class, 'index']);
+    Route::get('/limit', [CommentController::class, 'indexlimit']);
+    Route::get('/product/{id}', [CommentController::class, 'indexP']);
+    Route::get('/productlimit/{id}', [CommentController::class, 'indexlimitP']);
+
+
+    Route::post('/', [CommentController::class, 'store']);
+    Route::delete('/{id}', [CommentController::class, 'destroy']);
+    Route::patch('/{id}', [CommentController::class, 'update']);
 });

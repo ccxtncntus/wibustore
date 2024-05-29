@@ -1,4 +1,4 @@
-import * as request from "../configs/Axios";
+import * as request from '../configs/Axios';
 
 // get
 const ListAlls = async () => {

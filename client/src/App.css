@@ -10,3 +10,8 @@
 .vip {
   color: var(--vip);
 }
+.viph:hover {
+  color: var(--vip);
+  transition: 0.2s all;
+  cursor: pointer;
+}

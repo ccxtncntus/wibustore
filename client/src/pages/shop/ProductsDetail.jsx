@@ -24,8 +24,20 @@ import parse from 'html-react-parser';
 import Accordion from 'react-bootstrap/Accordion';
 import { Collapse } from 'antd';
 import Evaluate from './evaluate/Evaluate';
+// import Pusher from 'pusher-js';
 
 const ProductsDetail = () => {
+  // useEffect(() => {
+  //   const pusher = new Pusher('3c30b00645ce31e7d36e', {
+  //     cluster: 'ap1',
+  //   });
+  //   const channel = pusher.subscribe('comment');
+  //   channel.bind('message', function (data) {
+  //     console.log(data);
+  //     return;
+  //   });
+  // }, []);
+
   const paths = useParams();
   const [cookies, setCookie, removeCookie] = useCookies(['token', 'path_end']);
   const { addCard } = useContext(Contexts);
