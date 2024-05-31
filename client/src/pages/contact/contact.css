@@ -1,24 +1,17 @@
-.contact {
-  padding: 8px 160px;
-  min-height: 80vh;
+.contact_vip {
+  background-color: var(--newbg);
+  /* padding: 40px !important; */
 }
-@media screen and (max-width: 1280px) {
-  .contact {
-    padding: 8px 120px;
-  }
+.btn_contact {
+  border: 2px solid var(--vip);
+  color: var(--vip);
+  font-weight: 500;
+  transition: all 0.5s;
+  font-size: 1rem;
 }
-@media screen and (max-width: 1024px) {
-  .contact {
-    padding: 8px 60px;
-  }
-}
-@media screen and (max-width: 768px) {
-}
-@media screen and (max-width: 599px) {
-  .contact {
-    padding: 8px 20px;
-    justify-content: flex-end;
-  }
-}
-@media screen and (max-width: 375px) {
+.btn_contact:hover {
+  background-color: var(--vip);
+  color: var(--newbg);
+  font-size: 1.1rem;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }

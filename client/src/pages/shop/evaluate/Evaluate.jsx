@@ -15,6 +15,9 @@ import { useParams, Link } from 'react-router-dom';
 import Pusher from 'pusher-js';
 import { message } from 'antd';
 import { HOST } from '../../../configs/DataEnv';
+import Swal from 'sweetalert2';
+import toxic from '../../../../toxic.json';
+
 const Evaluate = ({ product }) => {
   const { User } = useContext(UContexts);
   const [rating, setRating] = useState(0);
@@ -27,17 +30,22 @@ const Evaluate = ({ product }) => {
     setisEvalute(true);
     setRating(index + 1);
   };
+  const [errDic, seterrDic] = useState(false);
   const handleSend = async () => {
     if (User) {
       setisValidate(true);
+      seterrDic(false);
       if (content == '') {
         return;
       }
+      const validate = Object.keys(toxic).some((v) =>
+        content.toLowerCase().includes(v.replaceAll('_', ' '))
+      );
+      if (validate) {
+        seterrDic(true);
+        return;
+      }
       if (files.length < 1) {
-        // console.log({
-        //   type: 'Không có img',
-        // });
-        // user_id, product_id, comments, stars, imgs;
         let formData = new FormData();
         formData.append('user_id', User.id);
         formData.append('product_id', product.id);
@@ -48,7 +56,7 @@ const Evaluate = ({ product }) => {
           delFile();
           reset();
           message.success('Bạn đã bình luận sản phẩm');
-          // renderComment();
+          renderComment();
           await NotificationService.comment(User.name, product.id);
           return;
         }
@@ -56,11 +64,6 @@ const Evaluate = ({ product }) => {
         setisValidate(false);
         return;
       }
-      // console.log({
-      //   type: 'Có img',
-      //   files: files,
-      // });
-
       let formData = new FormData();
       formData.append('user_id', User.id);
       formData.append('product_id', product.id);
@@ -75,8 +78,8 @@ const Evaluate = ({ product }) => {
         delFile();
         reset();
         message.success('Bạn đã bình luận sản phẩm');
+        renderComment();
         await NotificationService.comment(User.name, product.id);
-        // renderComment();
         return;
       }
       message.warning('Có lỗi xảy ra xin thử lại sau');
@@ -129,8 +132,7 @@ const Evaluate = ({ product }) => {
     const channel = pusher.subscribe('comment');
     const handleMessage = (data) => {
       if (data.idProduct == product.id) {
-        // console.log(data);
-        renderComment();
+        data.username != User?.name && renderComment();
       }
     };
     channel.bind('message', handleMessage);
@@ -186,6 +188,7 @@ const Evaluate = ({ product }) => {
       const checkc = await CommentsService.destroy(id);
       if (checkc.status == 200) {
         message.success('Xóa thành công');
+        renderComment();
         await NotificationService.comment(User.name, product.id);
         return;
       }
@@ -206,17 +209,23 @@ const Evaluate = ({ product }) => {
     const rec = await CommentsService.recomment(reComments.id, contentRe);
     if (rec.status == 200) {
       message.success('Phản hồi thành công');
-      await NotificationService.comment(User.name, product.id);
+      renderComment();
       setreComments('');
       setcontentRe('');
+      await NotificationService.comment(User.name, product.id);
       return;
     }
     message.warning('Có lỗi xảy ra xin thử lại sau');
   };
-
+  const handleViewImg = (i) => {
+    Swal.fire({
+      imageUrl: `${HOST}/uploads/${i}`,
+      showConfirmButton: false,
+      imageWidth: '100%',
+    });
+  };
   return (
     <>
-      {/* <button onClick={handleComment}>testSend comment</button> */}
       <div className="h4 text-center">
         <span className="vip">Đánh giá</span> sản phẩm
       </div>
@@ -267,11 +276,19 @@ const Evaluate = ({ product }) => {
                 as="textarea"
                 rows={3}
                 placeholder="Đánh giá của bạn"
-                onChange={(e) => setcontent(e.target.value)}
+                onChange={(e) => {
+                  setcontent(e.target.value);
+                  setisValidate(false);
+                }}
               />
               {isValidate && content == '' && (
                 <label style={{ fontSize: '0.9rem' }} className="text-danger">
                   Không bỏ trống
+                </label>
+              )}
+              {isValidate && errDic == true && (
+                <label style={{ fontSize: '0.9rem' }} className="text-danger">
+                  Từ không hợp lệ
                 </label>
               )}
             </Form.Group>
@@ -321,6 +338,8 @@ const Evaluate = ({ product }) => {
                       src={HOST + '/uploads/' + i}
                       alt={i}
                       style={{ height: 80, marginRight: 4 }}
+                      onClick={() => handleViewImg(i)}
+                      className="hh"
                     />
                   ))}
 
