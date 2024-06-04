@@ -101,7 +101,7 @@ const ListPosts = () => {
                 </Button>
               </td>
               <td>
-                <Button variant="primary">Xem</Button>{' '}
+                {/* <Button variant="primary">Xem</Button>{' '} */}
                 <Button variant="secondary" onClick={() => handleEdit(item)}>
                   Sửa
                 </Button>{' '}

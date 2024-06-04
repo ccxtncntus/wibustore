@@ -1,21 +1,21 @@
-import Table from "react-bootstrap/Table";
-import Form from "react-bootstrap/Form";
-import { Button, message, Popconfirm } from "antd";
-import { useEffect, useState } from "react";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
+import Table from 'react-bootstrap/Table';
+import Form from 'react-bootstrap/Form';
+import { Button, message, Popconfirm } from 'antd';
+import { useEffect, useState } from 'react';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 import {
   Status,
   OrderStatus,
   CountPage,
   FormatNumber,
   ExportExcel,
-} from "../../helpers/FormatNumber";
-import * as OrdersService from "../../services/OrdersService";
-import * as ProductService from "../../services/ProductService";
-import * as MailService from "../../services/MailService";
-import Dropdown from "react-bootstrap/Dropdown";
-import AdminOrdersModal from "../../components/modal/AdminOrdersModal";
+} from '../../helpers/FormatNumber';
+import * as OrdersService from '../../services/OrdersService';
+import * as ProductService from '../../services/ProductService';
+import * as MailService from '../../services/MailService';
+import Dropdown from 'react-bootstrap/Dropdown';
+import AdminOrdersModal from '../../components/modal/AdminOrdersModal';
 const OrderAdmin = () => {
   const [page, setPage] = useState(1);
   const [ListOrder, setListOrder] = useState([]);
@@ -29,7 +29,7 @@ const OrderAdmin = () => {
   const handleSelect = async (data) => {
     const { e, item } = data;
     const status = e.target.value;
-    if (status == "confirm") {
+    if (status == 'confirm') {
       const newOj = {
         name: item.name,
         address: item.address,
@@ -50,33 +50,34 @@ const OrderAdmin = () => {
           return MailService.senOrders(item.email, newOj, newdataDetail);
         })
         .then((i) => {
-          message.success("Thông tin đơn hàng đã được gửi tới người mua");
+          console.log(i);
+          message.success('Thông tin đơn hàng đã được gửi tới người mua');
           return OrdersService.updateStatusOrder(item.id, status);
         })
         .then((i) => {
           console.log(i);
         })
         .catch((error) => {
-          console.error("Error:", error);
+          console.error('Error:', error);
         });
       return;
     }
-    if (status == "successfully") {
+    if (status == 'successfully') {
+      console.log(listView);
       const promises = listView.map((item) => {
         return ProductService.updateBought(item.product_id, item.quantitybuy);
       });
       const upStatus = OrdersService.updateStatusOrder(item.id, status);
       Promise.all([promises, upStatus])
         .then(() => {
-          message.success("Cập nhật thông tin thành công");
+          message.success('Cập nhật thông tin thành công');
         })
         .catch((error) => {
-          console.error("Error:", error);
-          message.danger("Có lỗi xảy ra xin thử lại sau");
+          console.error('Error:', error);
+          message.danger('Có lỗi xảy ra xin thử lại sau');
         });
       return;
     }
-
     const upStatus = await OrdersService.updateStatusOrder(item.id, status);
     upStatus.status === 200 && message.success(upStatus.message);
   };
@@ -90,7 +91,7 @@ const OrderAdmin = () => {
     const del = await OrdersService.delOrder(e.id);
     ListOrder.splice(index, 1);
     setListOrder([...ListOrder]);
-    del.status === 200 && message.success("Delete order success");
+    del.status === 200 && message.success('Delete order success');
   };
   const handleChange = (event, value) => {
     setPage(value);
@@ -112,9 +113,9 @@ const OrderAdmin = () => {
   // nothing
   const cancel = () => {};
   const style = {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 8,
   };
   // export
@@ -130,7 +131,7 @@ const OrderAdmin = () => {
       })
     );
     // export
-    ExportExcel(newArray, "shheet1", "WibuStoreOrders");
+    ExportExcel(newArray, 'shheet1', 'WibuStoreOrders');
   };
   const hanldeExportAll = async () => {
     const dAll = await OrdersService.ListAlls();
@@ -146,7 +147,7 @@ const OrderAdmin = () => {
       })
     );
     // export
-    ExportExcel(newArray, "shheet1", "WibuStoreOrderAll");
+    ExportExcel(newArray, 'shheet1', 'WibuStoreOrderAll');
   };
 
   const handleViewOrders = async (i) => {
@@ -183,9 +184,6 @@ const OrderAdmin = () => {
             </option>
           ))}
         </Form.Select>
-        {/* <button className="btn btn-primary" onClick={hanldeExport}>
-        
-        </button> */}
         <Dropdown>
           <Dropdown.Toggle variant="secondary">
             export <i className="fa-solid fa-download"></i>
@@ -219,7 +217,7 @@ const OrderAdmin = () => {
                 <td onClick={() => handleViewOrders(item)}>{item.name}</td>
                 <td onClick={() => handleViewOrders(item)}>{item.address}</td>
                 <td onClick={() => handleViewOrders(item)}>
-                  {item.pay == 0 ? "Khi nhận hàng" : "VN PAY"}
+                  {item.pay == 0 ? 'Khi nhận hàng' : 'VN PAY'}
                 </td>
                 <td onClick={() => handleViewOrders(item)}>
                   {FormatNumber(item.totail)}
@@ -231,7 +229,7 @@ const OrderAdmin = () => {
                   >
                     {Status.map(
                       (items, index) =>
-                        items != "0" && (
+                        items != '0' && (
                           <option
                             value={items}
                             key={index}
@@ -261,10 +259,10 @@ const OrderAdmin = () => {
           </tbody>
         </Table>
       ) : (
-        "Không có đơn hàng nào..."
+        'Không có đơn hàng nào...'
       )}
       {CountPage(CountAll) > 1 && (
-        <Stack style={{ float: "right" }}>
+        <Stack style={{ float: 'right' }}>
           <Pagination
             count={CountPage(CountAll)}
             page={page}
