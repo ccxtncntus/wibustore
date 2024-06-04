@@ -1,13 +1,14 @@
-import { useForm } from "react-hook-form";
-import { NavLink, useNavigate } from "react-router-dom";
-import * as MailService from "../../services/MailService";
-import * as AccountService from "../../services/AccountService";
-import { message } from "antd";
-import { useEffect, useState } from "react";
-import { orbit } from "ldrs";
-import "./forgotpassword.css";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import { useForm } from 'react-hook-form';
+import { NavLink, useNavigate } from 'react-router-dom';
+import * as MailService from '../../services/MailService';
+import * as AccountService from '../../services/AccountService';
+import { message } from 'antd';
+import { useEffect, useState } from 'react';
+import { orbit } from 'ldrs';
+import './forgotpassword.css';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import bg from '/forgotPass.jpg';
 orbit.register();
 const ForgotPass = () => {
   // Default values shown
@@ -38,7 +39,7 @@ const ForgotPass = () => {
           return;
         }
         setSendToken(true);
-        message.success("Kiểm tra mã xác nhận trong email");
+        message.success('Kiểm tra mã xác nhận trong email');
         setLoading(false);
       } else {
         // khi đã có token confirm
@@ -47,11 +48,11 @@ const ForgotPass = () => {
           data.tokenConfirm
         );
         if (check.status === 400) {
-          message.error("Mã xác nhận không chính xác");
+          message.error('Mã xác nhận không chính xác');
           return;
         } else {
           // tới trang này khi đã thành công;
-          natigate("/changepass", {
+          natigate('/changepass', {
             state: { email: data.email, tokenConfirm: data.tokenConfirm },
           });
           // console.log(check.message);
@@ -63,14 +64,20 @@ const ForgotPass = () => {
     }
   };
   return (
-    <div className="forgot_password">
+    <div
+      className="forgot_password"
+      style={{
+        background: `url("${bg}")
+    center/cover no-repeat`,
+      }}
+    >
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mx-auto form_forgot_password"
         style={{ width: 600 }}
         data-aos="fade-up"
       >
-        <h4 style={{ textAlign: "center" }}>Quên mật khẩu.</h4>
+        <h4 style={{ textAlign: 'center' }}>Quên mật khẩu.</h4>
         {/* email */}
         <p style={{ margin: 0 }}>Email</p>
         <input
@@ -78,14 +85,14 @@ const ForgotPass = () => {
           placeholder="Email của bạn..."
           disabled={SendToken}
           {...(!SendToken &&
-            register("email", {
+            register('email', {
               required: {
                 value: true,
-                message: "Không bỏ trống",
+                message: 'Không bỏ trống',
               },
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Không đúng email",
+                message: 'Không đúng email',
               },
             }))}
         />
@@ -101,10 +108,10 @@ const ForgotPass = () => {
             <input
               className="form-control mt-2"
               placeholder="Kiểm tra mail để nhận mã..."
-              {...register("tokenConfirm", {
+              {...register('tokenConfirm', {
                 required: {
                   value: true,
-                  message: "Không bỏ trống",
+                  message: 'Không bỏ trống',
                 },
               })}
             />
@@ -125,14 +132,14 @@ const ForgotPass = () => {
             <input
               className="btn btn-primary mt-3"
               type="submit"
-              value={SendToken ? "Xác nhận" : "Gửi yêu cầu"}
+              value={SendToken ? 'Xác nhận' : 'Gửi yêu cầu'}
             />
           )}
         </div>
         <div className="mt-2">
           <span>
-            Đã có tài khoản?{" "}
-            <NavLink to={"/login"} style={{ textDecoration: "none" }}>
+            Đã có tài khoản?{' '}
+            <NavLink to={'/login'} style={{ textDecoration: 'none' }}>
               Đăng nhập.
             </NavLink>
           </span>

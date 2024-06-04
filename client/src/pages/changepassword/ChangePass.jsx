@@ -1,22 +1,22 @@
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 // import "./login.css";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import * as AccountService from "../../services/AccountService";
-import { message } from "antd";
-import { useEffect, useState } from "react";
-import { orbit } from "ldrs";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import "./changepassword.css";
-
-import { useCookies } from "react-cookie";
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import * as AccountService from '../../services/AccountService';
+import { message } from 'antd';
+import { useEffect, useState } from 'react';
+import { orbit } from 'ldrs';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import './changepassword.css';
+import bg from '/changePass.jpg';
+import { useCookies } from 'react-cookie';
 orbit.register();
 const ChangePass = () => {
   const natigate = useNavigate();
-  const [cookies] = useCookies(["token", "path_end"]);
+  const [cookies] = useCookies(['token', 'path_end']);
   const { state } = useLocation();
   const [Loading, setLoading] = useState(false);
-  const [Email, setEmail] = useState("");
+  const [Email, setEmail] = useState('');
   useEffect(() => {
     const run = async () => {
       AOS.init({
@@ -62,7 +62,7 @@ const ChangePass = () => {
           return;
         }
         message.success(changeWithToken.message);
-        natigate("/login");
+        natigate('/login');
         setLoading(false);
       } else {
         console.log(cookies.token);
@@ -92,14 +92,20 @@ const ChangePass = () => {
     natigate(cookies.path_end);
   };
   return (
-    <div className="changepassword">
+    <div
+      className="changepassword"
+      style={{
+        background: `url('${bg}')
+    center/cover no-repeat`,
+      }}
+    >
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mx-auto form_changepassword"
         style={{ width: 600 }}
         data-aos="fade-up"
       >
-        <h4 style={{ textAlign: "center" }}>Cập nhật mật khẩu</h4>
+        <h4 style={{ textAlign: 'center' }}>Cập nhật mật khẩu</h4>
         {/* email */}
         <p className="mt-2" style={{ margin: 0 }}>
           Email
@@ -119,7 +125,7 @@ const ChangePass = () => {
             <input
               className="form-control"
               type="password"
-              {...register("passwordOld", { required: true })}
+              {...register('passwordOld', { required: true })}
             />
             {errors.passwordOld && (
               <span className="text-danger">Không bỏ trống</span>
@@ -133,13 +139,13 @@ const ChangePass = () => {
         <input
           className="form-control mt-2"
           type="password"
-          {...register("password", {
+          {...register('password', {
             required: {
               value: true,
-              message: "Không bỏ trống",
+              message: 'Không bỏ trống',
             },
             validate: (value) =>
-              value !== watch("passwordOld") || "Mật khẩu cũ ???",
+              value !== watch('passwordOld') || 'Mật khẩu cũ ???',
           })}
         />
         {errors.password && (
@@ -152,13 +158,13 @@ const ChangePass = () => {
         <input
           className="form-control mt-2"
           type="password"
-          {...register("passwordCheck", {
+          {...register('passwordCheck', {
             required: {
               value: true,
-              message: "Không bỏ trống",
+              message: 'Không bỏ trống',
             },
             validate: (value) =>
-              value === watch("password") || "Nhập lại không đúng",
+              value === watch('password') || 'Nhập lại không đúng',
           })}
         />
         {errors.passwordCheck && (
@@ -175,12 +181,12 @@ const ChangePass = () => {
               <input
                 className="btn btn-primary mt-3"
                 type="submit"
-                value={"Đổi mật khẩu"}
-              />{" "}
+                value={'Đổi mật khẩu'}
+              />{' '}
               <button
-                className={"btn btn-secondary mt-3"}
+                className={'btn btn-secondary mt-3'}
                 onClick={handleCancel}
-                style={{ textDecoration: "none" }}
+                style={{ textDecoration: 'none' }}
               >
                 Quay lại
               </button>
@@ -190,8 +196,8 @@ const ChangePass = () => {
         {!cookies && (
           <div className="mt-2">
             <span>
-              Đã có tài khoản?{" "}
-              <NavLink to={"/login"} style={{ textDecoration: "none" }}>
+              Đã có tài khoản?{' '}
+              <NavLink to={'/login'} style={{ textDecoration: 'none' }}>
                 Đăng nhập.
               </NavLink>
             </span>
