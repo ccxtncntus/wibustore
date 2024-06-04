@@ -98,7 +98,19 @@ const listProCategoryAdmin = async (id, page) => {
   const res = await request.GET(`/api/productsAdmin/${id}?pageNumber=${page}`);
   return res;
 };
+// trend
+const trend = async () => {
+  const res = await request.GET(`/api/products/trend`);
+  return res;
+};
+// mid
 
+const testMiddleware = async (token) => {
+  const res = await request.GET(`/api/products/middleware`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res;
+};
 export {
   ListAdmin,
   listProCategoryAdmin,
@@ -117,4 +129,6 @@ export {
   updateQuantity,
   updateBought,
   ListBetween,
+  trend,
+  testMiddleware,
 };

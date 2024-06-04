@@ -2,6 +2,7 @@ import { useEffect, useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './checkout.css';
 import img from '/success.png';
+import bg from '/checkoutSuccess.jpg';
 import { UContexts } from '../../components/context/UserContext';
 import * as OrdersService from '../../services/OrdersService';
 const CheckOutSuccess = () => {
@@ -26,7 +27,14 @@ const CheckOutSuccess = () => {
     }
   }, [User]);
   return (
-    <div className="CheckOutSuccess">
+    <div
+      className="CheckOutSuccess"
+      style={{
+        background: `URL(
+          ${bg}
+        ) center/cover no-repeat`,
+      }}
+    >
       <div>{buySuccess && <img src={img} />}</div>
       <p style={{ textAlign: 'center' }} className="text-light">
         {buySuccess

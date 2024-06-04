@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import Table from "react-bootstrap/Table";
-import { HOST } from "../../configs/DataEnv";
-import { FormatNumber } from "../../helpers/FormatNumber";
-import { useNavigate } from "react-router-dom";
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
+import Table from 'react-bootstrap/Table';
+import { HOST } from '../../configs/DataEnv';
+import { FormatNumber } from '../../helpers/FormatNumber';
+import { useNavigate } from 'react-router-dom';
 const MyOrdersModal = (props) => {
   const { show, onHide, ListOfOrder, select } = props;
   const navigate = useNavigate();
@@ -14,9 +15,10 @@ const MyOrdersModal = (props) => {
   // }, [show]);
   const handleBuyAgain = (i) => {
     console.log({ id_product: i.product_id });
-    navigate("/carts", { state: { id_product: i.product_id } });
+    navigate('/carts', { state: { id_product: i.product_id } });
     onHide();
   };
+
   return (
     <>
       <Modal
@@ -45,7 +47,7 @@ const MyOrdersModal = (props) => {
                 ListOfOrder.map((item, index) => (
                   <tr key={index}>
                     <td className="modalMyOrdersImg">
-                      <img src={HOST + "/uploads/" + item.img} />
+                      <img src={HOST + '/uploads/' + item.img} />
                       <span>{item.name}</span>
                     </td>
                     <td>{item.quantitybuy}</td>

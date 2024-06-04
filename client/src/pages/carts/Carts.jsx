@@ -5,7 +5,7 @@ import './carts.css';
 import { useContext, useEffect, useState } from 'react';
 import { UContexts } from '../../components/context/UserContext';
 import { Contexts } from '../../components/context/Contexts';
-import { FormatNumber } from '../../helpers/FormatNumber';
+import { FormatNumber, returnMinPrice } from '../../helpers/FormatNumber';
 import { HOST } from '../../configs/DataEnv';
 import * as ShoppingCartService from '../../services/ShoppingCartsService';
 import * as ProductService from '../../services/ProductService';
@@ -25,7 +25,6 @@ const Carts = () => {
   };
   useEffect(() => {
     const chay = async () => {
-      // console.log(state);
       if (state) {
         if (state.list) {
           const { list } = state;
@@ -36,17 +35,17 @@ const Carts = () => {
           const data = await ProductService.productId(id_product);
           if (data.status == 200) {
             const product = data.data[0];
+            // console.log(product);
             const i = FormatImg(product.all_images);
             const newItem = {
               id: 0,
               idProduct: product.id,
               img: i,
               name: product.name,
-              price: product.price,
+              price: returnMinPrice(product.price_and_saleoff).price,
               quantity: 1,
-              saleoff: product.saleoff,
+              saleoff: returnMinPrice(product.price_and_saleoff).saleoff,
             };
-            // console.log(newItem);
             setListCart([newItem]);
           }
         }
@@ -99,12 +98,10 @@ const Carts = () => {
       item.id,
       e.target.value
     );
-    // console.log(update);
     ListCart[index].quantity = e.target.value;
     setListCart([...ListCart]);
   };
   const handleCheckOut = () => {
-    // console.log(isCheck);
     navigate('/check-out', { state: { listCart: isCheck } });
   };
 

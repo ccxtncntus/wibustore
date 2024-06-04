@@ -41,8 +41,7 @@
 .CheckOutSuccess {
   display: grid;
   place-content: center;
-  background: url('https://i.pinimg.com/originals/fe/1c/24/fe1c24bd035bb202ce7c7de8d16ab00d.jpg')
-    center/cover no-repeat;
+  /* background: center/cover no-repeat; */
   height: 80vh;
 }
 .CheckOutSuccess img {

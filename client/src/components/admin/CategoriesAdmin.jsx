@@ -1,9 +1,9 @@
-import { useForm } from "react-hook-form";
-import Form from "react-bootstrap/Form";
-import Table from "react-bootstrap/Table";
-import { useEffect, useState } from "react";
-import * as CategoryService from "../../services/CategoryService";
-import { Button, message, Popconfirm } from "antd";
+import { useForm } from 'react-hook-form';
+import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
+import { useEffect, useState } from 'react';
+import * as CategoryService from '../../services/CategoryService';
+import { Button, message, Popconfirm } from 'antd';
 const CategoriesAdmin = () => {
   const {
     register,
@@ -15,9 +15,9 @@ const CategoriesAdmin = () => {
   const [AddCate, setAddCate] = useState(false);
   const [Edit, setEdit] = useState(false);
   const [dataCate, setDataCate] = useState({
-    CategoryName: "",
-    id: "",
-    Status: "1",
+    CategoryName: '',
+    id: '',
+    Status: '1',
   });
   const onSubmit = async (data) => {
     // console.log(data);
@@ -30,24 +30,24 @@ const CategoriesAdmin = () => {
           statuss,
           dataCate.id
         );
-        console.log(editCate);
-        message.success("Edit success");
+        // console.log(editCate);
+        message.success('Edit success');
       } else {
         const addCate = await CategoryService.update(namee, statuss);
-        console.log(addCate);
-        message.success("Add success");
+        // console.log(addCate);
+        message.success('Add success');
       }
       setDataCate({
-        CategoryName: "",
-        Status: "1",
-        id: "",
+        CategoryName: '',
+        Status: '1',
+        id: '',
       });
-      setFocus("categoryName");
+      setFocus('categoryName');
       reset();
       setEdit(false);
       setAddCate((pre) => !pre);
     } catch (error) {
-      console.error("Error:", error.response.data.message);
+      console.error('Error:', error.response.data.message);
       message.error(error.response.data.message);
     }
   };
@@ -58,7 +58,7 @@ const CategoriesAdmin = () => {
         const data = await CategoryService.List(1);
         setListCategory(data.data.data);
       } catch (error) {
-        console.log(error.response.data);
+        // console.log(error.response.data);
       }
     };
     listC();
@@ -70,7 +70,7 @@ const CategoriesAdmin = () => {
     message.success(addCate.message);
   };
   const cancel = (item) => {
-    message.error("Undelete");
+    message.error('Undelete');
   };
   const handleEdit = (item) => {
     reset();
@@ -91,12 +91,12 @@ const CategoriesAdmin = () => {
               defaultValue={dataCate.CategoryName}
               type="text"
               placeholder="..."
-              {...register("categoryName", {
+              {...register('categoryName', {
                 required:
-                  dataCate.CategoryName == "" ? false : "Name is required",
+                  dataCate.CategoryName == '' ? false : 'Name is required',
                 pattern: {
                   value: /^\S.*\S$/,
-                  message: "No space",
+                  message: 'No space',
                 },
               })}
             />
@@ -108,14 +108,14 @@ const CategoriesAdmin = () => {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Status</Form.Label>
-            <Form.Select defaultValue={dataCate.Status} {...register("status")}>
+            <Form.Select defaultValue={dataCate.Status} {...register('status')}>
               <option value="1">Mở bán</option>
               <option value="0">Tạm ngưng</option>
             </Form.Select>
           </Form.Group>
           <div className="col-md-6"></div>
           <button type="submit" className="btn btn-success">
-            {Edit ? "Edit" : "Add"}
+            {Edit ? 'Edit' : 'Add'}
           </button>
         </Form>
       </div>
@@ -135,7 +135,7 @@ const CategoriesAdmin = () => {
                 <tr key={index}>
                   <td>{index + 1}</td>
                   <td>{item.name}</td>
-                  <td>{item.status ? "Mở bán" : "Tạm ngưng"}</td>
+                  <td>{item.status ? 'Mở bán' : 'Tạm ngưng'}</td>
                   <td>
                     <Popconfirm
                       title="Delete the category"
@@ -146,7 +146,7 @@ const CategoriesAdmin = () => {
                       cancelText="No"
                     >
                       <Button danger>Delete</Button>
-                    </Popconfirm>{" "}
+                    </Popconfirm>{' '}
                     <Button
                       className="m-1"
                       onClick={() => handleEdit(item)}
@@ -160,7 +160,7 @@ const CategoriesAdmin = () => {
             </tbody>
           </Table>
         ) : (
-          "Chưa có danh mục..."
+          'Chưa có danh mục...'
         )}
       </div>
     </div>

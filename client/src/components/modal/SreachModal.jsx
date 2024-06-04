@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
@@ -7,8 +9,12 @@ import * as ProductService from '../../services/ProductService';
 import { HOST } from '../../configs/DataEnv';
 import { FormatNumber, returnMinPrice } from '../../helpers/FormatNumber';
 import { Link } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import Swal from 'sweetalert2';
 
 const SreachModal = (props) => {
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+
   const { placement, show, onClose } = props;
   const [Sreach, setSreach] = useState('');
   const [ListSreach, setListSreach] = useState([]);
@@ -45,11 +51,23 @@ const SreachModal = (props) => {
       }
     };
     chay();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
   const formatImg = (list) => {
     const img = list.split(',')[0].trim();
     return img;
+  };
+  const handleTestMiddleware = async () => {
+    try {
+      const test = await ProductService.testMiddleware(cookies?.token);
+      console.log(test);
+      Swal.fire(test);
+    } catch (error) {
+      if (error.response.data) {
+        Swal.fire(error.response.data);
+        return true;
+      }
+      Swal.fire('Có lỗi xảy ra xin thử lại sau');
+    }
   };
   return (
     <>
@@ -97,6 +115,9 @@ const SreachModal = (props) => {
               : '...'}
           </div>
         </Offcanvas.Body>
+        <button className="btn btn-secondary" onClick={handleTestMiddleware}>
+          Middleware
+        </button>
       </Offcanvas>
     </>
   );

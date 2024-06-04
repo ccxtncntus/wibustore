@@ -102,6 +102,7 @@ class ProductsController extends Controller
                 'products.description',
                 'products.name',
             )
+            ->where('products.quantity', '>', 0)
             ->orderBy('products.id', $request->sort)
             ->paginate(12, ['*'], 'page', $pageNumber);
         if ($products->count() === 0) {
@@ -192,6 +193,43 @@ class ProductsController extends Controller
             )
             ->orderBy('products.bought', $request->sort)
             ->paginate(2, ['*'], 'page', $pageNumber);
+        if ($products->count() === 0) {
+            $upData = [
+                "status" => 400,
+                "message" => "There aren't any products",
+            ];
+            return response()->json($upData, 200);
+        } else {
+            $data = [
+                "status" => 200,
+                "data" => $products,
+            ];
+            return response()->json($data, 200);
+        }
+    }
+    public function productsTrend()
+    {
+        $products = Products::select(
+            'products.id',
+            'products.name',
+            'products.status',
+            'products.quantity',
+            'products.bought',
+            DB::raw('MIN(images.url) AS img')
+        )
+            ->join('images', 'images.product_id', '=', 'products.id')
+            ->groupBy(
+                'products.id',
+                'products.status',
+                'products.bought',
+                'products.quantity',
+                'products.name',
+            )
+            ->where('products.quantity', ">", 0)
+            ->where('products.bought', ">", 0)
+            ->orderBy('products.bought', "DESC")
+            ->limit(3)
+            ->get();
         if ($products->count() === 0) {
             $upData = [
                 "status" => 400,
@@ -442,8 +480,6 @@ class ProductsController extends Controller
             'products.status',
             'products.description',
             'products.quantity',
-            // 'products.price',
-            // 'products.saleoff',
             DB::raw('GROUP_CONCAT(images.url) AS all_images'),
             DB::raw('CONCAT("[", GROUP_CONCAT(JSON_OBJECT("id_addPrice", addprices.id,"size", addprices.size,"price", addprices.price, "saleoff", addprices.saleoff)), "]") AS price_and_saleoff'),
         )
@@ -453,8 +489,6 @@ class ProductsController extends Controller
             ->groupBy(
                 'products.id',
                 'products.status',
-                // 'products.saleoff',
-                // 'products.price',
                 'products.quantity',
                 'products.description',
                 'products.name',
@@ -648,5 +682,9 @@ class ProductsController extends Controller
             'img' => $result, 'price' => $price, 'name' => $name, 'information' => $information
         ];
         return $dataResult;
+    }
+    public function test()
+    {
+        return response()->json("Bạn là admin", 200);
     }
 }

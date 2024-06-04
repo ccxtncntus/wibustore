@@ -49,6 +49,10 @@ const Cart = ({ item }) => {
   const handleAddCart = async (i) => {
     // add cart
     if (User) {
+      if (i.quantity < 1) {
+        message.warning('Sản phẩm hiện tại đang hết hàng hãy quay lại sau');
+        return;
+      }
       const img = i.all_images.split(',')[0];
       const test1 = {
         idProduct: i.id,

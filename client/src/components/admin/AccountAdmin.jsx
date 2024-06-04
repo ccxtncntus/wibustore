@@ -1,14 +1,14 @@
-import { useEffect, useState, useCallback } from "react";
-import { Button, message, Popconfirm } from "antd";
-import Pagination from "@mui/material/Pagination";
-import * as AccountService from "../../services/AccountService";
-import UsersAdminModal from "./adminModal/UsersAdminModal";
-import UsersEditAdminModal from "./adminModal/UsersEditAdminModal";
+import { useEffect, useState, useCallback } from 'react';
+import { Button, message, Popconfirm } from 'antd';
+import Pagination from '@mui/material/Pagination';
+import * as AccountService from '../../services/AccountService';
+import UsersAdminModal from './adminModal/UsersAdminModal';
+import UsersEditAdminModal from './adminModal/UsersEditAdminModal';
 
 const AccountAdmin = () => {
   const [page, setPage] = useState(1);
   const [SelectAll, setSelectAll] = useState(0);
-  const [ChangeRole, setChangeRole] = useState("user");
+  const [ChangeRole, setChangeRole] = useState('user');
   const [ListUsers, setListUsers] = useState([]);
   const [CountAll, setCountAll] = useState(0);
   const [Del, setDel] = useState(false);
@@ -21,7 +21,7 @@ const AccountAdmin = () => {
   };
   const FormatDay = (time) => {
     var d = new Date(time);
-    return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+    return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
   };
   const FormatAllCount = (count) => {
     return Math.ceil(count / 12);
@@ -44,12 +44,12 @@ const AccountAdmin = () => {
   const handleChangeRole = async (data) => {
     const { e, item } = data;
     const update = await AccountService.updateRole(item.id, e.target.value);
-    console.log(update);
+    // console.log(update);
     setChangeRole(e.target.value);
-    message.success("Change success");
+    message.success('Change success');
   };
   // edit
-  const [userEdit, setuserEdit] = useState("");
+  const [userEdit, setuserEdit] = useState('');
   const handleEdit = (i) => {
     setuserEdit(i);
     setModalEditShow(true);
@@ -58,7 +58,7 @@ const AccountAdmin = () => {
   const confirmDel = async (e) => {
     const del = await AccountService.delUser(e.id);
     setDel((pre) => !pre);
-    message.success("Click on Yes");
+    message.success('Click on Yes');
   };
   // add
   const run = () => {
@@ -89,9 +89,9 @@ const AccountAdmin = () => {
         />
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}
           className="mb-2"
         >
@@ -106,7 +106,7 @@ const AccountAdmin = () => {
             <option value="ban">Ban</option>
           </select>
           <button
-            style={{ float: "right" }}
+            style={{ float: 'right' }}
             className="btn btn-secondary"
             onClick={handleAdd}
           >
@@ -132,20 +132,20 @@ const AccountAdmin = () => {
                   <td>{index + 1}</td>
                   <td>{item.email}</td>
                   <td>{item.name}</td>
-                  <td>{item.adsress || "Chưa cập nhật"}</td>
+                  <td>{item.adsress || 'Chưa cập nhật'}</td>
                   <td>
                     <select
                       className="form-select"
                       onChange={(e) => handleChangeRole({ e: e, item: item })}
                       // value={item.role}
                     >
-                      <option value="user" selected={item.role == "user"}>
+                      <option value="user" selected={item.role == 'user'}>
                         User
                       </option>
-                      <option value="admin" selected={item.role == "admin"}>
+                      <option value="admin" selected={item.role == 'admin'}>
                         Admin
                       </option>
-                      <option value="ban" selected={item.role == "ban"}>
+                      <option value="ban" selected={item.role == 'ban'}>
                         Ban
                       </option>
                     </select>
@@ -161,7 +161,7 @@ const AccountAdmin = () => {
                       cancelText="No"
                     >
                       <Button danger>Delete</Button>
-                    </Popconfirm>{" "}
+                    </Popconfirm>{' '}
                     <Button
                       type="primary"
                       ghost
@@ -175,7 +175,7 @@ const AccountAdmin = () => {
             </tbody>
           </table>
         ) : (
-          "Không có user"
+          'Không có user'
         )}
         {FormatAllCount(CountAll) > 1 && (
           <Pagination
@@ -184,7 +184,7 @@ const AccountAdmin = () => {
             variant="outlined"
             color="primary"
             onChange={handleChangePage}
-            style={{ float: "right" }}
+            style={{ float: 'right' }}
           />
         )}
       </div>

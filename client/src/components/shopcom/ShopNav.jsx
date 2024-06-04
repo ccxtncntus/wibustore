@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Link, NavLink, useParams } from 'react-router-dom';
 import './shopnav.css';
 import { useEffect, useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import ShopFillter from './shopFillter';
+import ProductsTrend from './ProductsTrend';
 // eslint-disable-next-line react/prop-types
 const ShopNav = ({ cate }) => {
   const chanPath = (name) => {
@@ -64,6 +66,10 @@ const ShopNav = ({ cate }) => {
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
+      <div className="mt-4">
+        {/* trend */}
+        <ProductsTrend />
+      </div>
     </div>
   );
 };

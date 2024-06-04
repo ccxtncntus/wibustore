@@ -24,9 +24,9 @@ const Notification = () => {
     const handleMessage = (data) => {
       OrdersService.getPending()
         .then((i) => {
-          console.log(data);
+          // console.log(data);
           setProcessing(i.count);
-          console.log('đã nhận thông báo');
+          // console.log('đã nhận thông báo');
           // message.warning("Có đơn hàng mới cần xử lí");
         })
         .catch((e) => console.log(e));

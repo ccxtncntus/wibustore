@@ -243,9 +243,10 @@ const ProductsDetail = () => {
                       ))}
                   </div>
                 </div>
-                {/* <div>
-                  Kho {Product.quantity} ({Product.status})
-                </div> */}
+                {Product.quantity < 1 && (
+                  <div className="mt-2 text-danger">Tạm thời hết sản phẩm</div>
+                )}
+
                 <div className="product_detail_quantity mt-3">
                   <p className="m-0 p-0">Số lượng</p>
                   <input
@@ -261,7 +262,10 @@ const ProductsDetail = () => {
                     className="btn btn_add_product mt-3"
                     onClick={handleAddcard}
                     disabled={
-                      value > 0 && value <= Product.quantity ? false : true
+                      Product.quantity < 1 ||
+                      value < 0 ||
+                      value > Product.quantity ||
+                      value == ''
                     }
                   >
                     Thêm vào giỏ hàng

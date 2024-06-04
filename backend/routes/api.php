@@ -19,6 +19,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AddpriceController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
+
+use App\Http\Middleware\IsAdmin;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -59,10 +61,16 @@ Route::get('products', [ProductsController::class, 'index']);
 Route::get('products/sale', [ProductsController::class, 'indexSale']);
 Route::get('products/hot', [ProductsController::class, 'indexHot']);
 Route::get('products/number', [ProductsController::class, 'indeNumber']);
+Route::get('products/trend', [ProductsController::class, 'productsTrend']);
+
+// testmid
+Route::get('products/middleware', [ProductsController::class, 'test'])->middleware('admin');
+
 Route::get('products/random/{id}', [ProductsController::class, 'indexRandom']);
 Route::get('products/once/{value}', [ProductsController::class, 'onceProduct']);
 Route::get('products/listPro/{id}', [ProductsController::class, 'listProductOfCategory']);
 Route::get('products/{id}', [ProductsController::class, 'show']);
+
 Route::post('products', [ProductsController::class, 'upload']);
 Route::post('products/edit/{id}', [ProductsController::class, 'edit']);
 Route::delete('products/delete/{id}', [ProductsController::class, 'delete']);
@@ -81,6 +89,7 @@ Route::get('crawl/{p}', [ProductsController::class, 'crawl']);
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('logout', [UserCotroller::class, 'logout']);
 });
+
 Route::post('login', [UserCotroller::class, 'login']);
 Route::post('loginGG', [UserCotroller::class, 'loginGG']);
 Route::post('authentication', [UserCotroller::class, 'authentication']);
@@ -177,7 +186,6 @@ Route::prefix('addprice')->group(function () {
 Route::prefix('blogs')->group(function () {
     // admin
     Route::get('/admin/{page}', [BlogController::class, 'indexAdmin']);
-
     Route::get('/page/{page}', [BlogController::class, 'index']);
     Route::get('/{idblog}', [BlogController::class, 'show']);
     Route::post('/', [BlogController::class, 'store']);
@@ -194,7 +202,6 @@ Route::prefix('comments')->group(function () {
     Route::get('/limit', [CommentController::class, 'indexlimit']);
     Route::get('/product/{id}', [CommentController::class, 'indexP']);
     Route::get('/productlimit/{id}', [CommentController::class, 'indexlimitP']);
-
 
     Route::post('/', [CommentController::class, 'store']);
     Route::delete('/{id}', [CommentController::class, 'destroy']);

@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class IsAdmin
 {
@@ -16,15 +17,17 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // if (Auth::user() &&  Auth::user()->role == 'admin') {
-        //     return $next($request);
-        // }
-        if (Auth::check() && Auth::user()->role == 'admin') {
-            // Người dùng đã đăng nhập và có vai trò là admin
-            return $next($request);
-        } else {
-            // return response()->json(['error' => 'You is not Admin!!!'], 403);
-            return response()->json(['name' => Auth::user()->role], 403);
+        $token = $request->bearerToken();
+        if (!$token) {
+            return response()->json("Bạn chưa đăng nhập", 400);
         }
+        $tokens = PersonalAccessToken::findToken($token);
+        if (!$tokens) {
+            return response()->json("Bạn chưa đăng nhập", 400);
+        }
+        if ($tokens->tokenable->role == 'admin') {
+            return $next($request);
+        }
+        return response()->json("Bạn không phải admin", 403);
     }
 }
