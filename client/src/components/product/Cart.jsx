@@ -49,16 +49,38 @@ const Cart = ({ item }) => {
   const handleAddCart = async (i) => {
     // add cart
     if (User) {
+      const qCs = await ShoppingCartsService.quantityCart(i.id, User.id);
+      if (qCs.length == 1) {
+        if (i.quantity == qCs[0].quantity) {
+          console.log(qCs);
+          message.warning('Số lượng bạn thêm đã tối đa');
+          return;
+        }
+      }
+      if (qCs.length > 1) {
+        const initialValue = 0;
+        const sumWithInitial = qCs.reduce(
+          (accumulator, currentValue) => accumulator + currentValue.quantity,
+          initialValue
+        );
+        if (i.quantity == sumWithInitial) {
+          console.log(qCs);
+          message.warning('Số lượng bạn thêm đã tối đa');
+          return;
+        }
+      }
       if (i.quantity < 1) {
         message.warning('Sản phẩm hiện tại đang hết hàng hãy quay lại sau');
         return;
       }
+      // add
       const img = i.all_images.split(',')[0];
       const test1 = {
         idProduct: i.id,
         idPrice: returnMinPrice(item.price_and_saleoff).id_addPrice,
       };
       addCard(test1);
+      console.log(User.id);
       const chay = await ShoppingCartsService.add(
         User.id,
         i.id,

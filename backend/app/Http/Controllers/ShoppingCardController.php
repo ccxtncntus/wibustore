@@ -35,6 +35,11 @@ class ShoppingCardController extends Controller
             ->get();
         return response()->json($shoppingCard, 200);
     }
+    function quantityCart($product_id, $user_id)
+    {
+        $shoppingCard = ShoppingCart::where('product_id', $product_id)->where('user_id', $user_id)->get();
+        return response()->json($shoppingCard, 200);
+    }
 
 
     function updateQuantity(Request $request)
@@ -141,10 +146,15 @@ class ShoppingCardController extends Controller
             ];
             return response()->json($data, 400);
         } else {
-            $cart = DB::table('shopping_carts')->where('product_id',  $request->product_id)->where('addprice_id',  $request->addprice_id)->first();
+            $cart = DB::table('shopping_carts')
+                ->where('product_id',  $request->product_id)
+                ->where('user_id',  $request->user_id)
+                ->where('addprice_id',  $request->addprice_id)->first();
             if ($cart) {
                 $sl = $cart->quantity + $request->quantity;
-                $edit = DB::table('shopping_carts')->where('product_id', $request->product_id)->where('addprice_id',  $request->addprice_id)
+                $edit = DB::table('shopping_carts')
+                    ->where('product_id', $request->product_id)
+                    ->where('user_id',  $request->user_id)
                     ->update(['quantity' => $sl]);
                 $data = [
                     "status" => 200,

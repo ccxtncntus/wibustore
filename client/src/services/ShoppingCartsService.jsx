@@ -14,6 +14,12 @@ const listOfUser = async (user_id) => {
   const res = await request.GET(`/api/shoppingcard/listOfUser/${user_id}`);
   return res;
 };
+const quantityCart = async (product_id, user_id) => {
+  const res = await request.GET(
+    `/api/shoppingcard/quantityCart/${product_id}/${user_id}`
+  );
+  return res;
+};
 const updateQuantity = async (id, quantity) => {
   const res = await request.POST(`/api/shoppingcard/updateQuantity`, {
     id: id,
@@ -55,4 +61,5 @@ export {
   productBuyed,
   updateQuantity,
   productCancelBuy,
+  quantityCart,
 };

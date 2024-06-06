@@ -124,6 +124,9 @@ Route::post(
 // shoppingcart
 Route::get('shoppingcard', [ShoppingCardController::class, 'index']);
 Route::post('shoppingcard/adOneProduct', [ShoppingCardController::class, 'addOneProduct']);
+
+Route::get('shoppingcard/quantityCart/{product_id}/{user_id}', [ShoppingCardController::class, 'quantityCart']);
+
 Route::get('shoppingcard/listOfUser/{id}', [ShoppingCardController::class, 'listOfUser']);
 Route::post('shoppingcard/delCart', [ShoppingCardController::class, 'delCart']);
 Route::post('shoppingcard/changeQuatityProduct', [ShoppingCardController::class, 'changeQuatityProduct']);
