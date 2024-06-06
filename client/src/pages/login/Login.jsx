@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useForm } from 'react-hook-form';
 import './login.css';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
@@ -9,8 +10,15 @@ import { orbit } from 'ldrs';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import loginImg from '/login.jpg';
-import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+  FacebookAuthProvider,
+} from 'firebase/auth';
 import { auth } from '../../firebase/FireBaseConfig';
+import { FaFacebookSquare } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
 orbit.register();
 const Login = () => {
   const natigate = useNavigate();
@@ -37,7 +45,7 @@ const Login = () => {
     try {
       setLoading(true);
       const login = await AccountService.login(data.email, data.password);
-      console.log(login);
+      // console.log(login);
       if (login.status === 400) {
         console.log(login);
         message.error(login.message);
@@ -88,6 +96,32 @@ const Login = () => {
       })
       .catch((error) => {
         console.log(error);
+        message.error('Có lỗi xảy ra xin thử lại sau');
+      });
+  };
+  const handleLoginFB = async () => {
+    const providers = new FacebookAuthProvider();
+    signInWithPopup(auth, providers)
+      .then(async (result) => {
+        const { email, displayName } = result.user.providerData[0];
+        const loginGG = await AccountService.loginGG(email, displayName);
+        console.log(loginGG);
+        if (loginGG) {
+          let d = new Date();
+          d.setTime(d.getTime() + 1200 * 60 * 1000);
+          message.success('Đăng nhập thành công');
+          cookies.path_end && cookies.path_end != '/login'
+            ? natigate(cookies.path_end)
+            : natigate('/');
+          await removeCookie('path_end');
+          setCookie('token', loginGG.token, { path: '/', expires: d });
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        // if (error.code === 'auth/account-exists-with-different-credential') {
+        // }
         message.error('Có lỗi xảy ra xin thử lại sau');
       });
   };
@@ -173,15 +207,26 @@ const Login = () => {
               )}
             </div>
           </form>
-          <button
+          {/* <button
             className="login-with-google-btn mt-2"
             onClick={handleLoginGG}
           >
             Đăng nhập với google{' '}
-          </button>
-          {/* <button className="loginGoogle_btn mt-2" onClick={handleOutGG}>
-            <i className="fa-brands fa-google"></i> Logout{' '}
           </button> */}
+          <button className="btn mt-2 p-1" onClick={handleLoginGG}>
+            <FcGoogle
+              style={{
+                fontSize: '1.9rem',
+                // border: '1px solid rgba(81, 97, 100, 1.00)',
+                borderRadius: 2,
+              }}
+            />
+          </button>
+          <button className="btn mt-2 p-1" onClick={handleLoginFB}>
+            <FaFacebookSquare
+              style={{ fontSize: '1.9rem', color: '#4267B2 ' }}
+            />
+          </button>
           <div className="mt-2">
             <span>
               Chưa có tài khoản?{' '}

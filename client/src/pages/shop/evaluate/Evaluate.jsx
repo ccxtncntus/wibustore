@@ -57,6 +57,7 @@ const Evaluate = ({ product }) => {
           reset();
           message.success('Bạn đã bình luận sản phẩm');
           renderComment();
+          run();
           await NotificationService.comment(User.name, product.id);
           return;
         }
@@ -79,6 +80,7 @@ const Evaluate = ({ product }) => {
         reset();
         message.success('Bạn đã bình luận sản phẩm');
         renderComment();
+        run();
         await NotificationService.comment(User.name, product.id);
         return;
       }
@@ -132,7 +134,10 @@ const Evaluate = ({ product }) => {
     const channel = pusher.subscribe('comment');
     const handleMessage = (data) => {
       if (data.idProduct == product.id) {
-        data.username != User?.name && renderComment();
+        if (data.username != User?.name) {
+          renderComment();
+          run();
+        }
       }
     };
     channel.bind('message', handleMessage);
@@ -174,9 +179,30 @@ const Evaluate = ({ product }) => {
     const cs = await CommentsService.getP(product.id);
     setComments(cs);
   };
+  useEffect(() => {
+    run();
+  }, []);
+  const [ratings, setratings] = useState(null);
+  const run = async () => {
+    const cs = await CommentsService.getP(product.id);
+    if (cs.length > 0) {
+      const initialValue = 0;
+      const sumWithInitial = cs.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.stars,
+        initialValue
+      );
+      const tb = (sumWithInitial / cs.length).toFixed(1);
+      setratings({
+        tb: tb,
+        length: cs.length,
+      });
+    }
+  };
+
   const handleView = () => {
     setviewAll((pre) => !pre);
     if (viewAll) {
+      console.log(1);
       renderComment();
       return;
     }
@@ -189,6 +215,7 @@ const Evaluate = ({ product }) => {
       if (checkc.status == 200) {
         message.success('Xóa thành công');
         renderComment();
+        run();
         await NotificationService.comment(User.name, product.id);
         return;
       }
@@ -210,6 +237,7 @@ const Evaluate = ({ product }) => {
     if (rec.status == 200) {
       message.success('Phản hồi thành công');
       renderComment();
+      run();
       setreComments('');
       setcontentRe('');
       await NotificationService.comment(User.name, product.id);
@@ -229,6 +257,18 @@ const Evaluate = ({ product }) => {
       <div className="h4 text-center">
         <span className="vip">Đánh giá</span> sản phẩm
       </div>
+      {ratings && (
+        <span className="d-block text-center mb-1">
+          <span className="vip" style={{ fontSize: '1.4rem' }}>
+            {ratings.tb}
+          </span>{' '}
+          trên 5⭐ -{' '}
+          <span className="vip" style={{ fontSize: '1.4rem' }}>
+            {ratings.length}
+          </span>{' '}
+          bình luận{' '}
+        </span>
+      )}
       <div className="star-rating text-center">
         {[...Array(5)].map((_, index) => (
           <FontAwesomeIcon
