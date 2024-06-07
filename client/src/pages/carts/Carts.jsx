@@ -11,7 +11,6 @@ import * as ShoppingCartService from '../../services/ShoppingCartsService';
 import * as ProductService from '../../services/ProductService';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, message, Popconfirm } from 'antd';
-
 const Carts = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -101,8 +100,23 @@ const Carts = () => {
     ListCart[index].quantity = e.target.value;
     setListCart([...ListCart]);
   };
-  const handleCheckOut = () => {
-    navigate('/check-out', { state: { listCart: isCheck } });
+  const handleCheckOut = async () => {
+    // console.log(isCheck);
+    let test = 0;
+    const promises = isCheck.map(async (item) => {
+      const check = await ProductService.productId(item.idProduct);
+      const { quantity, name } = check.data[0];
+      if (item.quantity > quantity) {
+        test++;
+        message.warning(
+          `Số lượng ${name} trong kho không đủ: còn lại ${quantity}`
+        );
+        return;
+      }
+    });
+    await Promise.all(promises);
+
+    test == 0 && navigate('/check-out', { state: { listCart: isCheck } });
   };
 
   const confirm = async (i) => {

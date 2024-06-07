@@ -93,12 +93,44 @@ const ProductsDetail = () => {
 
   const handleAddcard = async () => {
     if (IsLogin) {
+      const qCs = await ShoppingCartsService.quantityCart(Product.id, User.id);
+      if (qCs.length == 1) {
+        if (Number(qCs[0].quantity) + Number(value) > Product.quantity) {
+          message.warning('Số lượng bạn thêm đã đạt giới hạn');
+          return;
+        }
+        if (Product.quantity == qCs[0].quantity) {
+          console.log(qCs);
+          message.warning('Số lượng bạn thêm đã tối đa');
+          return;
+        }
+      }
+      if (qCs.length > 1) {
+        const initialValue = 0;
+        const sumWithInitial = qCs.reduce(
+          (accumulator, currentValue) => accumulator + currentValue.quantity,
+          initialValue
+        );
+        if (Number(sumWithInitial) + Number(value) > Product.quantity) {
+          message.warning('Số lượng bạn thêm đã đạt giới hạn');
+          return;
+        }
+        if (Product.quantity == sumWithInitial) {
+          console.log(qCs);
+          message.warning('Số lượng bạn thêm đã tối đa');
+          return;
+        }
+      }
+      if (Product.quantity < 1) {
+        message.warning('Sản phẩm hiện tại đang hết hàng hãy quay lại sau');
+        return;
+      }
       const img = Product.all_images.split(',')[0];
       const test1 = {
         idProduct: Product.id,
         idPrice: Prii.id_addPrice,
       };
-      console.log(test1);
+      // console.log(test1);
       // return;
       addCard(test1);
       const chay = await ShoppingCartsService.add(
