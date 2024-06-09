@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import All from './components/context/AllContexts.jsx';
 import { store } from './redux/store.jsx';
 import { Provider } from 'react-redux';
+import 'react-chat-elements/dist/main.css';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>

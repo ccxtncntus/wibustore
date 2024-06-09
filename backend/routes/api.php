@@ -19,7 +19,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AddpriceController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
-
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChatDetailController;
 use App\Http\Middleware\IsAdmin;
 /*
 |--------------------------------------------------------------------------
@@ -209,4 +210,23 @@ Route::prefix('comments')->group(function () {
     Route::post('/', [CommentController::class, 'store']);
     Route::delete('/{id}', [CommentController::class, 'destroy']);
     Route::patch('/{id}', [CommentController::class, 'update']);
+});
+
+// chat
+Route::prefix('chats')->group(function () {
+    Route::get('/{user_id}', [ChatController::class, 'indexUser']);
+    Route::get('/', [ChatController::class, 'index']);
+    Route::post('/', [ChatController::class, 'store']);
+});
+// chatDetail
+Route::prefix('chatdetail')->group(function () {
+    Route::get('/', [ChatDetailController::class, 'index']);
+    Route::get('/limit', [ChatDetailController::class, 'indexlimit']);
+    Route::get('/product/{id}', [ChatDetailController::class, 'indexP']);
+    Route::get('/productlimit/{id}', [ChatDetailController::class, 'indexlimitP']);
+
+    Route::post('/', [ChatDetailController::class, 'store']);
+
+    Route::delete('/{id}', [ChatDetailController::class, 'destroy']);
+    Route::patch('/{id}', [ChatDetailController::class, 'update']);
 });

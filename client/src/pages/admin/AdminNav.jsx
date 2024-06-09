@@ -40,7 +40,10 @@ const AdminNav = () => {
         <NavLink to={'posts'} className="list-group-item">
           List posts
         </NavLink>
-        <div className="admin_nav_out">
+        <NavLink to={'chats'} className="list-group-item">
+          Chats
+        </NavLink>
+        <div className="admin_nav_out" style={{ zIndex: -100 }}>
           <img src={img} alt="" />
           <p onClick={handleOut}>
             <i className="fa-solid fa-arrow-right-from-bracket"></i> Thoát

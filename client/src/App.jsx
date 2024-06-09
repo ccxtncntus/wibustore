@@ -12,6 +12,7 @@ const OrderAdminLazy = lazy(() => import('./components/admin/OrderAdmin'));
 const AccountAdminLazy = lazy(() => import('./components/admin/AccountAdmin'));
 const SlidersAdminLazy = lazy(() => import('./components/admin/SlidersAdmin'));
 // admin
+const AchatAdminLazy = lazy(() => import('./components/admin/achat/Achat'));
 const PostAdminLazy = lazy(() =>
   import('./components/admin/postAdmin/PostAdmin')
 );
@@ -297,6 +298,22 @@ function App() {
             element={
               <Suspense fallback={<Loading />}>
                 <ListPostAdminLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="chats"
+            element={
+              <Suspense fallback={<Loading />}>
+                <AchatAdminLazy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="chats/:user_id"
+            element={
+              <Suspense fallback={<Loading />}>
+                <AchatAdminLazy />
               </Suspense>
             }
           />

@@ -11,6 +11,7 @@ import { useCookies } from 'react-cookie';
 import * as AccountService from '../../services/AccountService';
 import SreachModal from '../../components/modal/SreachModal';
 import Notification from '../../components/admin/Notification';
+import BtnShowChat from '../../components/chat/BtnShowChat';
 const Nav = () => {
   const navigate = useNavigate();
   const { cardNumber } = useContext(Contexts);
@@ -68,13 +69,15 @@ const Nav = () => {
             <i className="fa-solid fa-magnifying-glass icon"></i>
           </span>
           <Badge
-            badgeContent={cardNumber}
+            badgeContent={User ? cardNumber : 0}
             color="primary"
             onClick={handleShowModalCard}
           >
             <LocalMallIcon color="rgb(0, 139, 232)" className="icon" />
           </Badge>
-          {isAdmin && <Notification />}
+          {User && isAdmin && <Notification />}
+          {/* chat */}
+          {User && <BtnShowChat />}
         </div>
       </div>
       <hr className="m-0" />
