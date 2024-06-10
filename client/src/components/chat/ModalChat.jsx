@@ -7,6 +7,7 @@ import BtnSend from './BtnSend';
 import * as ChatsService from '../../services/ChatsService';
 import { HOST } from '../../configs/DataEnv';
 import Swal from 'sweetalert2';
+import Pusher from 'pusher-js';
 
 const ModalChat = ({ show, handleClose, placement, User }) => {
   useEffect(() => {
@@ -50,7 +51,22 @@ const ModalChat = ({ show, handleClose, placement, User }) => {
         messageListReference.current.scrollHeight;
     }
   }, [mes]);
-
+  useEffect(() => {
+    const pusher = new Pusher('3c30b00645ce31e7d36e', {
+      cluster: 'ap1',
+    });
+    const channel = pusher.subscribe('comment');
+    const handleMessage = (data) => {
+      if (User.id == data.idProduct) {
+        run();
+      }
+    };
+    channel.bind('message', handleMessage);
+    return () => {
+      channel.unbind('message', handleMessage);
+      pusher.unsubscribe('comment');
+    };
+  }, []);
   return (
     <Offcanvas
       show={show}

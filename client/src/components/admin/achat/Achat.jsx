@@ -5,10 +5,12 @@ import Col from 'react-bootstrap/Col';
 import { MessageList } from 'react-chat-elements';
 import { NavLink, useParams } from 'react-router-dom';
 import * as ChatsService from '../../../services/ChatsService';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, createRef } from 'react';
 import Asend from './Asend';
 import { HOST } from '../../../configs/DataEnv';
 import Swal from 'sweetalert2';
+import Pusher from 'pusher-js';
+
 // import { UContexts } from '../../../components/context/UserContext';
 const Achat = () => {
   const { user_id } = useParams();
@@ -24,14 +26,32 @@ const Achat = () => {
       imageWidth: '100%',
     });
   };
-  //   const messageListReference = createRef();
 
-  //   useEffect(() => {
-  //     if (messageListReference.current) {
-  //       messageListReference.current.scrollTop =
-  //         messageListReference.current.scrollHeight;
-  //     }
-  //   }, [mes]);
+  const messageListReference = createRef();
+
+  useEffect(() => {
+    if (messageListReference.current) {
+      messageListReference.current.scrollTop =
+        messageListReference.current.scrollHeight;
+    }
+  }, [mes]);
+  useEffect(() => {
+    const pusher = new Pusher('3c30b00645ce31e7d36e', {
+      cluster: 'ap1',
+    });
+    const channel = pusher.subscribe('comment');
+    const handleMessage = (data) => {
+      if (data.idProduct == user_id) {
+        console.log('render');
+        runm(user_id);
+      }
+    };
+    channel.bind('message', handleMessage);
+    return () => {
+      channel.unbind('message', handleMessage);
+      pusher.unsubscribe('comment');
+    };
+  }, [user_id]);
 
   const renderImg = (imgs) => {
     const parsedImgs = JSON.parse(imgs);
@@ -133,7 +153,7 @@ const Achat = () => {
               )}
 
               <div
-                //   ref={messageListReference}
+                ref={messageListReference}
                 className="message-list-container"
                 style={{ overflowY: 'auto', maxHeight: '100%' }}
               >

@@ -2,11 +2,12 @@
 import { MdAddAPhoto } from 'react-icons/md';
 import { FaDeleteLeft } from 'react-icons/fa6';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { createRef, useRef, useState } from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 import { Button } from 'react-chat-elements';
 import { message } from 'antd';
 import * as ChatsService from '../../services/ChatsService';
 import * as ChatDetailService from '../../services/ChatDetailService';
+import * as NotificationService from '../../services/NotificationService';
 import { IoMdSend } from 'react-icons/io';
 const BtnSend = ({ User, run }) => {
   const [value, setvalue] = useState('');
@@ -48,7 +49,10 @@ const BtnSend = ({ User, run }) => {
       }
       data.append('role', 0);
       const chatDetail = await ChatDetailService.updateI(data);
-      chatDetail.status == 200 && reset();
+      if (chatDetail.status == 200) {
+        reset();
+        await NotificationService.comment(User.name, User.id);
+      }
       run();
     } catch (error) {
       console.log(error);
@@ -72,8 +76,12 @@ const BtnSend = ({ User, run }) => {
         text,
         false
       );
-      chatDetail.status == 200 && reset();
-      run();
+      // chat
+      if (chatDetail.status == 200) {
+        reset();
+        run();
+        await NotificationService.comment(User.name, User.id);
+      }
       if (forcus.current) {
         forcus.current.focus();
       }

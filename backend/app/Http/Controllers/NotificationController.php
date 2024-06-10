@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Events\testE;
 use App\Events\commentEvent;
+use App\Events\chatsEvent;
+use App\Events\sendChat;
 
 class NotificationController extends Controller
 {

@@ -7,6 +7,7 @@ import * as ChatsService from '../../../services/ChatsService';
 import * as ChatDetailService from '../../../services/ChatDetailService';
 import { IoMdSend } from 'react-icons/io';
 import { UContexts } from '../../../components/context/UserContext';
+import * as NotificationService from '../../../services/NotificationService';
 
 const Asend = ({ run, user_id }) => {
   const { User } = useContext(UContexts);
@@ -46,8 +47,11 @@ const Asend = ({ run, user_id }) => {
       }
       data.append('role', 1);
       const chatDetail = await ChatDetailService.updateI(data);
-      chatDetail.status == 200 && reset();
-      run(user_id);
+      if (chatDetail.status == 200) {
+        reset();
+        run(user_id);
+        await NotificationService.comment('Admin', user_id);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -68,8 +72,11 @@ const Asend = ({ run, user_id }) => {
         text,
         1
       );
-      chatDetail.status == 200 && reset();
-      run(user_id);
+      if (chatDetail.status == 200) {
+        reset();
+        run(user_id);
+        await NotificationService.comment('Admin', user_id);
+      }
       if (forcus.current) {
         forcus.current.focus();
       }
