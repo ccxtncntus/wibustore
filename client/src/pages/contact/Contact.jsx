@@ -16,24 +16,6 @@ const Contact = () => {
     lng: 107.8678297,
   };
 
-  // useEffect(() => {
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (position) => {
-  //         const { latitude, longitude } = position.coords;
-  //         console.log(latitude, longitude);
-  //         // what to do once we have the position
-  //       },
-  //       (error) => {
-  //         // display an error if we cant get the users position
-  //         console.error('Error getting user location:', error);
-  //       }
-  //     );
-  //   } else {
-  //     // display an error if not supported
-  //     console.error('Geolocation is not supported by this browser.');
-  //   }
-  // }, []);
   return (
     <>
       <div className="contact_vip p-4">

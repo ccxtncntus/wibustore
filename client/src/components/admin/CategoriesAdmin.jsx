@@ -17,29 +17,22 @@ const CategoriesAdmin = () => {
   const [dataCate, setDataCate] = useState({
     CategoryName: '',
     id: '',
-    Status: '1',
   });
   const onSubmit = async (data) => {
     // console.log(data);
     const namee = data.categoryName;
-    const statuss = data.status;
     try {
       if (Edit) {
-        const editCate = await CategoryService.edit(
-          namee,
-          statuss,
-          dataCate.id
-        );
-        // console.log(editCate);
+        const editCate = await CategoryService.edit(namee, 1, dataCate.id);
+        console.log(editCate);
         message.success('Edit success');
       } else {
-        const addCate = await CategoryService.update(namee, statuss);
-        // console.log(addCate);
+        const addCate = await CategoryService.update(namee, 1);
+        console.log(addCate);
         message.success('Add success');
       }
       setDataCate({
         CategoryName: '',
-        Status: '1',
         id: '',
       });
       setFocus('categoryName');
@@ -53,23 +46,29 @@ const CategoriesAdmin = () => {
   };
   const [ListCategory, setListCategory] = useState(null);
   useEffect(() => {
-    const listC = async () => {
-      try {
-        const data = await CategoryService.List(1);
-        setListCategory(data.data.data);
-      } catch (error) {
-        // console.log(error.response.data);
-      }
-    };
     listC();
     return () => {};
   }, [AddCate]);
+
+  const listC = async () => {
+    try {
+      const data = await CategoryService.List(1);
+      localStorage.setItem('categories', JSON.stringify(data));
+      setListCategory(data.data.data);
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data);
+        return;
+      }
+      console.log(error);
+    }
+  };
   const confirm = async (item) => {
     const addCate = await CategoryService.del(item.id);
     setAddCate((pre) => !pre);
     message.success(addCate.message);
   };
-  const cancel = (item) => {
+  const cancel = () => {
     message.error('Undelete');
   };
   const handleEdit = (item) => {
@@ -77,7 +76,6 @@ const CategoriesAdmin = () => {
     setEdit(true);
     setDataCate({
       CategoryName: item.name,
-      Status: item.status,
       id: item.id,
     });
   };
@@ -95,7 +93,7 @@ const CategoriesAdmin = () => {
                 required:
                   dataCate.CategoryName == '' ? false : 'Name is required',
                 pattern: {
-                  value: /^\S.*\S$/,
+                  value: /^\S+$/,
                   message: 'No space',
                 },
               })}
@@ -106,13 +104,7 @@ const CategoriesAdmin = () => {
               </span>
             )}
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Status</Form.Label>
-            <Form.Select defaultValue={dataCate.Status} {...register('status')}>
-              <option value="1">Mở bán</option>
-              <option value="0">Tạm ngưng</option>
-            </Form.Select>
-          </Form.Group>
+          <Form.Group className="mb-3"></Form.Group>
           <div className="col-md-6"></div>
           <button type="submit" className="btn btn-success">
             {Edit ? 'Edit' : 'Add'}
@@ -126,7 +118,6 @@ const CategoriesAdmin = () => {
               <tr>
                 <th>#</th>
                 <th>Name</th>
-                <th>Status</th>
                 <th>*</th>
               </tr>
             </thead>
@@ -135,7 +126,6 @@ const CategoriesAdmin = () => {
                 <tr key={index}>
                   <td>{index + 1}</td>
                   <td>{item.name}</td>
-                  <td>{item.status ? 'Mở bán' : 'Tạm ngưng'}</td>
                   <td>
                     <Popconfirm
                       title="Delete the category"
@@ -168,5 +158,3 @@ const CategoriesAdmin = () => {
 };
 
 export default CategoriesAdmin;
-
-// <span>{CategoryName}</span> <span> {isNaN(Status) ? "" : Status}</span>

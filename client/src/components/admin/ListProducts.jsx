@@ -1,7 +1,6 @@
 import Form from 'react-bootstrap/Form';
 import { Button, message, Popconfirm } from 'antd';
 import Table from 'react-bootstrap/Table';
-import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import * as CategoryService from '../../services/CategoryService';
 import * as ProductService from '../../services/ProductService';
@@ -10,7 +9,6 @@ import Pagination from '@mui/material/Pagination';
 import { CountPage } from '../../helpers/FormatNumber';
 import UserAddPriceModal from './adminModal/UserAddPriceModal';
 const ListProducts = () => {
-  const { register, watch } = useForm();
   const [listCate, setlistCate] = useState([]);
   const [listProductCate, setlistProductCate] = useState([]);
   const [delSuccess, setdelSuccess] = useState(false);
@@ -20,7 +18,6 @@ const ListProducts = () => {
   const [page, setPage] = useState(1);
   useEffect(() => {
     const listC = async () => {
-      // console.log(watch("category"));
       try {
         const data = await CategoryService.List(1);
         data.status == 200 && setlistCate(data.data.data);

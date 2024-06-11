@@ -1,18 +1,19 @@
 import './slider.css';
 import SliderImgs from './SliderImgs';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import * as SliderService from '../../services/SliderService';
-import { SliContexts } from '../../components/context/SliderContex';
 const Slider = () => {
-  const { slidersC, list } = useContext(SliContexts);
   const [List, setList] = useState([]);
   useEffect(() => {
     const run = async () => {
-      if (slidersC.length > 0) {
-        setList(slidersC);
+      if (localStorage.getItem('sliders')) {
+        const parseImgs = localStorage.getItem('sliders');
+        const dataImg = JSON.parse(parseImgs);
+        setList(dataImg);
       } else {
         const listSlider = await SliderService.list();
-        list(listSlider);
+        const dataImg = JSON.stringify(listSlider);
+        localStorage.setItem('sliders', dataImg);
         setList(listSlider);
       }
     };

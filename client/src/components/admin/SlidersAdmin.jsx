@@ -1,34 +1,41 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { CategoriesContexts } from "../../components/context/CategoriesContexts";
-import * as SliderService from "../../services/SliderService";
-import * as CategoryService from "../../services/CategoryService";
-import { Button, message, Popconfirm } from "antd";
-import { HOST } from "../../configs/DataEnv";
+import { useEffect, useRef, useState } from 'react';
+import * as SliderService from '../../services/SliderService';
+import * as CategoryService from '../../services/CategoryService';
+import { Button, message, Popconfirm } from 'antd';
+import { HOST } from '../../configs/DataEnv';
 const SlidersAdmin = () => {
-  const { ListCategories } = useContext(CategoriesContexts);
   const [listCate, setlistCate] = useState([]);
-  const [path, setpath] = useState("/shop");
-  const [img, setimg] = useState("");
-  const [title, settitle] = useState("");
-  const [content, setcontent] = useState("");
+  const [path, setpath] = useState('/shop');
+  const [img, setimg] = useState('');
+  const [title, settitle] = useState('');
+  const [content, setcontent] = useState('');
   const [blob, setblob] = useState(null);
   const refForcus = useRef(null);
   const [ListSlides, setListSlides] = useState([]);
   const [Load, setLoad] = useState(false);
-  const [Edit, setEdit] = useState("");
+  const [Edit, setEdit] = useState('');
   const [isEdit, setisEdit] = useState(false);
   // path
+
   useEffect(() => {
     const run = async () => {
-      if (ListCategories.status === 200) {
-        setlistCate(ListCategories.data.data);
-      } else {
+      if (!localStorage.getItem('categories')) {
         const data = await CategoryService.List(1);
-        data.status === 200 && setlistCate(data.data.data);
+        setlistCate(data.data.data);
+        const dataCates = JSON.stringify(data);
+        localStorage.setItem('categories', dataCates);
+        return;
+      }
+      if (localStorage.getItem('categories')) {
+        const dataCates = JSON.parse(localStorage.getItem('categories'));
+        console.log(dataCates);
+        setlistCate(dataCates.data.data);
+        return;
       }
     };
     run();
-  }, [ListCategories]);
+  }, []);
+
   useEffect(() => {
     const run = async () => {
       const list = await SliderService.list();
@@ -37,33 +44,33 @@ const SlidersAdmin = () => {
     run();
   }, [Load]);
   const FormatPath = (path) => {
-    const newPath = path.replace(/ /g, "-").toLowerCase();
+    const newPath = path.replace(/ /g, '-').toLowerCase();
     return newPath;
   };
   const handleStart = () => {
     setblob(null);
-    setpath("/shop");
-    setimg("");
-    setEdit("");
-    settitle("");
-    setcontent("");
+    setpath('/shop');
+    setimg('');
+    setEdit('');
+    settitle('');
+    setcontent('');
   };
   const handleAdd = async () => {
     const formData = new FormData();
-    formData.append("img", img[0]);
-    formData.append("title", title);
-    formData.append("content", content);
-    formData.append("path", path);
+    formData.append('img', img[0]);
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('path', path);
     const i = await SliderService.add(formData);
     if (i.status === 200) {
       setLoad((pre) => !pre);
       handleStart();
-      message.success("Add success");
+      message.success('Add success');
       refForcus.current.focus();
     }
   };
   const handleDelImg = () => {
-    setimg("");
+    setimg('');
     setblob(null);
   };
   const handleImg = (e) => {
@@ -86,10 +93,10 @@ const SlidersAdmin = () => {
   const cancel = () => {};
   // edit
   const FormatIdCate = (data) => {
-    const id = data.split("/");
+    const id = data.split('/');
     return id.pop();
   };
-  const [imgOld, setimgOld] = useState("");
+  const [imgOld, setimgOld] = useState('');
   const [idEdit, setidEdit] = useState(null);
   const handleEdit = (i) => {
     window.scrollTo(0, 0);
@@ -103,29 +110,29 @@ const SlidersAdmin = () => {
     setisEdit(true);
   };
   const handleEditSuccess = async () => {
-    if (img != "") {
+    if (img != '') {
       if (img[0] == 1) {
         const i = await SliderService.editNoImg(idEdit, title, content, path);
         if (i.status === 200) {
           setLoad((pre) => !pre);
           handleStart();
-          message.success("Edit success");
+          message.success('Edit success');
           refForcus.current.focus();
           setisEdit(false);
         }
       } else {
         const formData = new FormData();
-        formData.append("img", img[0]);
-        formData.append("title", title);
-        formData.append("content", content);
-        formData.append("path", path);
-        formData.append("imgOld", imgOld);
-        formData.append("idEdit", idEdit);
+        formData.append('img', img[0]);
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append('path', path);
+        formData.append('imgOld', imgOld);
+        formData.append('idEdit', idEdit);
         const i = await SliderService.edit(formData);
         if (i.status === 200) {
           setLoad((pre) => !pre);
           handleStart();
-          message.success("Edit success");
+          message.success('Edit success');
           refForcus.current.focus();
           setisEdit(false);
         }
@@ -135,7 +142,7 @@ const SlidersAdmin = () => {
       if (i.status === 200) {
         setLoad((pre) => !pre);
         handleStart();
-        message.success("Edit success");
+        message.success('Edit success');
         refForcus.current.focus();
         setisEdit(false);
       }
@@ -153,37 +160,37 @@ const SlidersAdmin = () => {
           <label
             className="btn btn-secondary"
             htmlFor="sliderImg"
-            style={{ margin: "20px 0" }}
+            style={{ margin: '20px 0' }}
           >
             Add img
           </label>
           <input
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
             type="file"
             className="form-control"
             id="sliderImg"
             onChange={(e) => handleImg(e)}
           />
           <br />
-          <div style={{ position: "relative", display: "inline-block" }}>
+          <div style={{ position: 'relative', display: 'inline-block' }}>
             <img
-              style={{ height: 260, width: "100%", objectFit: "cover" }}
+              style={{ height: 260, width: '100%', objectFit: 'cover' }}
               src={
                 blob
                   ? blob
                   : Edit
-                  ? HOST + "/uploads/" + Edit.img
-                  : "https://i.pinimg.com/originals/70/bd/ca/70bdca6c2315a811b35cda5c95d9cc0a.jpg"
+                  ? HOST + '/uploads/' + Edit.img
+                  : 'https://i.pinimg.com/originals/70/bd/ca/70bdca6c2315a811b35cda5c95d9cc0a.jpg'
               }
               alt=""
             />
             <span
-              style={{ position: "absolute", right: 10, top: 10 }}
+              style={{ position: 'absolute', right: 10, top: 10 }}
               onClick={handleDelImg}
             >
               <i
                 style={{
-                  fontSize: "1.2rem",
+                  fontSize: '1.2rem',
                 }}
                 className="fa-solid fa-circle-xmark"
               ></i>
@@ -222,7 +229,7 @@ const SlidersAdmin = () => {
             className="form-control"
             onChange={(e) => setpath(e.target.value)}
           >
-            <option value={"/shop"}>Shop</option>
+            <option value={'/shop'}>Shop</option>
             {listCate.length > 0 &&
               listCate.map((item, index) => (
                 <option
@@ -246,7 +253,7 @@ const SlidersAdmin = () => {
               onClick={handleEditSuccess}
             >
               Edit
-            </button>{" "}
+            </button>{' '}
             <button
               className="btn btn-secondary mt-4"
               onClick={handleEditCancel}
@@ -274,9 +281,9 @@ const SlidersAdmin = () => {
                 <th scope="row">{index + 1}</th>
                 <td>
                   <img
-                    src={HOST + "/uploads/" + item.img}
+                    src={HOST + '/uploads/' + item.img}
                     alt=""
-                    style={{ width: 280, height: 220, objectFit: "contain" }}
+                    style={{ width: 280, height: 220, objectFit: 'contain' }}
                   />
                 </td>
                 <td>{item.title}</td>
@@ -292,7 +299,7 @@ const SlidersAdmin = () => {
                     cancelText="No"
                   >
                     <Button danger>Delete</Button>
-                  </Popconfirm>{" "}
+                  </Popconfirm>{' '}
                   <Button type="dashed" onClick={() => handleEdit(item)}>
                     Edit
                   </Button>
@@ -302,7 +309,7 @@ const SlidersAdmin = () => {
           </tbody>
         </table>
       ) : (
-        "Hãy thêm slider..."
+        'Hãy thêm slider...'
       )}
     </div>
   );

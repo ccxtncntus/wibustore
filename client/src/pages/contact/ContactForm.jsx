@@ -15,7 +15,40 @@ const ContactForm = () => {
     const { name, value } = e.target;
     setFormData({ ...formDataa, [name]: value });
   };
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    const re = /^\d{10}$/; // Giả sử số điện thoại có 10 chữ số
+    return re.test(phoneNumber);
+  };
+
   const handleSubmit = () => {
+    const { email, name, phoneNumber, content } = formDataa;
+
+    if (!validateEmail(email)) {
+      message.error('Email không hợp lệ');
+      return;
+    }
+
+    if (!name) {
+      message.error('Tên không được để trống');
+      return;
+    }
+
+    if (!validatePhoneNumber(phoneNumber)) {
+      message.error('Số điện thoại không hợp lệ');
+      return;
+    }
+
+    if (!content) {
+      message.error('Nội dung không được để trống');
+      return;
+    }
+
     const data = new FormData();
     data.append('email', formDataa.email);
     data.append('name', formDataa.name);

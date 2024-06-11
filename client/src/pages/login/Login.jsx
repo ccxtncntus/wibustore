@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useForm } from 'react-hook-form';
 import './login.css';
@@ -26,6 +27,12 @@ const Login = () => {
   const [Loading, setLoading] = useState(false);
 
   useEffect(() => {
+    if (localStorage.getItem('sliders')) {
+      localStorage.removeItem('sliders');
+    }
+    if (localStorage.getItem('categories')) {
+      localStorage.removeItem('categories');
+    }
     if (cookies.token) {
       removeCookie('token');
     }
