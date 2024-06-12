@@ -50,7 +50,9 @@ const ChangePassllLazy = lazy(() =>
 const MyCartsllLazy = lazy(() => import('./pages/orders/MyOders'));
 // profile
 const ProfilellLazy = lazy(() => import('./pages/profile/Profile'));
-
+const aaa = () => {
+  console.log(123);
+};
 function App() {
   return (
     <>
@@ -115,6 +117,7 @@ function App() {
           />
           <Route
             path="/shop/:idProduct"
+            onLeave={aaa}
             element={
               <Suspense fallback={<Loading />}>
                 <ProductsDetailllLazy />

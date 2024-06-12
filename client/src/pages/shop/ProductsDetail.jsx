@@ -25,8 +25,12 @@ import Accordion from 'react-bootstrap/Accordion';
 import { Collapse } from 'antd';
 import Evaluate from './evaluate/Evaluate';
 // import Pusher from 'pusher-js';
-
+import { useLocation } from 'react-router-dom';
 const ProductsDetail = () => {
+  const location = useLocation();
+  useEffect(() => {
+    console.log(location);
+  }, [location]);
   // useEffect(() => {
   //   const pusher = new Pusher('3c30b00645ce31e7d36e', {
   //     cluster: 'ap1',
@@ -202,9 +206,11 @@ const ProductsDetail = () => {
       ),
     },
   ];
-
   return (
     <div className="productDetail_vip">
+      <div style={{ position: 'fixed', top: 2, left: 2 }} className="vip">
+        0
+      </div>
       {loading && <LoadingConponent />}
       <div className="productDetail pt-4 container">
         <LoginModal show={modalShow} onHide={() => setModalShow(false)} />
