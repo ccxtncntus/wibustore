@@ -8,7 +8,7 @@ import * as ChatsService from '../../services/ChatsService';
 import { HOST } from '../../configs/DataEnv';
 import Swal from 'sweetalert2';
 import Pusher from 'pusher-js';
-
+import { message } from 'antd';
 const ModalChat = ({ show, handleClose, placement, User }) => {
   useEffect(() => {
     if (show) {
@@ -57,6 +57,11 @@ const ModalChat = ({ show, handleClose, placement, User }) => {
     });
     const channel = pusher.subscribe('comment');
     const handleMessage = (data) => {
+      console.log(data);
+      if (User.id == data.idProduct && show != true) {
+        console.log(show);
+        message.success('bạn có tin nhắn từ admin');
+      }
       if (User.id == data.idProduct) {
         run();
       }
@@ -66,7 +71,7 @@ const ModalChat = ({ show, handleClose, placement, User }) => {
       channel.unbind('message', handleMessage);
       pusher.unsubscribe('comment');
     };
-  }, []);
+  }, [show]);
   return (
     <Offcanvas
       show={show}

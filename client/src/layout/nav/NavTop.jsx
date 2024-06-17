@@ -4,7 +4,8 @@ import UserModal from '../../components/modal/UserModal';
 import { useCookies } from 'react-cookie';
 import { useContext } from 'react';
 import { UContexts } from '../../components/context/UserContext';
-import Notification from '../../components/admin/Notification';
+// import Notification from '../../components/admin/Notification';
+
 const NavTop = () => {
   const [cookie, setCookie] = useCookies(['token', 'path_end']);
   const { User } = useContext(UContexts);
@@ -20,6 +21,7 @@ const NavTop = () => {
     setCookie('path_end', window.location.pathname, { path: '/' });
     setShowUser(true);
   };
+
   return (
     <div className="bg-light">
       <div className="container navtop">

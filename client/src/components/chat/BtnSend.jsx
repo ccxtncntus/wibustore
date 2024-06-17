@@ -63,6 +63,7 @@ const BtnSend = ({ User, run }) => {
 
   // ...
   const handleSendText = async () => {
+    await NotificationService.test('vip');
     try {
       if (value.trim() == '') {
         message.warning('Không bỏ trống');

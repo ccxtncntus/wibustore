@@ -13,4 +13,10 @@ const comment = async (username, idProduct) => {
   });
   return res;
 };
-export { sendMess, comment };
+const test = async (username) => {
+  const res = await request.POST(`/api/testEvent`, {
+    username: username,
+  });
+  return res;
+};
+export { sendMess, comment, test };

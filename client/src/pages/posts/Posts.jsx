@@ -35,7 +35,12 @@ const Posts = () => {
       {loading && <Loading />}
       {!loading && (
         <div className="posts container mt-2">
-          <h4>Blog</h4>
+          <h4 className="text-center mt-4">
+            Tất cả <span className="vip">bài viết</span>
+          </h4>
+          <p className="text-center">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </p>
           <div className="row">
             {listBlogs.map((item, index) => (
               <div className="col-md-6" key={index}>

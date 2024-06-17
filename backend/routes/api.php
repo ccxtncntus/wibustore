@@ -177,6 +177,7 @@ Route::get('dashboard/getData', [DashboardController::class, 'getData']);
 // notification
 Route::post('sendNotifi', [NotificationController::class, 'sendNoti']);
 Route::post('comment', [NotificationController::class, 'comment']);
+Route::post('testEvent', [NotificationController::class, 'test']);
 
 
 // addprice
